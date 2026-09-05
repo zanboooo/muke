@@ -1,0 +1,36 @@
+name: 公开库护栏
+
+# 事后一道。真正能挡住的是本机的 .githooks/pre-commit 和 GitHub 的 Push protection ——
+# 推上来的那一刻内容就已经公开了。这一条的价值是「有人绕过了钩子，一分钟内让人知道」，
+# 以及给 PR 一个必过的闸门。
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      # ⚠ 不加 -v。命中的原文会被打进 **公开的** Actions 日志 —— 那等于把泄露再广播一次。
+      #   只打「哪个文件第几行命中哪条规则」，要看原文去本机跑。
+      - name: 全树扫描
+        run: node tools/guard-tree.js --all
+      - name: 告警到 Lark
+        if: failure()
+        env:
+          LARK_APP_ID: ${{ secrets.LARK_APP_ID }}
+          LARK_APP_SECRET: ${{ secrets.LARK_APP_SECRET }}
+          LARK_ALERT_CHAT_ID: ${{ secrets.LARK_ALERT_CHAT_ID }}
+        run: |
+          node tools/notify.js "🔴 公开库护栏拦截
+          仓库 ${{ github.repository }} 的 main 分支上有隐私数据或凭据。
+          内容已经公开了 —— 先确认范围，再决定要不要再删一次库。
+          详情（不含原文）：${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"

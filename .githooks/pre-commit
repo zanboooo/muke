@@ -1,0 +1,9 @@
+#!/bin/sh
+# 公开库污染护栏。这是唯一能真正「挡住」的一道 ——
+# 一旦 push 上去就已经公开了，CI 只能事后报警，而删文件删不掉历史。
+#
+# 启用（每次新克隆都要跑一次，git 不会自动带上钩子）：
+#     git config core.hooksPath .githooks
+#
+# ⛔ 别用 git commit --no-verify 绕过。2026-09-06 已经为泄露删过一次库。
+node tools/guard-tree.js || exit 1

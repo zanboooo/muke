@@ -71,6 +71,26 @@ Lark 多维表格 (Base2_HR-Ops)
 - **入口文件熔断** —— `j/`、`s/` 一次要删超过 3 个就只报不删
 - **状态文件不降级** —— 没配 `STATUS_PIN` 时，绝不把线上的密文覆盖成明文
 
+## ⚠ 克隆下来第一件事
+
+```bash
+git config core.hooksPath .githooks
+```
+
+**不跑这一条 = 没有护栏，而且不会报错。** `core.hooksPath` 不跟着 clone 走。
+钩子做的事是：commit 前扫暂存区，发现工资／电话／身份证／真实工号／凭据就拒绝提交。
+
+推上去的那一刻内容就已经公开了，**而且删文件删不掉历史** —— 所以能真正挡住的只有
+这个钩子和 GitHub 的 Push protection；`.github/workflows/guard.yml` 是事后报警。
+
+误杀了就在 `.guardignore` 写一行「路径 规则id # 理由」，或在那一行加
+`guard-tree:allow <规则id> <理由>`。**⛔ 不要用 `--no-verify` 绕过。**
+
+```bash
+node tools/guard-tree.js --all    # 手动全树扫
+```
+
+
 ## 本地怎么跑
 
 ```bash
