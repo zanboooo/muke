@@ -174,20 +174,63 @@ function linksLost(sets) {
     const after = new Set(s.after || []);
     (s.before || []).forEach((k) => { if (!after.has(k)) lost.push(label + "/" + k); });
   }
+  // ⚠ msg 会被 sync-portal 打进 **公开的** Actions 日志，所以只放计数。
+  //   文件名就是经纪人名字（j/fitri），进公开日志等于点名。细节走 detail，只发到 Lark 群。
   return { name: "断链", ok: lost.length === 0, lost,
-    msg: lost.length ? lost.length + " 个入口文件本轮消失，已发出去的对应链接从此打不开：" + lost.join("、")
-                     : "入口文件无消失" };
+    msg: lost.length ? lost.length + " 个入口文件本轮消失，已发出去的对应链接从此打不开" : "入口文件无消失",
+    detail: lost.length ? lost.length + " 个入口文件本轮消失：" + lost.join("、") : null };
 }
+
+// ── 第 ⑤ 道：A02 已发布，门户却没产出对应的归因码 ──────────────────
+//
+// 为什么需要它（2026-09-06 删库重建后补）：新经纪人上站依赖两条路径 ——
+//   慢路径：GitHub Actions 的 cron，雅加达 10:00–17:00 每整点，共 8 次
+//   快路径：Anycross 入职流拿 PAT 调 workflow_dispatch，立刻同步
+// 快路径断了（token 过期／被摘掉仓库权限／被撤销）时**没有任何人会知道**：
+// Anycross 那一步显示成功，Lark 表里数据齐全，网站只是不更新。
+// 删库重建当天就实测到这个：仓库 ID 变了，fine-grained token 的仓库勾选被自动摘掉。
+//
+// 这一道不去猜 token 状态，而是查**结果**：A02 里标着「发布」且人没离职的经纪人，
+// 他的归因码就该出现在某个 j/*.json 的 byJob 值里。查不到 = 他的链接是死的，
+// 候选人扫他的码进来会看到「链接无效」。至于是 token 死了还是同步跑挂了，看别的告警。
+function publishedNotLive(a02, jAll, V) {
+  const live = new Set();
+  Object.values((jAll && jAll.__all) || {}).forEach((o) =>
+    Object.values((o && o.byJob) || {}).forEach((r) => live.add(String(r))));
+
+  const noRef = [], notLive = [];
+  (a02 || []).forEach((r) => {
+    const f = r.fields || {};
+    if (V(f["T-Status"]).indexOf("发布") < 0) return;      // 只查已发布的
+    if (V(f["Emp Status"]).indexOf("离职") >= 0) return;   // 离职的本来就该下站
+    const ref = V(f.ARef);
+    if (!ref) { noRef.push(1); return; }
+    if (!live.has(ref)) notLive.push(ref);
+  });
+
+  const bad = noRef.length + notLive.length;
+  // msg 进公开日志 → 只放计数；detail 进 Lark 群 → 可带归因码
+  //（码本身就在公开链接里，不算秘密；姓名一律不带，群里可能有非管理层成员）。
+  return { name: "发布未上站", ok: bad === 0, noRef: noRef.length, notLive,
+    msg: bad ? bad + " 个已发布的经纪人在门户里查不到归因码（其中 " + noRef.length + " 个连 ARef 都空）"
+             : "已发布的经纪人全部在站",
+    detail: bad ? "已发布但门户查不到码：" + (notLive.join("、") || "无")
+                + (noRef.length ? "；另有 " + noRef.length + " 个 A02 行没有 ARef" : "")
+                + "。先查 Anycross 入职流的 GitHub 触发节点，再看本轮同步有没有跑完。" : null };
+}
+
 
 // ── 汇总成一条群消息。只发结论与数量，不带候选人姓名电话 —— 群里可能有非管理层成员 ──
 function compose(results, jkt) {
   const bad = results.filter((r) => !r.ok);
   if (!bad.length) return null;
   const lines = ["⚠️ 报名链路巡检发现问题", "", "时间：" + jkt + "（雅加达）", ""];
-  bad.forEach((r) => lines.push("• " + r.name + "：" + r.msg));
+  // 群消息用 detail（可带细节），没有 detail 的退回 msg。
+  // 公开 Actions 日志那边打的是 msg —— 两个出口的详略刻意不同。
+  bad.forEach((r) => lines.push("• " + r.name + "：" + (r.detail || r.msg)));
   lines.push("", "报名页本身仍可访问，数据也已更新；以上是链路健康度告警。");
   lines.push("状态看板：https://zanboooo.github.io/muke/status/");
   return lines;
 }
 
-module.exports = { attribution, prefillKeys, formLinks, dataContract, linksLost, compose };
+module.exports = { attribution, prefillKeys, formLinks, dataContract, linksLost, publishedNotLive, compose };

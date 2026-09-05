@@ -447,7 +447,7 @@ const encrypt = (pin, obj) => {
   ]);
   if (!process.env.GITHUB_STEP_SUMMARY) { console.log(""); console.log(sm); }   // 本机跑时也看得见
 
-  // ── 10. 四道巡检（WO-0274 建三道，WO-A97 补第四道）：查结果而非查过程，详见 checks.js 顶部 ──
+  // ── 10. 五道巡检（WO-0274 建三道，WO-A97 补第四，2026-09-06 删库重建后补第五道）：查结果而非查过程，详见 checks.js 顶部 ──
   const formList = h28
     .map((r) => ({ label: V(r.fields.LinkType) + (V(r.fields["Job-CN"]) ? "·" + V(r.fields["Job-CN"]) : ""), url: V(r.fields["原始链接"]) }))
     .filter((x) => x.url && x.url.indexOf("share/base/form") >= 0);
@@ -471,6 +471,9 @@ const encrypt = (pin, obj) => {
   const benchBack = back("bench.json");
   checks.push(CK.linksLost({ j: { before: beforeJ, after: listEntry("j") },
                              s: { before: beforeS, after: listEntry("s") } }));
+  // 第 ⑤ 道：查「已发布却没上站」。用的是刚回读的 anyJ，跟第 ④ 道同一份磁盘快照 ——
+  //   要验的是最终落盘的产物，不是内存里的意图。
+  checks.push(CK.publishedNotLive(a02, anyJ, V));
   checks.push(CK.dataContract({
     "bench.json": benchBack && benchBack.bench,      // 前端读的是 d.bench 这一层
     "jobs.json": back("jobs.json"),
