@@ -1,0 +1,38 @@
+<!doctype html><html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MUKE</title>
+<style>
+ :root{--bg:#0b0b0f;--sf:#15151c;--tx:#f2f2f5;--dim:#9b9baa;--pk:#ff2d78}
+ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);
+  font:400 15px/1.7 system-ui,-apple-system,'Segoe UI',sans-serif}
+ body{display:grid;place-items:center;padding:24px}
+ .c{max-width:420px;text-align:center}
+ h1{font-size:22px;margin:0 0 10px;font-weight:600}
+ p{color:var(--dim);margin:0 0 20px}
+ a{display:inline-block;background:var(--pk);color:#fff;text-decoration:none;
+  padding:11px 22px;border-radius:8px;font-weight:600}
+ code{background:var(--sf);padding:2px 6px;border-radius:4px;font-size:13px;color:var(--dim)}
+</style></head><body>
+<div class="c" id="c" hidden>
+ <h1>Halaman tidak ditemukan</h1>
+ <p>Tautan ini sudah tidak berlaku.<br><span id="p"></span></p>
+ <a href="/muke/join/">Lihat lowongan</a>
+</div>
+<script>
+/* 2026-09-06 分仓兜底。
+   内部规程页搬到了 MSOP 仓库，但旧地址散落在已发出的入职私信、聊天记录、
+   书签里 —— 那些我找不全。与其逐个追，不如在这里兜住：命中白名单就转发，
+   路径、query、hash 原样带走（welcome/avatar 的 #p=... 是人员信息，必须保留）。
+   白名单是固定前缀 + 定死的目标域名，不接受任意跳转目标。 */
+var MOVED = ["absensi","akses","aksesflow","avatar","cutistep","dayldemo","examdemo",
+  "footer","h01demo","h01map","h24demo","kalkulator","lanjut","leaveflow","nilai",
+  "notice","onboarding","welcome","probe.html"];
+var rest = location.pathname.replace(/^\/muke\//, "");
+var seg  = rest.split("/")[0];
+if (MOVED.indexOf(seg) >= 0) {
+  location.replace("https://zanboooo.github.io/MSOP/" + rest + location.search + location.hash);
+} else {
+  document.getElementById("p").innerHTML = "<code>/" + (rest || "").replace(/[<>&]/g, "") + "</code>";
+  document.getElementById("c").hidden = false;
+}
+</script></body></html>

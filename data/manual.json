@@ -1,0 +1,47 @@
+{
+ "_readme": "对外展示用的固定值，手动维护。sync 不会覆盖这个文件，改完提交即生效。改法见 /status/ 页最下方。",
+ "staff": "65+",
+ "speed": 3,
+ "jobs": {
+  "主持": {
+   "id": "Pemula → Emas · 4 tingkat",
+   "cn": "新人主播 → 金牌主播 · 4 档"
+  },
+  "主播": {
+   "id": "Pemula → Emas · 4 tingkat",
+   "cn": "新人主播 → 金牌主播 · 4 档"
+  },
+  "翻译": {
+   "id": "Asisten → Senior · 3 tingkat",
+   "cn": "助理 → 资深 · 3 档"
+  },
+  "艺人经纪": {
+   "id": "Agen Junior → Agen Emas · 3 tingkat",
+   "cn": "经纪助理/星探 → 金牌经纪人 · 3 档"
+  },
+  "舞蹈培训师": {
+   "id": "Spesialis → Pakar · 3 tingkat",
+   "cn": "专员 → 专家 · 3 档"
+  },
+  "舞导": {
+   "id": "Asisten → Pakar · 4 tingkat",
+   "cn": "助理 → 专家 · 4 档"
+  },
+  "妆造": {
+   "id": "Asisten → Pakar · 4 tingkat",
+   "cn": "助理 → 专家 · 4 档"
+  },
+  "财务": {
+   "id": "Staf → Direktur · 3 tingkat",
+   "cn": "专员 → 总监 · 3 档"
+  },
+  "运镜": {
+   "id": "Asisten → Pakar · 4 tingkat",
+   "cn": "助理 → 专家 · 4 档"
+  },
+  "直播间技术": {
+   "id": "Asisten → Pakar · 4 tingkat",
+   "cn": "助理 → 专家 · 4 档"
+  }
+ }
+}

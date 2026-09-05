@@ -1,0 +1,1017 @@
+<!doctype html><html lang="id"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow,noarchive"><meta name="color-scheme" content="dark">
+<title>MUKE · Karier</title>
+<meta property="og:title" content="Gabung MUKE — Agensi Live Streaming Jakarta">
+<meta property="og:description" content="Lowongan Host, MC, MUA, Videografer dan lainnya. Daftar online, gratis, proses cepat.">
+<meta property="og:image" content="https://zanboooo.github.io/muke/og/card.png">
+<meta property="og:image:secure_url" content="https://zanboooo.github.io/muke/og/card.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="MUKE MEDIA — Bangun karier di live streaming">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MUKE MEDIA">
+<meta property="og:locale" content="id_ID">
+<meta property="og:url" content="https://zanboooo.github.io/muke/join/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Gabung MUKE — Agensi Live Streaming Jakarta">
+<meta name="twitter:description" content="Lowongan Host, MC, MUA, Videografer dan lainnya. Daftar online, gratis, proses cepat.">
+<meta name="twitter:image" content="https://zanboooo.github.io/muke/og/card.png">
+<link rel="icon" href="https://zanboooo.github.io/muke/og/card.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800;900&family=Noto+Sans+SC:wght@400;600;800&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+:root{--bg:#07070b;--sf:rgba(255,255,255,.045);--sf2:rgba(255,255,255,.075);--ln:rgba(255,255,255,.11);
+--tx:#f4f4f7;--dim:#9a9aab;--pk:#ff2d78;--gr:#33d69f;--am:#ffb020;
+--f:'Archivo','Noto Sans SC',system-ui,-apple-system,'Segoe UI',sans-serif;--m:'IBM Plex Mono',ui-monospace,monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--tx);font:400 16px/1.6 var(--f);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+html[lang="zh"] body{font-family:'Noto Sans SC','Archivo',system-ui,'Microsoft YaHei',sans-serif}
+.wrap{max-width:720px;margin:0 auto;padding:0 20px}
+/* ── 氛围层：canvas 光场 + 幕布 ── */
+#bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.scrim{position:fixed;inset:0;z-index:1;pointer-events:none;
+background:radial-gradient(120% 70% at 50% 0%,transparent 0%,rgba(7,7,11,.55) 45%,rgba(7,7,11,.92) 78%,#07070b 100%)}
+.page{position:relative;z-index:2}
+/* ── 头 ── */
+header{position:sticky;top:0;z-index:20;backdrop-filter:blur(14px);background:rgba(7,7,11,.72);border-bottom:1px solid var(--ln)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;height:58px;gap:10px}
+.logo{display:flex;align-items:center;gap:9px;min-width:0;text-decoration:none;cursor:pointer;transition:opacity .2s}
+.logo:hover{opacity:.78}
+.logo svg{height:22px;width:auto;flex:none;display:block}
+.logo b{font:800 12.5px var(--f);letter-spacing:.15em;color:var(--tx);white-space:nowrap}
+/* 窄屏（含 375px）头部会挤：只留 logo 图形，字标让位给经纪人名字 */
+@media(max-width:430px){.logo b{display:none}.ref{font-size:10.5px;max-width:34vw;padding:0 10px}}
+.hd{display:flex;align-items:center;gap:8px;min-width:0}
+/* 经纪人名字框与语言切换：同一高度基准 */
+.ref,.lang{height:36px;border:1px solid var(--ln);border-radius:99px;flex:none}
+.ref{position:relative;overflow:hidden;display:flex;align-items:center;font:500 11px var(--m);color:var(--dim);padding:0 12px;
+white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:40vw;min-width:0}
+.ref::after{content:"";position:absolute;inset:0;pointer-events:none;
+background:linear-gradient(105deg,transparent 34%,rgba(255,255,255,.30) 50%,transparent 66%);
+transform:translateX(-130%);animation:shim 7.2s ease-in-out infinite}
+@keyframes shim{0%{transform:translateX(-130%)}30.5%,100%{transform:translateX(130%)}}
+.lang{position:relative;display:flex;overflow:hidden;background:rgba(255,255,255,.03)}
+/* 胶囊滑块：带回弹的弹性过渡 */
+.lang em{position:absolute;top:3px;bottom:3px;left:3px;width:calc(50% - 3px);border-radius:99px;
+background:var(--pk);box-shadow:0 2px 10px -2px rgba(255,45,120,.7);
+transition:transform .42s cubic-bezier(.34,1.56,.64,1);will-change:transform}
+.lang.zh em{transform:translateX(100%)}
+.lang button{position:relative;z-index:1;background:none;border:0;color:var(--dim);
+font:600 12px var(--f);padding:0 14px;cursor:pointer;height:100%;min-width:44px;
+transition:color .3s ease}
+.lang button.on{color:#fff}
+/* ── Hero ── */
+.hero{padding:44px 0 30px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font:600 11px var(--f);letter-spacing:.2em;text-transform:uppercase;
+color:var(--dim);border:1px solid var(--ln);border-radius:99px;padding:7px 14px;background:rgba(255,255,255,.03)}
+.eyebrow i{width:6px;height:6px;border-radius:99px;background:var(--gr);font-style:normal;animation:bl 2.4s ease-in-out infinite}
+@keyframes bl{0%,100%{opacity:1}50%{opacity:.25}}
+h1{font-size:clamp(34px,9vw,58px);font-weight:900;line-height:1.03;letter-spacing:-.035em;margin:18px 0 0}
+h1 em{font-style:normal;background:linear-gradient(100deg,#ff2d78,#c96bff 45%,#38bdf8);-webkit-background-clip:text;background-clip:text;color:transparent}
+h1 span{display:block;opacity:0;transform:translateY(18px);animation:up .75s cubic-bezier(.2,.7,.2,1) forwards}
+h1 span:nth-child(2){animation-delay:.11s}
+@keyframes up{to{opacity:1;transform:none}}
+.sub{color:var(--dim);margin-top:16px;font-size:16.5px;max-width:50ch;opacity:0;animation:up .75s cubic-bezier(.2,.7,.2,1) .24s forwards}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:26px;opacity:0;animation:up .75s cubic-bezier(.2,.7,.2,1) .34s forwards}
+.fact{background:var(--sf);border:1px solid var(--ln);border-radius:14px;padding:13px;backdrop-filter:blur(8px)}
+.fact b{display:block;font:900 23px var(--f);letter-spacing:-.02em;
+background:linear-gradient(120deg,#fff,#ffbcd5);-webkit-background-clip:text;background-clip:text;color:transparent}
+.fact span{font-size:11.5px;color:var(--dim);line-height:1.35;display:block;margin-top:2px}
+h2{font:600 12px var(--f);letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin:34px 0 14px;display:flex;align-items:center;gap:12px}
+h2::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--ln),transparent)}
+/* ── 岗位磨砂玻璃条 ── */
+.job{position:relative;border:1px solid var(--ln);border-radius:18px;margin-bottom:11px;overflow:hidden;
+background:linear-gradient(135deg,hsla(var(--h),70%,55%,.11),hsla(var(--h),70%,45%,.03));
+backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3);transition:border-color .25s,transform .25s}
+.job::before{content:"";position:absolute;inset:-2px;border-radius:inherit;pointer-events:none;opacity:.5;
+background:conic-gradient(from var(--a,0deg) at 30% 50%,transparent 0deg,hsla(var(--h),85%,62%,.5) 60deg,transparent 130deg,transparent 360deg);
+-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;padding:1px;
+animation:aur 9s linear infinite}
+@keyframes aur{to{--a:360deg}}
+@property --a{syntax:'<angle>';initial-value:0deg;inherits:false}
+.job.on{border-color:hsla(var(--h),80%,60%,.55)}
+.job .bar{display:flex;align-items:center;gap:13px;padding:15px 16px;cursor:pointer;user-select:none;min-height:76px}
+.jt{flex:1;min-width:0}
+.jt .n{font-weight:700;font-size:17.5px;letter-spacing:-.01em;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.jt .n s{text-decoration:none;color:var(--dim);font-size:12.5px;font-weight:400}
+/* 岗位剪影：卡片右侧背景里隐约倾斜的职业符号，不抢视线 */
+.emb{position:absolute;right:94px;top:50%;width:222px;height:222px;pointer-events:none;
+transform:translateY(-50%) rotate(-25deg);opacity:.063;
+background-repeat:no-repeat;background-position:center;background-size:contain;
+transition:opacity .3s,transform .3s}
+.job.on .emb{opacity:.099;transform:translateY(-50%) rotate(-23deg) scale(1.04)}
+@media(max-width:430px){.emb{right:82px;width:186px;height:186px}}
+/* 头像条：一人一张，排不下的向右渐隐（mask），不显示人数文字 */
+.crew{display:flex;align-items:center;margin-top:7px;height:23px;overflow:hidden;
+-webkit-mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 34px),transparent 100%);
+mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 34px),transparent 100%)}
+.crew img{width:22px;height:22px;border-radius:99px;margin-right:-7px;flex:none;
+border:1.5px solid rgba(9,9,14,.9);background:hsla(var(--h),35%,22%,1)}
+.pay{font:500 13px var(--m);color:hsl(var(--h),75%,72%);white-space:nowrap;flex:none}
+/* next 圆钮：环缓慢顺时针转；里面的人物轮廓不转，男女随呼吸周期交替 */
+/* 卡片极光背景周期 9s；next 亮度周期 = 9 × 1.3 = 11.7s，与背景永不同频（缓慢错拍） */
+.nx{position:relative;width:42px;height:42px;flex:none;border-radius:99px;overflow:hidden;
+background:hsla(var(--h),70%,55%,.13);border:1px solid hsla(var(--h),70%,60%,.28);
+animation:brt 11.7s ease-in-out infinite}
+@keyframes brt{0%,100%{opacity:.40}50%{opacity:.80}}
+.nx .ring{position:absolute;inset:-1px;border-radius:99px;
+background:conic-gradient(from 0deg,transparent 0deg,hsla(var(--h),90%,72%,.55) 55deg,transparent 120deg,transparent 360deg);
+-webkit-mask:radial-gradient(circle,transparent 0 62%,#000 63%);mask:radial-gradient(circle,transparent 0 62%,#000 63%);
+animation:spin 14s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.nx .sil{position:absolute;inset:0;display:block;background-repeat:no-repeat;background-position:center 128%;
+background-size:88% auto;opacity:0}
+.nx .sil.m{animation:silM 9.2s ease-in-out infinite}
+.nx .sil.f{animation:silF 9.2s ease-in-out infinite}
+@keyframes silM{0%,42%{opacity:.5}50%,92%{opacity:0}100%{opacity:.5}}
+@keyframes silF{0%,42%{opacity:0}50%,92%{opacity:.5}100%{opacity:0}}
+/* next 字样：跟着顺时针转（与外环同向同速），常驻 50% 透明 */
+.nx u{position:absolute;inset:0;display:grid;place-items:center;text-decoration:none;
+font:700 9px var(--f);letter-spacing:.1em;color:hsl(var(--h),85%,90%);text-transform:uppercase;
+text-shadow:0 1px 4px rgba(0,0,0,.75);opacity:.5;animation:spin 14s linear infinite}
+.job.on .nx{animation:none;opacity:1}
+.job.on .nx u{animation:none;opacity:.85}
+.urg{font:600 10px var(--f);letter-spacing:.08em;color:var(--am);border:1px solid rgba(255,176,32,.4);
+border-radius:99px;padding:2px 7px;text-transform:uppercase}
+/* ── 展开区 ── */
+.panel{max-height:0;overflow:hidden;transition:max-height .42s cubic-bezier(.3,.8,.3,1)}
+.pin{padding:2px 16px 17px;border-top:1px solid var(--ln);margin-top:0}
+.jd{color:#c9c9d6;font-size:14.5px;line-height:1.65;margin:14px 0 4px}
+.meta{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0 4px}
+.tag{font-size:11.5px;color:var(--dim);border:1px solid var(--ln);border-radius:99px;padding:3px 10px;background:rgba(255,255,255,.03)}
+.btn{display:block;width:100%;margin-top:14px;border:0;border-radius:13px;cursor:pointer;text-decoration:none;text-align:center;
+font:700 15.5px var(--f);padding:15px;min-height:52px;color:#fff;
+background:linear-gradient(100deg,hsl(var(--h),75%,52%),hsl(calc(var(--h) + 26),75%,56%));
+box-shadow:0 6px 22px -8px hsla(var(--h),80%,50%,.75);transition:transform .15s,filter .15s}
+.btn:active{transform:scale(.985)}
+.btn:disabled{opacity:.42;cursor:default;box-shadow:none}
+label{display:block;font-size:12.5px;color:var(--dim);margin:14px 0 6px;font-weight:600;letter-spacing:.01em}
+label u{text-decoration:none;color:hsl(var(--h),70%,70%)}
+input{width:100%;background:rgba(0,0,0,.3);border:1px solid var(--ln);border-radius:12px;color:var(--tx);
+font:500 16.5px var(--m);padding:14px 15px;outline:none;min-height:52px;-webkit-appearance:none}
+input:focus{border-color:hsl(var(--h),70%,55%);box-shadow:0 0 0 3px hsla(var(--h),70%,55%,.13)}
+input::placeholder{color:#5b5b6b;font-size:14px}
+.hint{font-size:11.5px;color:#7a7a8c;margin-top:5px;line-height:1.45}
+/* ── 三步 ── */
+.steps{margin-top:16px;display:grid;gap:9px}
+.st{display:flex;align-items:center;gap:12px;padding:13px 14px;border-radius:13px;cursor:pointer;
+background:rgba(255,255,255,.045);border:1px solid var(--ln);text-decoration:none;color:inherit;transition:.18s;min-height:58px}
+.st:hover{border-color:hsla(var(--h),70%,60%,.5);background:rgba(255,255,255,.075)}
+.st i{width:27px;height:27px;border-radius:99px;flex:none;display:grid;place-items:center;font:700 12px var(--m);font-style:normal;
+background:hsla(var(--h),70%,55%,.17);color:hsl(var(--h),80%,78%);border:1px solid hsla(var(--h),70%,60%,.32)}
+.st div{flex:1;min-width:0}
+.st b{display:block;font-size:14.5px;font-weight:600}
+.st span{font-size:11.5px;color:var(--dim)}
+.st u{text-decoration:none;font-size:17px;color:var(--dim);flex:none}
+.st.done{opacity:.62}
+.st.done i{background:rgba(51,214,159,.17);color:var(--gr);border-color:rgba(51,214,159,.35)}
+.st.done u::before{content:"✓";color:var(--gr)}
+.st.done u{font-size:15px}
+.st.wip{border-color:hsla(38,90%,60%,.4);background:rgba(255,176,32,.06)}
+.st.wip i{background:rgba(255,176,32,.18);color:var(--am);border-color:rgba(255,176,32,.4)}
+.st u em{font-style:normal;font:600 10px var(--f);letter-spacing:.06em;color:var(--am);
+border:1px solid rgba(255,176,32,.42);border-radius:99px;padding:3px 8px;white-space:nowrap}
+.st.lock{opacity:.34;pointer-events:none}
+.fin{margin-top:14px;padding:15px 16px;border-radius:13px;
+background:linear-gradient(135deg,rgba(51,214,159,.13),rgba(51,214,159,.04));
+border:1px solid rgba(51,214,159,.34)}
+.fin b{display:block;font:700 15px var(--f);color:var(--gr);margin-bottom:5px}
+.fin span{font-size:12.5px;color:#a8b8b2;line-height:1.6}
+.who{display:flex;align-items:center;gap:9px;margin-top:14px;padding:11px 13px;border-radius:12px;
+background:rgba(51,214,159,.08);border:1px solid rgba(51,214,159,.22);font-size:13px}
+.who b{font-weight:700}.who button{margin-left:auto;background:none;border:0;color:var(--dim);font:500 12px var(--f);cursor:pointer;text-decoration:underline;padding:6px}
+/* .ref 是 display:flex、.job 等也带自定义 display —— 都会盖掉浏览器对 [hidden] 的
+   默认 display:none。第三次踩这个坑了（agent 的 h2、agent 的链接块、join 的归因徽章），
+   所以直接一条兜死：凡是 hidden 就必须不可见。 */
+[hidden]{display:none!important}
+.err{background:rgba(255,45,120,.1);border:1px solid rgba(255,45,120,.32);color:#ffb3cc;border-radius:12px;padding:12px;font-size:13.5px;margin-top:10px}
+.warn{background:rgba(255,176,32,.1);border:1px solid rgba(255,176,32,.34);color:#ffd79a;border-radius:12px;padding:12px;font-size:13.5px;margin-bottom:12px}
+.flow{display:grid;gap:0;margin-top:6px}
+.fl{display:flex;gap:13px;padding:11px 0;border-bottom:1px solid var(--ln)}
+.fl:last-child{border:0}
+.fl.now{position:relative}
+.fl.now b{color:var(--tx)}
+.fl.now i{background:hsla(320,75%,58%,.2);border-color:hsla(320,75%,62%,.55);color:#ffa8ca}
+.fl.now i::after{content:"";position:absolute;inset:-5px;border-radius:99px;
+border:1px solid hsla(320,75%,62%,.5);animation:ring 2.4s ease-out infinite}
+@keyframes ring{0%{transform:scale(.85);opacity:.9}70%,100%{transform:scale(1.5);opacity:0}}
+.fl.past i{background:rgba(51,214,159,.16);border-color:rgba(51,214,159,.4);color:var(--gr)}
+.fl.past b{color:var(--dim)}
+.fl .nowtag{display:inline-block;margin-left:8px;vertical-align:2px;
+font:700 9px var(--f);letter-spacing:.14em;text-transform:uppercase;
+color:#ffa8ca;border:1px solid hsla(320,75%,62%,.45);border-radius:99px;padding:2px 7px}
+.fl i{position:relative;flex:0 0 25px;height:25px;border-radius:99px;background:var(--sf2);border:1px solid var(--ln);
+display:grid;place-items:center;font:600 11px var(--m);font-style:normal;color:var(--pk)}
+.fl b{display:block;font-weight:600;font-size:14.5px}.fl span{color:var(--dim);font-size:13px}
+footer{border-top:1px solid var(--ln);margin-top:44px;padding:24px 0 44px;color:var(--dim);font-size:12.5px}
+/* 底部：手机 = [工会名 · 地址钮] / [三个链接]，两行都两端顶满；
+   桌面 = 工会名独占一行，其下「地址钮 + 三个链接」四者同行等距平铺 */
+.fgrid{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;
+row-gap:20px;column-gap:14px}
+.fbrand{font:800 15px var(--f);letter-spacing:.13em;color:var(--tx);flex:0 0 auto;text-decoration:none;transition:opacity .2s}
+.fbrand:hover{opacity:.78}
+.fbrand i{font-style:normal;background:linear-gradient(100deg,#e4007f,#6d3b85 55%,#1d2088);
+-webkit-background-clip:text;background-clip:text;color:transparent}
+.brk{flex-basis:100%;height:0;margin:0}
+.fbtn,.flink{display:inline-flex;align-items:center;gap:7px;flex:0 0 auto;
+background:none;border:0;padding:0;cursor:pointer;color:var(--dim);
+font:500 12px var(--f);text-decoration:none;transition:color .2s;min-height:26px}
+.fbtn b{font-weight:500}
+/* 星探登录：页脚里唯一的「可点按钮」。刻意做得比 .flink 只重一点点 ——
+   这个页面是发给候选人的，入口要能找到，但不能抢戏。无下划线。 */
+.sbtn{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;
+ border:1px solid var(--ln);background:rgba(255,255,255,.03);color:var(--dim);
+ font:500 11.5px var(--f);text-decoration:none;transition:color .2s,border-color .2s,background .2s}
+.sbtn:hover{color:var(--tx);border-color:rgba(255,255,255,.22);background:rgba(255,255,255,.06)}
+.sbtn svg{width:12px;height:12px;fill:currentColor;opacity:.65}
+/* 死链页的出口按钮：给候选人一条活路，但要他自己点 —— 不能替他默认跳过去 */
+.deadgo{display:inline-block;margin-top:12px;padding:10px 18px;border-radius:12px;
+ border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.05);
+ color:var(--tx);font:600 13.5px var(--f);text-decoration:none}
+.deadgo:hover{background:rgba(255,255,255,.1)}
+.flink span{font:500 12px var(--m)}
+#fabout span{font-family:var(--f);font-weight:600}
+.fbtn:hover,.fbtn.on,.flink:hover{color:var(--tx)}
+.fbtn svg,.flink svg{width:12.5px;height:12.5px;fill:currentColor;flex:none;opacity:.6;transition:opacity .2s}
+.fbtn:hover svg,.fbtn.on svg,.flink:hover svg{opacity:1}
+.fbtn.on b{border-bottom:1px solid hsla(320,72%,64%,.7);padding-bottom:2px}
+/* 展开的完整地址：整幅铺满、两端对齐 */
+.faddr[hidden]{display:none}
+.faddr{display:block;width:100%;margin-top:18px;line-height:1.75;color:#82828f;
+font-size:12.5px;text-decoration:none;transition:color .2s;
+text-align:justify;text-justify:inter-word}
+.faddr:hover{color:var(--tx)}
+/* 底部装饰：iframe 按正常比例渲染（宽 × 420），外层只露出下半条并裁掉上部。
+   不是把画面压扁——压扁会让人形变形；这里是等比渲染后做窗口裁切。
+   顶缘用 mask 渐隐，和页面背景无缝接上，看不出边界。 */
+/* 页脚舞台：装饰铺满「公会名上方那条分割线」到「最底行那条分割线」之间，
+   公会名与三列标签叠在它上面。装饰仍是独立 iframe —— 删掉 .crewwrap 那一行即可移除，
+   .fstage 退化成普通容器，页脚照常显示。 */
+.fstage{position:relative;min-height:210px;display:flex;align-items:flex-end;
+  padding:34px 0 26px;margin-bottom:-8px}
+.crewwrap{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;opacity:.8;
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0,rgba(0,0,0,.5) 26%,#000 62%,#000 88%,transparent 100%);
+          mask-image:linear-gradient(to bottom,transparent 0,rgba(0,0,0,.5) 26%,#000 62%,#000 88%,transparent 100%)}
+.crewart{position:absolute;left:0;bottom:0;width:100%;height:480px;border:0;
+  display:block;background:transparent;color-scheme:normal}
+/* 压一层暗色，保证叠在动态画面上的文字始终可读 */
+.fstage::after{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:linear-gradient(to bottom,rgba(7,7,11,.62),rgba(7,7,11,.34) 48%,rgba(7,7,11,.72))}
+.fstage>.fgrid,.fstage>.faddr{position:relative;z-index:1;width:100%}
+@media(max-width:520px){.fstage{min-height:170px;padding:26px 0 20px}
+  .crewart{height:360px}.crewwrap{opacity:.62}}
+@media(prefers-reduced-motion:reduce){.crewwrap{opacity:.55}}
+.fmeta{margin-top:18px;padding-top:15px;border-top:1px solid var(--ln);
+display:flex;flex-wrap:wrap;justify-content:space-between;gap:5px 16px;color:#63636f;font-size:11px}
+/* 桌面：工会名独占一行，四者同行平铺 */
+@media(min-width:640px){.fbrand{flex:0 0 100%}.brk{display:none}}
+.toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,20px);z-index:60;
+background:rgba(20,20,28,.96);border:1px solid rgba(51,214,159,.45);color:var(--tx);
+border-radius:13px;padding:13px 18px;font:600 13.5px var(--f);box-shadow:0 10px 34px -10px #000;
+opacity:0;transition:opacity .35s,transform .35s;max-width:88vw;text-align:center}
+.toast.go{opacity:1;transform:translate(-50%,0)}
+.modal{position:fixed;inset:0;z-index:50;background:rgba(4,4,8,.72);backdrop-filter:blur(6px);display:grid;place-items:center;padding:22px}
+.modal>div{background:#13131b;border:1px solid var(--ln);border-radius:18px;padding:22px;max-width:400px;width:100%}
+.modal h3{font-size:18px;font-weight:800;margin-bottom:9px}
+.modal p{color:var(--dim);font-size:14px;line-height:1.6}
+.modal .row{display:grid;gap:9px;margin-top:17px}
+.modal button{border-radius:12px;padding:14px;font:600 14.5px var(--f);cursor:pointer;border:1px solid var(--ln);
+background:rgba(255,255,255,.06);color:var(--tx);min-height:50px}
+.modal button.pri{background:var(--pk);border-color:var(--pk);color:#fff}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head><body>
+<canvas id="bg"></canvas><div class="scrim"></div>
+<div class="page">
+<header><div class="wrap"><a class="logo" href="https://mukestar.jp.larksuite.com/slides/YE9jstEzSlc9qSdmZvKj2KWIpye" target="_blank" rel="noopener" aria-label="MUKE MEDIA">
+<svg viewBox="0 0 277.58 146.31" role="img" aria-label="MUKE MEDIA"><defs>
+<linearGradient id="mg" x1="0" y1="73.16" x2="277.58" y2="73.16" gradientUnits="userSpaceOnUse">
+<stop offset="0" stop-color="#e4007f"/><stop offset=".53" stop-color="#6d3b85"/><stop offset="1" stop-color="#1d2088"/></linearGradient></defs>
+<path fill="url(#mg)" d="M3.44,122.26L84.57,6.29c4.61-6.6,13.69-8.21,20.29-3.6,4.05,2.83,6.22,7.35,6.23,11.94h.06v71.37L168.03,6.17c4.67-6.57,13.78-8.1,20.35-3.43,4,2.84,6.13,7.33,6.13,11.89h.04v71.21L250.4,7.09c2.56-4.25,7.22-7.09,12.54-7.09,8.08,0,14.63,6.55,14.63,14.63,0,3.54-1.26,6.8-3.36,9.33l-81.76,115.26c-2.56,4.25-7.22,7.09-12.54,7.09-8.08,0-14.63-6.55-14.63-14.63V60.31l-56.24,78.93c-2.56,4.24-7.21,7.07-12.53,7.07-8.08,0-14.63-6.55-14.63-14.63V60.97l-54.54,77.96c-2.52,4.41-7.27,7.38-12.71,7.38-8.08,0-14.63-6.55-14.63-14.63,0-3.59,1.3-6.88,3.44-9.43Z"/>
+<path fill="url(#mg)" fill-rule="evenodd" d="M252.43,89.06c14.17,1.77,25.14,13.87,25.14,28.52s-10.97,26.74-25.14,28.52v-17.11l11.62-9.14h0c.36-.28.67-.62.93-1.01,1.32-1.99.77-4.67-1.21-5.98l-11.33-7.48v-16.31ZM248.84,88.83c1.22,0,2.42.08,3.6.22v16.31l-6.32-4.17c-.73-.55-1.64-.88-2.62-.88-2.39,0-4.33,1.93-4.33,4.32v25.87h0c0,.93.3,1.88.92,2.67,1.47,1.88,4.2,2.2,6.07.73l6.26-4.93v17.11c-1.18.15-2.38.22-3.6.22-15.87,0-28.74-12.87-28.74-28.74s12.87-28.74,28.74-28.74Z"/></svg>
+<b>MUKE MEDIA</b></a>
+<div class="hd"><div class="ref" id="ref" hidden></div>
+<div class="lang" id="lang"><em></em><button id="lid" class="on">ID</button><button id="lzh">中</button></div></div></div></header>
+<div class="wrap">
+<section class="hero">
+<div class="eyebrow"><i></i><span data-t="eyebrow"></span></div>
+<h1 data-t="h1"></h1>
+<p class="sub" data-t="sub"></p>
+<div class="facts">
+<div class="fact"><b id="f1">&mdash;</b><span data-t="fact1"></span></div>
+<div class="fact"><b id="f2">&mdash;</b><span data-t="fact2"></span></div>
+<div class="fact"><b id="f3">&mdash;</b><span data-t="fact3"></span></div>
+</div>
+</section>
+<h2 data-t="h_jobs"></h2><div id="jobs"></div>
+<h2 data-t="h_flow"></h2><div class="flow" id="flow"></div>
+<footer>
+<div class="fstage">
+<!-- 底部装饰：独立模块，iframe 隔离。
+     热拔插：不想要就删掉这一行，页面其余部分完全不受影响；
+     换效果只改 /crew/index.html，不必动本文件。
+     脚本崩溃、视频加载失败、渲染卡顿都被关在 iframe 里，碰不到业务逻辑。 -->
+<div class="crewwrap" aria-hidden="true"><iframe class="crewart" src="../crew/"
+     loading="lazy" tabindex="-1" title="" aria-hidden="true" scrolling="no"
+     frameborder="0" allow="autoplay"></iframe></div>
+<div class="fgrid">
+<a class="fbrand" href="https://mukestar.jp.larksuite.com/slides/YE9jstEzSlc9qSdmZvKj2KWIpye" target="_blank" rel="noopener">MUKE STAR<i>_ID</i></a>
+<button class="fbtn" id="faddrBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 017 7c0 5.25-7 13-7 13S5 14.25 5 9a7 7 0 017-7zm0 4.5A2.5 2.5 0 1012 11.5 2.5 2.5 0 0012 6.5z"/></svg><b>PT MUKE · E9 Landmark Pluit</b></button>
+<i class="brk"></i>
+<a class="flink" id="fabout" href="https://mukestar.jp.larksuite.com/slides/YE9jstEzSlc9qSdmZvKj2KWIpye" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 110 20 10 10 0 010-20zm0 2a8 8 0 100 16 8 8 0 000-16zm-1 4h2v2h-2zm0 4h2v6h-2z"/></svg><span></span></a>
+<a class="flink" href="https://www.tiktok.com/@muke.md" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.6 5.8a4.3 4.3 0 01-1-2.8h-3.1v11.6a2.6 2.6 0 11-1.9-2.5V9a5.7 5.7 0 105 5.6V9.3a7.3 7.3 0 004.3 1.4V7.6a4.3 4.3 0 01-3.3-1.8z"/></svg><span>@muke.md</span></a>
+<a class="flink" href="https://www.tiktok.com/@.mk.stars" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.6 5.8a4.3 4.3 0 01-1-2.8h-3.1v11.6a2.6 2.6 0 11-1.9-2.5V9a5.7 5.7 0 105 5.6V9.3a7.3 7.3 0 004.3 1.4V7.6a4.3 4.3 0 01-3.3-1.8z"/></svg><span>@.mk.stars</span></a>
+</div>
+<a class="faddr" id="faddr" href="https://maps.app.goo.gl/QK3aB68W8FY22Tag6" target="_blank" rel="noopener" hidden></a>
+</div>
+
+<div class="fmeta"><span id="fnote"></span><a class="sbtn" id="slogin" href="../agent/" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a5 5 0 015 5v3h1a2 2 0 012 2v9a2 2 0 01-2 2H6a2 2 0 01-2-2v-9a2 2 0 012-2h1V7a5 5 0 015-5zm0 2a3 3 0 00-3 3v3h6V7a3 3 0 00-3-3z"/></svg><span data-t="scout_login"></span></a><span>&copy; PT MUKE · MUKE MEDIA Indonesia</span></div>
+</footer>
+</div></div>
+<div id="modal"></div>
+<script>
+/* ═══ MUKE 招募门户 v3（2026-08-31）═══
+   一条链接覆盖全岗位；姓名电话只填一次，后续三张表单 prefill+hide 自动带入。
+   状态存本机 localStorage（混淆非明文；但同源同设备本就只有候选人自己能读，
+   真正的跨设备找回需要后端，见 TODO A45）。 */
+var qs=new URLSearchParams(location.search);
+var AGENT=(qs.get('a')||qs.get('agent')||'').trim();
+/* ?s=<星探码>。s = scout，与 ?a= 的 a = agent 对齐，一眼能看出是给谁的。
+   ?r= / ?ref= 保留为旧链接的静默别名 —— 老链接不该因为改名而失效。 */
+var REF=(qs.get('s')||qs.get('scout')||qs.get('r')||qs.get('ref')||'').trim().toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,8);
+var DONE=qs.get('done')||'';           // 表单提交后跳回 ?done=cv|bg|ex 用于自动标记完成
+var LANG='id';try{var sv=localStorage.getItem('muke_lang');if(sv==='zh'||sv==='id')LANG=sv;}catch(e){}
+var CODES=null,JOBS=null,REFNAME='',MOVED='',OPENJOB=null;
+/* 归因码没拿到就绝不放行报名：refFor() 会回落成空 Ref，候选人照样能填能交，
+   但简历落库时没有经纪人的码 —— 页面看起来一切正常，经纪人的这一单白推荐，
+   而且事后无法追认。宁可让人多刷新一次。（2026-09-01 加固）
+
+   ⚠ 2026-09-04 WO-A96：原先只有一个 REFFAIL，把两种性质完全不同的失败混成一种：
+     · 网络抖动加载失败 —— 刷新有用，挡住报名是对的
+     · 码根本不存在(404) —— 刷新一万次也没用，挡住只是白白赶走候选人；
+       归因在码失效那一刻就已经丢了，拦下他并不能把它找回来
+   所以拆成两个状态位，404 走"降级成公开入口 + 琥珀色提示"（张博 2026-09-04 拍板选 B）。 */
+var REFFAIL=false;   // 网络加载失败：可重试 → 仍挡住报名，提示刷新
+/* MANUAL = 对外展示用的固定值（在职员工、入职周期），由 data/manual.json 手动维护。
+   2026-09-05 张博定案：这两个是隐私数据，不再如实显示真实值。
+   在职员工写成「65+」这种非实时的感觉，入职周期固定为 3。
+   要改就改 data/manual.json，提交即生效（不经过 sync，所以不用等下一轮同步）。
+   ⚠ 拿不到就置横杠，绝不回退到真实数据 —— 回退等于把要藏的数字又漏出去。 */
+var MANUAL=null;
+var REFBAD=false;    // 码不存在(404)：不可重试 → 正常展示岗位，只提示推荐不计入
+var SCOUT=false;     // ?r=<星探码> 命中：单岗位页，页脚露出星探的数据入口
+if(!AGENT&&!REF){try{AGENT=localStorage.getItem('muke_agent_name')||'';REF=localStorage.getItem('muke_ref')||'';}catch(e){}}
+/* ⛔ 绝不在这里写 localStorage —— 此刻还没 fetch，根本不知道这个码有没有对应文件。
+   原先无条件写入的后果：打开一次坏链接 → 坏码被存下 → 之后连不带参数的公开入口
+   /join/ 也会从 localStorage 把坏码读回来 → 这台手机永远看不到任何岗位。
+   实测复现过：干净手机 10 个岗位 → 开一次 ?a=555 → 回到 /join/ 变 0 个岗位。
+   改为「解析成功才写」，见页尾 fetch 的 .then 分支。 */
+/* ⛔ 同样不在这里写 muke_ref —— 此刻还没查表，不知道这个码存不存在。
+   校验通过才存，见页尾 ?r= 的 .then 分支（WO-A98 的教训，见 muke_agent_name）。 */
+
+/* ── 本机状态：混淆存储（XOR+base64）。不是加密——静态页的密钥藏不住，
+      但 devtools 里不会一眼看到明文。数据只在候选人自己设备上。 ── */
+var SK='muke.v3.'+location.pathname;
+function xo(s,k){var o='';for(var i=0;i<s.length;i++)o+=String.fromCharCode(s.charCodeAt(i)^k.charCodeAt(i%k.length));return o;}
+function save(o){try{localStorage.setItem('muke_c',btoa(unescape(encodeURIComponent(xo(JSON.stringify(o),SK)))));}catch(e){}}
+/* ⚠ 2026-09-05 修：load 必须是 save 的严格逆运算，原先两者的 xo 位置反了 ——
+   save 是 xo → UTF-8 编码 → base64，load 却是 base64 → xo → UTF-8 解码。
+   纯 ASCII 时两种顺序巧合一致，所以一直没暴露；名字含**任何**非 ASCII 字符
+   （中文、或 André 这种带重音的拉丁名）就对不上，load() 返回 null →
+   ME 为空 → 从表单跳回来时 markDone 直接 return → **他的进度永远记不上**，
+   页面看起来像没提交过，他会重复填。
+   改成 base64 → UTF-8 解码 → xo，与 save 严格互逆。
+   ✅ 向后兼容：ASCII 内容下新旧两种顺序结果相同，老用户的存档照常读得回。 */
+function load(){try{var r=localStorage.getItem('muke_c');if(!r)return null;return JSON.parse(xo(decodeURIComponent(escape(atob(r))),SK));}catch(e){return null;}}
+var ME=load()||null;
+
+var L={
+id:{eyebrow:'Sedang merekrut', h1:'Bangun karier di<br><em>live streaming</em>.',
+ sub:'MUKE adalah agensi live streaming TikTok di Jakarta. Kami cari orang yang mau serius — bukan cuma coba-coba. Lamaran online, gratis, tanpa biaya apa pun.',
+ fact1:'karyawan aktif', fact2:'posisi dibuka', fact3:'hari sampai kerja',
+ addr:"PT MUKE · Landmark Pluit Tower E9, Lantai 3\nJl. Pluit Selatan Raya No.2, Pluit, Jakarta Utara 14450\nMasuk lewat Lantai P1",
+ maps:'Buka di Google Maps →', tk:'Tentang & sosial', about:'Tentang MUKE', nowtag:'sekarang',
+ h_jobs:'Lowongan', h_flow:'Prosesnya',
+ need:function(n){return 'butuh '+n+' orang';}, urgent:'urgent',
+ invited:function(n){return 'Diundang oleh '+n;}, moved:function(a,b){return a+' · kini '+b;}, code:function(c){return 'Kode: '+c;},
+ none:'Belum ada lowongan terbuka saat ini.',
+ none_agent:'Agen ini belum pegang lowongan yang terbuka sekarang. Coba tanya dia lagi nanti.',
+ load_err:'Gagal memuat lowongan. Coba refresh halaman.',
+ ref_err:'Data perekomendasi gagal dimuat (masalah koneksi). Refresh halaman dulu, baru daftar — kalau langsung daftar, rekomendasi tidak akan tercatat.',
+ ref_dead:'Link ini tidak berlaku — alamatnya salah atau sudah kedaluwarsa. Minta link baru ke orang yang mengirimnya. Kalau mau lihat semua lowongan yang dibuka sekarang:',
+ go_public:'Lihat semua lowongan',
+ scout_login:'Login scout',
+ updated:function(d){return 'Data diperbarui '+d;},
+ apply:'Lamar posisi ini', l_name:'Nama lengkap', l_phone:'Nomor WhatsApp',
+ n_hint:'Tulis <u>persis seperti di KTP</u>. Dipakai untuk kontrak kerja.',
+ p_hint:'Harus nomor <u>milikmu sendiri</u> — jadi satu-satunya identitas kamu setelah masuk kerja.',
+ ph_name:'contoh: Siti Rahayu', ph_phone:'contoh: 081234567890',
+ e_n_short:'Nama terlalu pendek. Tulis nama lengkap sesuai KTP.',
+ e_n_long:'Nama terlalu panjang (maks 60 huruf).',
+ e_n_digit:'Nama tidak boleh mengandung angka.',
+ e_n_char:'Nama hanya boleh huruf, spasi, titik, dan tanda kutip.',
+ e_n_fake:'Nama tidak valid. Tulis nama aslimu sesuai KTP.',
+ e_p_empty:'Isi nomor WhatsApp kamu.',
+ e_p_mobile:'Harus nomor HP Indonesia (mulai 08 atau +628). Nomor rumah/kantor tidak bisa.',
+ e_p_short:'Nomor terlalu pendek. Contoh: 081234567890',
+ e_p_long:'Nomor terlalu panjang. Contoh: 081234567890',
+ e_p_fake:'Nomor tidak valid. Isi nomor WhatsApp aktif milikmu.',
+ hi:function(n){return n;}, chg:'ubah',
+ steps:[['Form lamaran','Data diri dan foto. 5–10 menit.'],
+        ['Kuesioner posisi','Ada penilaian — isi sesuai keahlian aslimu.'],
+        ['Tes tulis posisi','Ada batas waktu, dikerjakan sendiri.']],
+ ready:'Nama & nomor tersimpan. Kerjakan 3 langkah berurutan — tidak perlu isi ulang nama/nomor. Boleh ditutup dan dilanjut nanti di HP yang sama.',
+ back:'Setelah selesai, kembali ke halaman ini untuk langkah berikutnya.',
+ flow:[['Pendaftaran','Tiga form: lamaran → kuesioner → tes tulis.'],
+       ['Interview','Kami hubungi lewat WhatsApp untuk atur jadwal.'],
+       ['Mulai kerja','Bawa dokumen, langsung dibuatkan akun dan tim.']],
+ dup_t:'Langkah ini sudah selesai', dup_p:'Kamu sudah mengisi langkah ini. Mau memperbarui data, atau tadi salah pencet?',
+ dup_y:'Perbarui data saya', dup_n:'Salah pencet — kembali',
+ done_ok:'✅ Tersimpan. Lanjut ke langkah berikutnya di bawah.', wip:'lanjutkan',
+ done_closed:'✅ Data kamu sudah kami terima. Posisi ini baru saja ditutup, tim kami tetap akan meninjau berkasmu.',
+ exam_t:'Tes tulis sudah dibuka', exam_p:'Tes tulis ada batas waktu dan hanya dinilai sekali. Kalau sudah selesai, tidak perlu dibuka lagi.',
+ exam_y:'Tetap buka lagi',
+ fin_t:'🎉 Semua langkah selesai', fin_p:'Terima kasih! Tim kami akan menghubungi kamu lewat WhatsApp untuk mengatur jadwal interview. Tidak perlu melakukan apa-apa lagi.'},
+zh:{eyebrow:'正在招聘', h1:'在<em>直播</em>行业<br>做一份长久的事业。',
+ sub:'MUKE 是雅加达的 TikTok 直播机构。我们要的是认真做的人，不是来试试看的。线上投递，全程不收任何费用。',
+ fact1:'在职员工', fact2:'开放岗位', fact3:'天平均入职周期',
+ addr:"PT MUKE · Landmark Pluit Tower E9 三层\nJl. Pluit Selatan Raya No.2, Pluit, 北雅加达 14450\n从 P1 层入口进",
+ maps:'在 Google 地图打开 →', tk:'了解与关注', about:'关于我们', nowtag:'当前',
+ h_jobs:'在招岗位', h_flow:'流程',
+ need:function(n){return '招 '+n+' 人';}, urgent:'加急',
+ invited:function(n){return n+' 邀请';}, moved:function(a,b){return a+' · 现由 '+b+' 负责';}, code:function(c){return '归因码：'+c;},
+ none:'目前没有开放的岗位。',
+ none_agent:'这位经纪人目前没有开放中的岗位，晚点再问问他。',
+ load_err:'岗位加载失败，请刷新页面。',
+ ref_err:'推荐人信息加载失败（网络问题）。请刷新页面再报名 —— 直接报名的话，推荐关系不会被记录。',
+ ref_dead:'这个链接无效 —— 地址错误或已失效。请向发链接给你的人索要新链接。想直接看现在开放的全部岗位：',
+ go_public:'查看全部在招岗位',
+ scout_login:'星探登录',
+ updated:function(d){return '数据更新于 '+d;},
+ apply:'应聘这个岗位', l_name:'姓名', l_phone:'WhatsApp 号码',
+ n_hint:'请填写<u>与身份证完全一致</u>的姓名，用于签订劳动合同。',
+ p_hint:'必须是<u>你本人的主号码</u>——入职后这是你唯一的身份凭据。',
+ ph_name:'例：Siti Rahayu', ph_phone:'例：081234567890',
+ e_n_short:'姓名太短，请填写与身份证一致的完整姓名。',
+ e_n_long:'姓名过长（最多 60 个字符）。',
+ e_n_digit:'姓名不能包含数字。',
+ e_n_char:'姓名只能是字母、空格、点和撇号。',
+ e_n_fake:'姓名无效，请填写你的真实姓名。',
+ e_p_empty:'请填写 WhatsApp 号码。',
+ e_p_mobile:'必须是印尼手机号（08 或 +628 开头），座机不可用。',
+ e_p_short:'号码位数不足，例：081234567890',
+ e_p_long:'号码位数过多，例：081234567890',
+ e_p_fake:'号码无效，请填写你本人在用的 WhatsApp 号码。',
+ hi:function(n){return n;}, chg:'修改',
+ steps:[['报名表','个人资料、照片。5–10 分钟。'],
+        ['岗位问卷','涉及评分，请填真实技能背景。'],
+        ['岗位笔试','限时填写，请独立完成。']],
+ ready:'姓名和号码已记住。按顺序完成这 3 步，后面都不用再填姓名电话。中途关掉也不会丢，用同一台手机打开就能接着填。',
+ back:'每完成一步，回到本页继续下一步。',
+ flow:[['报名','三张表单：报名表 → 岗位问卷 → 笔试。'],
+       ['面试','我们用 WhatsApp 联系你约时间。'],
+       ['入职','带齐材料，当场开账号、分小组。']],
+ dup_t:'这一步已经完成', dup_p:'你已经填过这一步了。是要更新资料，还是刚才点错了？',
+ dup_y:'更新我的资料', dup_n:'点错了，返回',
+ done_ok:'✅ 已记录。下面继续下一步。', wip:'继续填',
+ done_closed:'✅ 资料已收到。这个岗位刚刚停止招聘了，我们仍会看你的材料。',
+ exam_t:'笔试已经打开过', exam_p:'笔试有时间限制、只计一次成绩。如果你已经做完了，不需要再打开。',
+ exam_y:'仍然再打开一次',
+ fin_t:'🎉 三步全部完成', fin_p:'谢谢！我们会通过 WhatsApp 联系你安排面试，你不需要再做任何事。'}};
+function t(k){return L[LANG][k];}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function norm(s){return String(s||'').toLowerCase().replace(/[^a-z0-9]/g,'');}
+/* ⚠ norm() 会把中文剥成空串 —— 岗位名是中文，DOM id / 完成状态键必须另用哈希，
+   否则 11 个岗位的 id 全部撞成 'pn_'（2026-08-31 实测踩到）。 */
+function jkey(s){var h=5381,x=String(s||'');for(var i=0;i<x.length;i++)h=((h*33)^x.charCodeAt(i))>>>0;return 'j'+h.toString(36);}
+/* 与 Base 的 WA9 公式同款：剥符号取右 9 位。两边必须一套规则，否则查不到 */
+function wa9(s){return String(s).replace(/[+\s\-().]/g,'').replace(/\D/g,'').slice(-9);}
+
+/* ── 校验：印尼实名 + 印尼手机号 ──
+   姓名：只允许字母/空格/'/./-（印尼名如 Siti Nur'aini、M. Rizky、Ayu-Wulan）；
+        禁数字与符号，至少 2 个词或 ≥3 字母，防「aaa」「测试」这类占位。
+   手机：归一成 8xxxxxxxx… 后必须以 8 开头（印尼移动号段），总长 10~13 位；
+        排除固话（021/022…）与明显假号（全同、连号）。 */
+function checkName(s){
+ var v=String(s||'').trim().replace(/\s+/g,' ');
+ var core=v.replace(/[ '.\u00b7\-]/g,'');          // 去掉分隔符后的实体字符
+ if(core.length<2)return 'e_n_short';
+ if(v.length>60)return 'e_n_long';
+ if(/\d/.test(v))return 'e_n_digit';
+ /* 允许：拉丁字母（含变音）、中文、日文假名、空格与 ' . · -
+    ⚠ 不能只允许拉丁——公司有中国籍员工与中文名候选人（2026-08-31 实测被拒） */
+ if(!/^[A-Za-z\u00c0-\u024f\u4e00-\u9fff\u3040-\u30ff' .\u00b7\-]+$/.test(v))return 'e_n_char';
+ var latin=/^[A-Za-z\u00c0-\u024f' .\u00b7\-]+$/.test(v);
+ if(latin&&core.length<3)return 'e_n_short';         // 纯拉丁名至少 3 字母
+ if(/^(.)\1+$/.test(core))return 'e_n_fake';        // aaa / 啊啊啊
+ return '';}
+
+/* 印尼号码归一：+62 / 62 / 0062 国际前缀，以及 +62 (0) 852… 这种「国际码 + 干线 0」
+   同时出现的自动填充格式，都要剥干净，最终必须以 8 开头。
+   ⚠ 2026-08-31 实测：iOS 通讯录填出的 +62 (0) 852 86087108 被旧版误判为座机 ——
+   旧版只剥一层（要么 62 要么 0），剥不掉 62 后面那个 0。 */
+function normPhone(s){
+ var d=String(s||'').replace(/\D/g,'');
+ d=d.replace(/^00/,'');
+ if(/^62/.test(d))d=d.slice(2);
+ d=d.replace(/^0+/,'');
+ return d;}
+function checkPhone(s){
+ var raw=String(s||'').replace(/\D/g,'');
+ if(!raw)return 'e_p_empty';
+ var d=normPhone(s);
+ if(!/^8/.test(d))return 'e_p_mobile';              // 印尼手机一律 8 开头
+ if(d.length<9)return 'e_p_short';
+ if(d.length>12)return 'e_p_long';
+ if(/^(\d)\1+$/.test(d))return 'e_p_fake';
+ var asc=true,desc=true;
+ for(var i=1;i<d.length;i++){if(+d[i]!==+d[i-1]+1)asc=false;if(+d[i]!==+d[i-1]-1)desc=false;}
+ if(asc||desc)return 'e_p_fake';
+ return '';}
+function fmtPhone(s){return '0'+normPhone(s);}       // 统一落库成 08xxxxxxxxxx
+
+/* 报名渠道自动识别（2026-09-02）：社交 App 的内置浏览器会在 UA 里留专有特征，
+   候选人和经纪人都不用做任何事。三重保险确保不弄脏数据：
+     ① 只认 App 专有特征，referrer 一律不用 —— 它会被短链和跳转页改写，置信度不够
+     ② 选项名从 jobs.json 实时来（Lark 里改 emoji/措辞/加渠道都自动适配），不写死
+     ③ 必须唯一命中一个选项才用；命中 0 个或 2 个以上一律放弃
+   认出来 → formUrl 自动 prefill+hide，候选人看不到这题；
+   认不出 → 不传这个字段，题目照常显示由候选人自己选。 */
+function detectKanal(){
+ var ua=navigator.userAgent||'';
+ var RULES=[[/musical_ly|Trill|aweme|BytedanceWebview/i,'TikTok'],
+            [/Instagram/i,'Instagram'],
+            [/FBAN|FBAV|FB_IAB|FBIOS/i,'Facebook'],
+            [/WhatsApp/i,'WhatsApp'],
+            [/Telegram/i,'Telegram']];
+ var key='';
+ for(var i=0;i<RULES.length;i++){if(RULES[i][0].test(ua)){key=RULES[i][1];break;}}
+ if(!key)return '';
+ var opts=(JOBS&&JOBS.srcOpts)||[],hit=[];
+ for(var k=0;k<opts.length;k++)if(opts[k].toLowerCase().indexOf(key.toLowerCase())>=0)hit.push(opts[k]);
+ return hit.length===1?hit[0]:'';}
+
+/* 归因码兜底（WO-A98）。公开入口和失效链接都不能把 Ref 留空：
+   A05.Ref 的题面写着「terisi otomatis — jangan diubah / 自动填写，请勿修改」，
+   可它空着又可编辑 —— 候选人会往里填东西（自己的名字、"—"、或听来的一个码），
+   而现有 180 个码全是 4 位大写字母数字，猜中一个就是归因串到别人头上。
+   给了值之后 formUrl() 会自动附 hide_，这道题对候选人直接隐藏。
+
+   ⚠ 为什么是两个码而不是一个：巡检①（checks.js）靠「Ref 为空」发现链路故障，
+   而 WO-A96 的 B 案让失效链接降级成公开入口。两者若都填 MUKE，空 Ref 会归零，
+   巡检就再也看不见「链接批量失效」。所以失效来源单独用 MUKEX，巡检把它一并计入。
+   两个码与现有 180 个归因码均无碰撞（2026-09-05 全量核对）；
+   它们匹配不到任何 ARef，归A码 公式尾部是 [Ref] 透传，因此原样落地、不计入任何人业绩。 */
+var REF_PUBLIC='MX5J';    // 公司直招（张博在 A03 的码，11 岗全覆盖；他不招人不拿佣金，
+                          // 历史上的离职移交也都落在这里，所以不另设码 —— 2026-09-05 张博定案）
+var REF_BROKEN='MUKEX';   // 由失效链接降级而来（异常信号，巡检① 会盯；不进任何结算）
+function refFor(job){
+ if(CODES)return CODES.byJob[job]||'';   // ?a= 经纪人多岗位 ／ ?r= 星探单岗位，都走这里
+ if(REFFAIL)return '';                   // 网络失败时页面已挡住报名；真被走到也不许假冒归因
+ return REFBAD?REF_BROKEN:REF_PUBLIC;}
+ /* ⛔ 这里刻意不再有「?r= 原样透传」那条分支：未经查表的码绝不能变成归因。
+    旧写法把 URL 里的任意字符串直接当归因码落库，写错一个字就是一条查不出来的假归因，
+    而且会绕过巡检①（有值就不算「空」）。现在 ?r= 必须在 data/s/ 里命中才算数。 */
+function jidFor(job){var a=(JOBS&&JOBS.jobs)||[];for(var i=0;i<a.length;i++)if(a[i].cn===job)return a[i].jid||"";return "";}
+function allowed(job){return CODES?!!CODES.byJob[job]:true;}
+
+/* ── canvas 光场：低分辨率渲染 + CSS 放大模糊，手机也能跑满帧 ── */
+(function(){
+ var c=document.getElementById('bg'),x=c.getContext('2d'),W,Hh,orbs=[],raf,t0=0;
+ var COL=[[255,45,120],[201,107,255],[56,189,248],[255,176,32],[51,214,159]];
+ function size(){var s=9;W=Math.max(2,Math.ceil(innerWidth/s));Hh=Math.max(2,Math.ceil(innerHeight/s));c.width=W;c.height=Hh;}
+ for(var i=0;i<7;i++)orbs.push({c:COL[i%COL.length],
+   a:.00013+i*.000041,b:.000097+i*.000058,p:i*1.7,q:i*2.3,r:.28+(i%3)*.09});
+ function draw(ts){
+  if(!t0)t0=ts; var T=ts-t0;
+  x.globalCompositeOperation='source-over';x.fillStyle='#07070b';x.fillRect(0,0,W,Hh);
+  x.globalCompositeOperation='lighter';
+  for(var i=0;i<orbs.length;i++){var o=orbs[i];
+   var px=(Math.sin(T*o.a+o.p)*.5+.5)*W, py=(Math.sin(T*o.b+o.q)*.5+.5)*Hh*.72;
+   var rr=Math.min(W,Hh)*o.r*(1+.14*Math.sin(T*.00021+i));
+   var g=x.createRadialGradient(px,py,0,px,py,rr);
+   g.addColorStop(0,'rgba('+o.c[0]+','+o.c[1]+','+o.c[2]+',.30)');
+   g.addColorStop(.55,'rgba('+o.c[0]+','+o.c[1]+','+o.c[2]+',.09)');
+   g.addColorStop(1,'rgba('+o.c[0]+','+o.c[1]+','+o.c[2]+',0)');
+   x.fillStyle=g;x.beginPath();x.arc(px,py,rr,0,6.2832);x.fill();}
+  raf=requestAnimationFrame(draw);}
+ function start(){if(!raf)raf=requestAnimationFrame(draw);}
+ function stop(){if(raf){cancelAnimationFrame(raf);raf=0;}}
+ size();addEventListener('resize',size,{passive:true});
+ document.addEventListener('visibilitychange',function(){document.hidden?stop():start();});
+ if(!matchMedia('(prefers-reduced-motion: reduce)').matches)start();else{size();draw(0);stop();}
+})();
+
+/* ── 头像：内联 SVG 生成的写实风格人像，零外部请求。
+      印尼语境：女性含头巾造型；肤色/发色/衣色按 seed 稳定分布，同一岗位不重样。 ── */
+var SKIN=[['#f6cdb4','#d9a284'],['#eab894','#c9906a'],['#dda27b','#b87d56'],['#c88c60','#a06a41'],
+          ['#f8d9c4','#dcae92'],['#b47548','#8f5836']];
+var HAIRC=['#171418','#2a1f1a','#3d2a1e','#4e3325','#1c1a24','#5a3a24'];
+var CLOTH=['#2f3a56','#3a2f4e','#264a45','#4a2f3a','#33384a','#2c4256','#4a3a2c'];
+var HIJAB=['#3d5a80','#7d4a63','#4a6b5a','#8a6242','#57457a','#2f5d62'];
+function avatar(seed,hue){
+ var r=0;for(var i=0;i<seed.length;i++)r=((r*33)^seed.charCodeAt(i))>>>0;
+ var sk=SKIN[r%SKIN.length],hc=HAIRC[(r>>3)%HAIRC.length],cl=CLOTH[(r>>7)%CLOTH.length];
+ var fem=((r>>5)&1)===1, hij=fem&&((r>>9)%3!==0), sty=(r>>11)%3;
+ var hj=HIJAB[(r>>13)%HIJAB.length];
+ var id='a'+(r%99999);
+ var hair='';
+ if(hij){ // 头巾：包住头与肩，脸露椭圆
+  hair='<path d="M32 9c-12 0-19 9-19 21 0 7 2 12 3 16-6 3-10 8-11 18h54c-1-10-5-15-11-18 1-4 3-9 3-16 0-12-7-21-19-21z" fill="'+hj+'"/>'+
+       '<path d="M32 13c-8 0-13 6-13 15s5 17 13 17 13-8 13-17-5-15-13-15z" fill="url(#s'+id+')"/>';
+ }else if(fem){ // 长发
+  hair='<path d="M32 8c-11 0-18 8-18 19 0 9 1 15 2 21l4-2c-1-5-2-10-2-16 0-9 5-14 14-14s14 5 14 14c0 6-1 11-2 16l4 2c1-6 2-12 2-21 0-11-7-19-18-19z" fill="'+hc+'"/>'+
+       '<path d="M18 24c0-9 6-14 14-14s14 5 14 14c0 2-1 3-1 3-1-7-6-10-13-10s-12 3-13 10c0 0-1-1-1-3z" fill="'+hc+'"/>';
+ }else{ // 短发三款
+  hair=['<path d="M32 9c-10 0-17 6-17 15 0 3 1 5 2 5 0-8 6-12 15-12s15 4 15 12c1 0 2-2 2-5 0-9-7-15-17-15z"/>',
+        '<path d="M32 9c-10 0-17 6-17 16 0 2 1 4 2 4 0-7 4-11 8-12 3 3 8 4 13 3 3 1 6 4 6 9 1 0 2-2 2-4 0-10-4-16-14-16z"/>',
+        '<path d="M32 9c-11 0-17 7-17 16 0 2 1 4 2 4 0-6 3-9 6-10 4 2 12 2 16 0 3 1 6 4 6 10 1 0 2-2 2-4 0-9-4-16-15-16z"/>'][sty];
+  hair='<g fill="'+hc+'">'+hair+'</g>';
+ }
+ var shoulder=hij?'':'<path d="M32 44c-11 0-19 6-21 20h42c-2-14-10-20-21-20z" fill="'+cl+'"/>'+
+   '<path d="M32 44c-3 0-5 3-5 6s2 5 5 5 5-2 5-5-2-6-5-6z" fill="'+sk[1]+'" opacity=".55"/>';
+ return 'data:image/svg+xml;utf8,'+encodeURIComponent(
+ '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><defs>'+
+ '<radialGradient id="s'+id+'" cx="40%" cy="32%" r="72%"><stop offset="0" stop-color="'+sk[0]+'"/><stop offset="1" stop-color="'+sk[1]+'"/></radialGradient>'+
+ '<linearGradient id="b'+id+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="hsl('+hue+',34%,26%)"/><stop offset="1" stop-color="hsl('+hue+',30%,15%)"/></linearGradient>'+
+ '</defs><rect width="64" height="64" rx="32" fill="url(#b'+id+')"/>'+
+ shoulder+
+ (hij?'':'<path d="M32 12c-9 0-14 7-14 17 0 11 6 19 14 19s14-8 14-19c0-10-5-17-14-17z" fill="url(#s'+id+')"/>')+
+ hair+
+ '<ellipse cx="26" cy="30" rx="1.9" ry="2.1" fill="#231c22"/><ellipse cx="38" cy="30" rx="1.9" ry="2.1" fill="#231c22"/>'+
+ '<circle cx="26.6" cy="29.4" r=".6" fill="#fff" opacity=".85"/><circle cx="38.6" cy="29.4" r=".6" fill="#fff" opacity=".85"/>'+
+ '<path d="M22.5 26q3.5-1.6 7 0M34.5 26q3.5-1.6 7 0" stroke="'+hc+'" stroke-width="1.4" fill="none" stroke-linecap="round" opacity=".8"/>'+
+ '<path d="M32 32v3.5" stroke="'+sk[1]+'" stroke-width="1.2" fill="none" stroke-linecap="round" opacity=".7"/>'+
+ '<path d="M28.6 39.5q3.4 2.4 6.8 0" stroke="#7d4a44" stroke-width="1.5" fill="none" stroke-linecap="round"/>'+
+ '<ellipse cx="32" cy="32" rx="30" ry="30" fill="none" stroke="rgba(0,0,0,.28)" stroke-width="4"/></svg>');
+}
+/* ── 岗位剪影：卡片背景里隐约的职业符号（倾斜、极低透明度） ── */
+var EMB={
+ // 主播：环形补光灯 + 三脚架 + 手机
+ '主播':'M32 4a17 17 0 110 34 17 17 0 010-34zm0 6a11 11 0 100 22 11 11 0 000-22zm-5 3h10a2 2 0 012 2v14a2 2 0 01-2 2H27a2 2 0 01-2-2V15a2 2 0 012-2zm2 3v12h6V16zM30 38h4v6l14 16h-6L32 46 22 60h-6l14-16z',
+ // 主持：调音台，推子+旋钮
+ '主持':'M6 8h52a2 2 0 012 2v44a2 2 0 01-2 2H6a2 2 0 01-2-2V10a2 2 0 012-2zm4 6v10h44V14zm3 16h4v20h-4zm0 8h4v4h-4zm9-8h4v20h-4zm0 12h4v4h-4zm9-12h4v20h-4zm0 5h4v4h-4zm9-5h4v20h-4zm0 10h4v4h-4zm9-10h4v20h-4zm0 6h4v4h-4z',
+ // 翻译：两个对话气泡 + 文/A
+ '翻译':'M5 8h28a4 4 0 014 4v16a4 4 0 01-4 4H19l-9 8v-8H5a4 4 0 01-4-4V12a4 4 0 014-4zm10 6l-6 14h4l1-3h6l1 3h4l-6-14zm2 4l2 4h-4zM31 32h28a4 4 0 014 4v16a4 4 0 01-4 4h-5v8l-9-8H31a4 4 0 01-4-4V36a4 4 0 014-4zm6 6v3h6v3h-8v3h4l-3 6h4l4-8v-4h4v-3h-6v-3z',
+ // 艺人经纪：公文包 + 星（签约艺人）
+ '艺人经纪':'M24 8h16a5 5 0 015 5v5h9a5 5 0 015 5v28a5 5 0 01-5 5H10a5 5 0 01-5-5V23a5 5 0 015-5h9v-5a5 5 0 015-5zm2 10h12v-4H26zM5 30h54v6H38v5H26v-5H5zm27 4l2.2 4.5 5 .7-3.6 3.5.9 5-4.5-2.4-4.5 2.4.9-5-3.6-3.5 5-.7z',
+ // 舞蹈培训师：教学姿势 + 节拍器底座
+ '舞蹈培训师':'M38 3a5 5 0 110 10 5 5 0 010-10zm-2 12h5l13 10-4 5-9-7v9l9 21-6 3-9-19-8 19-6-3 9-21v-9l-8 6-4-5zM6 46h20l-4 14H10z',
+ // 舞导：舞者 + 动线
+ '舞导':'M34 3a5 5 0 110 10 5 5 0 010-10zM24 15h20l11 9-4 5-8-6v10l9 24-6 3-9-21-9 21-6-3 9-24V23l-8 6-4-5zM4 20c6 4 9 10 9 17s-3 13-9 17l-3-4c5-3 7-8 7-13s-2-10-7-13z',
+ // 妆造：化妆刷 + 眼影盘 + 口红
+ '妆造':'M44 2l16 16-24 24-16-16zM14 32l16 16-9 9a11 11 0 01-16-16zM40 44a11 11 0 1122 0 11 11 0 01-22 0zm11-5a5 5 0 100 10 5 5 0 000-10zM4 4h10v18a5 5 0 01-10 0z',
+ // 财务：计算器 + 硬币
+ '财务':'M12 2h30a4 4 0 014 4v40a4 4 0 01-4 4H12a4 4 0 01-4-4V6a4 4 0 014-4zm4 8v10h22V10zm0 16h6v6h-6zm8 0h6v6h-6zm8 0h6v6h-6zM16 36h6v6h-6zm8 0h6v6h-6zm8 0h6v14h-6zM16 46h14v4H16zM48 40a11 11 0 110 22 11 11 0 010-22zm-2 5v2h-3v3h5v2h-5v3h3v2h3v-2h3v-3h-5v-2h5v-3h-3v-2z',
+ // 拍摄剪辑：电影摄影机 + 场记板条纹
+ '拍摄剪辑':'M4 20h34a4 4 0 014 4v4l16-9v30l-16-9v4a4 4 0 01-4 4H4a4 4 0 01-4-4V24a4 4 0 014-4zm4 6v16h26V26zM8 4h10l6 10H14zm14 0h10l6 10H28zm14 0h10l6 10H42z',
+ // 运镜：云台摄影机 + 摇臂
+ '运镜':'M30 6a13 13 0 110 26 13 13 0 010-26zm0 7a6 6 0 100 12 6 6 0 000-12zm-4 27h8v6h10a4 4 0 014 4v14H12V50a4 4 0 014-4h10zm-8 10v8h24v-8zM2 22l14-8v6h8v4h-8v6z',
+ // 直播间技术：调光台 + 灯架 + 插头
+ '直播间技术':'M22 2h6v14h-6zm14 0h6v14h-6zM14 18h36v10a18 18 0 01-14 17.5V56h10v6H18v-6h10V45.5A18 18 0 0114 28zM4 34h6v20H4zm52 0h6v20h-6z'
+};
+function emblem(job,hue){
+ var d=EMB[job]||'M32 8a24 24 0 110 48 24 24 0 010-48zm0 8a16 16 0 100 32 16 16 0 000-32z';
+ return 'data:image/svg+xml;utf8,'+encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path d="'+d+'" fill="hsl('+hue+',85%,80%)"/></svg>');
+}
+/* next 圆钮里的人物轮廓（不随环旋转） */
+function silhouette(fem){
+ return 'data:image/svg+xml;utf8,'+encodeURIComponent(
+ '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><g fill="#fff">'+
+ (fem?'<path d="M20 6c-5 0-8 4-8 9 0 3 1 6 3 8-1 1-2 1-3 2 0-4-1-7-1-9 0-6 4-10 9-10s9 4 9 10c0 2-1 5-1 9-1-1-2-1-3-2 2-2 3-5 3-8 0-5-3-9-8-9z"/><ellipse cx="20" cy="15" rx="7.5" ry="9"/><path d="M20 26c-7 0-12 5-13 14h26c-1-9-6-14-13-14z"/>'
+     :'<ellipse cx="20" cy="14" rx="7.5" ry="8.5"/><path d="M20 25c-7 0-12 5-13 15h26c-1-10-6-15-13-15z"/>')+
+ '</g></svg>');
+}
+
+/* 流程当前阶段：任一岗位的三步都已完成 → 推进到「面试」。
+   入职(2) 需要公司侧动作，页面无从得知，不自动推进。 */
+function paintFlow(){try{applyLang();}catch(e){}}
+function flowStage(){
+ if(!ME||!ME.d||!JOBS)return 0;
+ var done=JOBS.jobs.some(function(j){return [0,1,2].every(function(i){return isDone(j.cn,i);});});
+ return done?1:0;}
+function showRef(){var el=document.getElementById('ref');
+ /* 死链/网络失败不显示徽章：那个码此刻恰恰是查不到的，显示出来等于把假归因摆给候选人看。 */
+ if(REFBAD||REFFAIL){el.hidden=true;return;}
+ el.hidden=false;
+ /* 公司直招（裸链）与离职归公司，对候选人是同一件事：他是被 MUKE 招的，不是被某个人。
+    离职者的名字刻意不显示 —— 人已经走了，摆出来只会引出「他还在吗」这种没法回答的问题。 */
+ if(MOVED||!CODES){el.textContent='MUKE MEDIA';return;}
+ el.textContent=REFNAME?t('invited')(REFNAME):t('code')(REF);}
+
+function applyLang(){
+ document.documentElement.lang=LANG==='zh'?'zh':'id';
+ document.getElementById('lid').className=LANG==='id'?'on':'';
+ document.getElementById('lzh').className=LANG==='zh'?'on':'';
+ document.getElementById('lang').className='lang'+(LANG==='zh'?' zh':'');   // 胶囊滑块位置
+ Array.prototype.forEach.call(document.querySelectorAll('[data-t]'),function(el){
+  var v=t(el.getAttribute('data-t'));
+  el.innerHTML=(el.tagName==='H1')?v.split('<br>').map(function(l){return '<span>'+l+'</span>';}).join(''):v;});
+ var _ad=document.getElementById('faddr');if(_ad)_ad.innerHTML=esc(t('addr')).split(String.fromCharCode(10)).join('<br>');
+ var _ab=document.querySelector('#fabout span');if(_ab)_ab.textContent=t('about');
+ var cur=flowStage();
+ document.getElementById('flow').innerHTML=t('flow').map(function(s,i){
+  return '<div class="fl'+(i===cur?' now':'')+(i<cur?' past':'')+'"><i>'+(i+1)+'</i><div><b>'+esc(s[0])+
+   (i===cur?'<span class="nowtag">'+esc(t('nowtag'))+'</span>':'')+'</b><span>'+esc(s[1])+'</span></div></div>';}).join('');
+ showRef();paint();}
+function setLang(v){LANG=v;try{localStorage.setItem('muke_lang',v);}catch(e){}applyLang();}
+document.getElementById('lid').onclick=function(){setLang('id');};
+document.getElementById('lzh').onclick=function(){setLang('zh');};
+
+function formUrl(base,p){
+ var q=Object.keys(p).filter(function(k){return p[k];}).map(function(k){
+  return 'prefill_'+encodeURIComponent(k)+'='+encodeURIComponent(p[k])+'&hide_'+encodeURIComponent(k)+'=1';}).join('&');
+ return base+(base.indexOf('?')>0?'&':'?')+q;}
+
+/* 三步的目标表单：①简历=全局通用 ②问卷=按岗位 ③笔试=按岗位（links.json 由生成器出，缺则降级隐藏） */
+function stepUrl(n,job){
+ var c=refFor(job),nm=ME&&ME.n||'',ph=ME&&ME.p||'';
+ if(n===0){var p0={'Ref':c,'Full Name':nm,'WhatsApp':ph};
+  var jd=jidFor(job); if(jd)p0['JOB']=jd;                 // 岗位代码，候选人不必自己从 33 个代码里挑
+  var kn=detectKanal(); if(kn)p0['Kanal']=kn;      // 认出来才传；formUrl 会自动加 hide_
+  return formUrl(JOBS.cvForm,p0);}
+ var LK=(JOBS.links||{})[job]||{};
+ if(n===1&&LK.bg)return formUrl(LK.bg,{'Ref':c,'Full Name':nm,'WhatsApp':ph});
+ if(n===2&&LK.ex)return formUrl(LK.ex,{'WhatsApp/Phone':ph});
+ return '';}
+
+function doneKey(job,n){return jkey(job)+'.'+n;}
+/* 步骤三态：无 → 进行中(点开表单但没跳回) → 已完成(表单提交后跳回本页)。
+   点开就先记「进行中」，所以候选人中途关掉浏览器也不会丢进度；
+   真正的「已完成」勾只在表单提交跳回时才盖 —— 二者分开，进度不丢也不虚报。 */
+function stState(job,n){var v=ME&&ME.d&&ME.d[doneKey(job,n)];
+ if(!v)return 0;
+ if(typeof v==='number')return 2;            // 旧版数据一律当已完成
+ return v.ok?2:1;}
+function isDone(job,n){return stState(job,n)===2;}
+function isOpened(job,n){return stState(job,n)>=1;}
+function markOpen(job,n){if(!ME)return;ME.d=ME.d||{};var k=doneKey(job,n);
+ if(stState(job,n)!==2)ME.d[k]={t:Date.now(),ok:false};save(ME);}
+function markDone(job,n){if(!ME)return;ME.d=ME.d||{};ME.d[doneKey(job,n)]={t:Date.now(),ok:true};save(ME);paintFlow();}
+
+function toast(msg){
+ var d=document.createElement('div');d.className='toast';d.textContent=msg;
+ document.body.appendChild(d);
+ setTimeout(function(){d.classList.add('go');},30);
+ setTimeout(function(){d.classList.remove('go');setTimeout(function(){d.remove();},400);},4200);}
+function modal(title,body,yes,no,onYes){
+ var m=document.getElementById('modal');
+ m.className='modal';
+ m.innerHTML='<div><h3>'+esc(title)+'</h3><p>'+esc(body)+'</p><div class="row">'+
+  '<button class="pri" id="mY">'+esc(yes)+'</button><button id="mN">'+esc(no)+'</button></div></div>';
+ document.getElementById('mN').onclick=function(){m.className='';m.innerHTML='';};
+ document.getElementById('mY').onclick=function(){m.className='';m.innerHTML='';onYes();};}
+
+function openStep(job,n){
+ var u=stepUrl(n,job); if(!u)return;
+ try{localStorage.setItem('muke_lastjob',job);}catch(e){}
+ try{localStorage.setItem('muke_laststep',String(n));}catch(e){}
+ var go=function(){markOpen(job,n);renderPanel(job);window.open(u,'_blank','noopener');};
+ /* 笔试有时限、不能随手重做：只要点开过（含「进行中」）就要确认；
+    前两步只在「已完成」时才拦。这样即使笔试表单不配回跳，也不会被误点重做。 */
+ var guard=(n===2)?isOpened(job,n):isDone(job,n);
+ if(guard)modal(n===2?t('exam_t'):t('dup_t'),n===2?t('exam_p'):t('dup_p'),
+   n===2?t('exam_y'):t('dup_y'),t('dup_n'),go); else go();}
+
+/* 取某岗位的职级标签，按当前语言给中文或印尼语。拿不到就不显示这个标签 ——
+   宁可少一块，也不要回退去显示人数。 */
+function lvl(cn){
+ var m=MANUAL&&MANUAL.jobs&&MANUAL.jobs[cn]; if(!m)return '';
+ return (LANG==='zh'?m.cn:m.id)||'';
+}
+function renderPanel(job){
+ var p=document.getElementById('pn_'+jkey(job)); if(!p)return;
+ var j=JOBS.jobs.filter(function(x){return x.cn===job;})[0];
+ var zh=LANG==='zh',h='';
+ h+='<div class="jd">'+esc((LANG==='zh'?j.jd:(j.jdId||j.jd))||'')+'</div>';
+ h+='<div class="meta">'+
+   '<span class="tag">'+esc(t('need')(j.goal))+'</span>'+
+   (j.track?'<span class="tag">'+esc(j.track)+'</span>':'')+
+   /* 原来这里是「团队 N 人」—— 那是真实在岗人数，2026-09-05 张博定案不再对外。
+      换成职级阶梯：既不泄露编制，又比人数更能说明这个岗位有多少晋升空间。
+      文案在 data/manual.json 的 jobs 里手动维护，不从 Lark 拉。 */
+   (lvl(j.cn)?'<span class="tag">'+esc(lvl(j.cn))+'</span>':'')+'</div>';
+ if(!ME){
+  /* ⚠ 用 class 不用 id：11 个面板同时在 DOM 里，全局 id 会重复，
+     getElementById 只认第一个 → 换岗位后报错串到别的卡上（2026-08-31 张博实测）。 */
+  h+='<label>'+t('l_name')+'</label><input class="i-n" autocomplete="name" placeholder="'+esc(t('ph_name'))+'">'+
+     '<div class="hint">'+t('n_hint')+'</div>'+
+     '<label>'+t('l_phone')+'</label><input class="i-p" type="tel" inputmode="tel" autocomplete="tel" placeholder="'+esc(t('ph_phone'))+'">'+
+     '<div class="hint">'+t('p_hint')+'</div>'+
+     '<div class="e-box"></div>'+
+     '<button class="btn b-go">'+esc(t('apply'))+'</button>';
+ }else{
+  h+='<div class="who">✅ <b>'+esc(ME.n)+'</b> · '+esc(ME.p)+'<button class="b-chg">'+esc(t('chg'))+'</button></div>'+
+     '<div class="hint" style="margin-top:9px">'+t('ready')+'</div><div class="steps">';
+  for(var i=0;i<3;i++){
+   var stt=stState(job,i),lock=(i>0&&stState(job,i-1)===0),u=stepUrl(i,job);
+   var cls=stt===2?' done':(stt===1?' wip':'');
+   var mark=stt===2?'':(stt===1?'<em>'+esc(t('wip'))+'</em>':'→');
+   h+='<a class="st'+cls+((lock||!u)?' lock':'')+'" data-s="'+i+'">'+
+      '<i>'+(i+1)+'</i><div><b>'+esc(t('steps')[i][0])+'</b><span>'+esc(t('steps')[i][1])+'</span></div><u>'+mark+'</u></a>';}
+  h+='</div>';
+  var allDone=[0,1,2].every(function(i){return isDone(job,i);});
+  h+=allDone?('<div class="fin"><b>'+esc(t('fin_t'))+'</b><span>'+esc(t('fin_p'))+'</span></div>')
+           :('<div class="hint" style="margin-top:10px">'+t('back')+'</div>');
+ }
+ p.innerHTML=h;
+ var b=p.querySelector('.b-go');
+ if(b)b.onclick=function(){
+  var ni=p.querySelector('.i-n'),pi=p.querySelector('.i-p'),e=p.querySelector('.e-box');
+  var n=(ni.value||'').trim().replace(/\s+/g,' '),ph=(pi.value||'').trim();
+  var bad=function(code,el){e.innerHTML='<div class="err">'+t(code)+'</div>';
+   fit(p.parentNode,false);                       // 报错多出一行 → 容器立刻重新自适应
+   try{el.focus();e.scrollIntoView({behavior:'smooth',block:'center'});}catch(x){}};
+  var en=checkName(n); if(en){bad(en,ni);return;}
+  var ep=checkPhone(ph); if(ep){bad(ep,pi);return;}
+  e.innerHTML='';
+  ME={n:n,p:fmtPhone(ph),w:wa9(ph),d:{},ts:Date.now()};save(ME);renderPanel(job);};
+ var cg=p.querySelector('.b-chg');
+ if(cg)cg.onclick=function(){ME=null;try{localStorage.removeItem('muke_c');}catch(e){}renderPanel(job);
+  setTimeout(function(){var el=p.querySelector('.i-n');if(el)el.focus();},60);};
+ Array.prototype.forEach.call(p.querySelectorAll('.st'),function(a){
+  a.onclick=function(ev){ev.preventDefault();openStep(job,+a.getAttribute('data-s'));};});
+ /* ⚠ 内容换了（表单→三步、或多出一行报错）必须让容器重新自适应。
+    max-height 只用于展开那一下的动画，展开后一律交回 none —— 否则内容变高会被裁在容器外，
+    表现就是「点了没反应」（2026-08-31 张博实测报的两个 bug 同一根因）。 */
+ fit(p.parentNode,false);}
+function fit(pan,animate){
+ if(!pan)return;
+ if(!animate){pan.style.maxHeight='none';return;}
+ pan.style.maxHeight=pan.scrollHeight+'px';
+ clearTimeout(pan._ft);
+ pan._ft=setTimeout(function(){if(pan.parentNode.classList.contains('on'))pan.style.maxHeight='none';},460);}
+
+function toggle(job){
+ var was=OPENJOB; OPENJOB=(was===job)?null:job;
+ Array.prototype.forEach.call(document.querySelectorAll('.job'),function(el){
+  var jb=el.getAttribute('data-j'),on=(jb===OPENJOB);
+  el.classList.toggle('on',on);
+  var pan=el.querySelector('.panel');
+  if(on){pan.style.maxHeight='0px';renderPanel(jb);
+   /* 先归零再量，动画才有起点；renderPanel 已把它设成 none，这里改回带动画的展开 */
+   pan.style.maxHeight='0px';void pan.offsetHeight;fit(pan,true);}
+  else{clearTimeout(pan._ft);pan.style.maxHeight=pan.scrollHeight+'px';void pan.offsetHeight;pan.style.maxHeight='0px';
+   /* 折叠后清空内容：既避免 11 份表单同时留在 DOM（输入值/报错残留、id 重复），
+      也让下次打开一定是干净的初始态 */
+   clearTimeout(pan._cl);pan._cl=setTimeout(function(){
+    if(!el.classList.contains('on')){var pin=pan.querySelector('.pin');if(pin)pin.innerHTML='';}},480);}});
+ if(OPENJOB){var e=document.querySelector('.job[data-j="'+OPENJOB+'"]');
+  setTimeout(function(){e.scrollIntoView({behavior:'smooth',block:'nearest'});},120);}}
+
+function paint(){
+ if(!JOBS)return;
+ var zh=LANG==='zh',box=document.getElementById('jobs');
+ /* 网络失败：挡住报名。三个数字一起置横杠 —— 原先只置了 f2，f1 靠初始值蒙对，
+    f3 由另一个 fetch 无条件写入完全没护栏，谁先返回谁说了算，页面时而露数字时而不露。 */
+ if(REFFAIL){box.innerHTML='<div class="err">'+t('ref_err')+'</div>';
+  document.getElementById('f1').textContent='—';
+  document.getElementById('f2').textContent='—';
+  document.getElementById('f3').textContent='—';return;}
+ var all=JOBS.jobs.filter(function(j){return j.open!==false;});
+ var open=all.filter(function(j){return allowed(j.cn);});
+ document.getElementById('f2').textContent=open.length;
+ // f1/f3 只认 MANUAL，不再读 JOBS.staff 与 bench.speed（那两个字段已从产物里去掉）
+ if(MANUAL&&MANUAL.staff!=null)document.getElementById('f1').textContent=MANUAL.staff;
+ if(MANUAL&&MANUAL.speed!=null)document.getElementById('f3').textContent=MANUAL.speed;
+ /* 码查不到 = 死链，不再降级展示岗位（2026-09-05 张博定案，推翻 WO-A96 的 B 案）。
+    理由比「别拦候选人」更硬：降级会把经纪人的推荐**静默转成公司的**，
+    而且发链接的人永远不知道自己的链接坏了 —— 经纪人丢单还蒙在鼓里，断链也没人修。
+    现在改为明确报错 + 一个出口按钮：断链可见、归因不被静默转移、候选人也不至于死路。
+    ⚠ GitHub Pages 给不了真的 404（?a=555 请求的还是 join/index.html，状态码必然 200），
+    所以这里是页面上的错误态，不是 HTTP 404。 */
+ if(REFBAD){box.innerHTML='<div class="err">'+t('ref_dead')+'</div>'+
+   '<a class="deadgo" href="./">'+t('go_public')+'</a>';
+  document.getElementById('f1').textContent='—';
+  document.getElementById('f2').textContent='—';
+  document.getElementById('f3').textContent='—';
+  var sl0=document.getElementById('slogin'); if(sl0)sl0.hidden=true;
+  return;}
+ var badTip='';
+ /* 星探自己的链接才露数据入口。它是发给候选人的页面，所以只做页脚一行小字、
+    不在这里放 PIN 输入框 —— 候选人误填是小事，被当成钓鱼是大事。 */
+ var sl=document.getElementById('slogin'); if(sl)sl.hidden=!SCOUT;
+ if(!open.length){box.innerHTML=badTip+'<div class="err">'+(all.length?t('none_agent'):t('none'))+'</div>';return;}
+ box.innerHTML=badTip+open.map(function(j){
+  var main=zh?(j.cn||j.id):(j.id||j.cn), sec=zh?(j.id||''):(j.cn||'');
+  /* 这排小人是装饰，不是数据。原先个数 = 真实在岗人数（妆造 3 人就画 3 个），
+     等于把「团队 N 人」又用视觉说了一遍 —— 2026-09-05 连同标签一起停掉。
+     现在所有岗位一律 12 个，只为撑起版面的「团队感」，不编码任何真实信息。
+     （图本身一直是程序生成的剪影，从来不是真人照片。） */
+  var n=12,av='';
+  for(var i=0;i<n;i++)av+='<img alt="" loading="lazy" src="'+avatar(j.cn+'#'+i,j.hue)+'">';
+  return '<div class="job" data-j="'+esc(j.cn)+'" style="--h:'+(j.hue||300)+'">'+
+   '<i class="emb" style="background-image:url(&#39;'+emblem(j.cn,j.hue)+'&#39;)"></i>'+
+   '<div class="bar"><div class="jt"><div class="n">'+esc(main)+
+     (sec&&sec!==main?'<s>'+esc(sec)+'</s>':'')+(j.urgent?'<span class="urg">'+t('urgent')+'</span>':'')+'</div>'+
+     '<div class="crew">'+av+'</div></div>'+
+     '<div class="nx"><i class="ring"></i>'+
+       '<i class="sil m" style="background-image:url(&#39;'+silhouette(false)+'&#39;)"></i>'+
+       '<i class="sil f" style="background-image:url(&#39;'+silhouette(true)+'&#39;)"></i>'+
+       '<u>next</u></div></div>'+
+   '<div class="panel"><div class="pin" id="pn_'+jkey(j.cn)+'"></div></div></div>';}).join('');
+ Array.prototype.forEach.call(box.querySelectorAll('.job'),function(el){
+  el.querySelector('.bar').onclick=function(){toggle(el.getAttribute('data-j'));};});
+ if(OPENJOB&&box.querySelector('.job[data-j="'+OPENJOB+'"]')){var k=OPENJOB;OPENJOB=null;toggle(k);}}
+
+/* 底部装饰：iframe 里的视频自动播放会被浏览器拦（顶层页面不拦，iframe 拦），
+   而模块自带的「首次交互补启动」绑在 iframe 内部，可它是 pointer-events:none，永远等不到。
+   这里把页面上任意一次交互转发进去，只跑一次。整段 try 包住：
+   装饰挂了不许影响业务，删掉 iframe 时这段自己空转、也不会报错。 */
+['pointerdown','touchstart','keydown'].forEach(function(ev){
+  addEventListener(ev,function(){
+    try{ var f=document.querySelector('iframe.crewart');
+      if(f&&f.contentDocument) f.contentDocument.querySelectorAll('video')
+        .forEach(function(v){ v.play().catch(function(){}); });
+    }catch(e){}
+  },{once:true,passive:true});
+});
+
+document.getElementById('faddrBtn').onclick=function(){
+  var a=document.getElementById('faddr');a.hidden=!a.hidden;this.className='fbtn'+(a.hidden?'':' on');};
+applyLang();
+fetch('../data/jobs.json?v='+Date.now()).then(function(r){return r.json();}).then(function(d){
+ JOBS=d;paint();
+ /* 表单提交后跳回 ?done=cv|bg|ex[&j=岗位]：标记完成 → 自动展开该岗位 → 提示下一步。
+    岗位优先取 URL 的 j（背调/笔试是按岗位的表单，可以写死），
+    没有就回落到本机记的最后一个操作岗位（通用简历表单只有一张，写不了岗位）。 */
+ var map={cv:0,bg:1,ex:2,'1':-1};
+ if(DONE&&ME){
+  var jb='',stp=-1;
+  try{jb=localStorage.getItem('muke_lastjob')||'';stp=parseInt(localStorage.getItem('muke_laststep'),10);}catch(e){}
+  if(map[DONE]>0)stp=map[DONE];                       // 带 done=bg/ex 时以它为准（向前兼容旧配置）
+  /* ⚠ 2026-09-05 张博指出：候选人提交完表单**会跳回本站**（?done=cv|bg|ex），
+     所以「填表期间同步改了数据」是真会撞上的。原先这里要求岗位仍在 JOBS.jobs 里
+     才标记完成 —— 一旦他填表的十几分钟内该岗位转成「已停止」，就**静默不标记**：
+     表单其实提交成功了（数据在 Lark），页面上却显示成没进展，他会重复提交。
+     现在改为：无论岗位还在不在都先记下他确实交了，只是文案不同。
+     同步 cron 从 2 次加密到 8 次后，撞上的时刻变多，这个洞必须先补。 */
+  if(jb&&stp>=0&&stp<=2){
+   markDone(jb,stp);                                     // 先记完成，与岗位在不在无关
+   var stillOpen=JOBS.jobs.some(function(x){return x.cn===jb;});
+   if(stillOpen){toggle(jb);toast(t('done_ok'));}        // 正常路径：展开卡片、提示继续
+   else toast(t('done_closed'));                         // 岗位在他填表期间关闭了
+  }
+ }
+}).catch(function(){document.getElementById('jobs').innerHTML='<div class="err">'+t('load_err')+'</div>';});
+fetch('../data/manual.json?v='+Date.now()).then(function(r){return r.json();}).then(function(d){
+ MANUAL=d;
+ /* 与 paint() 谁先返回不确定，两边都要写一次；REFFAIL/REFBAD 时不写，
+    否则死链页会被这条 fetch 把横杠又覆盖成数字（2026-09-05 实测过这个洞）。 */
+ if(!REFFAIL&&!REFBAD){
+  if(d.staff!=null)document.getElementById('f1').textContent=d.staff;
+  if(d.speed!=null)document.getElementById('f3').textContent=d.speed;
+ }
+}).catch(function(){});
+fetch('../data/bench.json?v='+Date.now()).then(function(r){return r.json();}).then(function(d){
+ document.getElementById('fnote').textContent=t('updated')(String(d.stamp||'').slice(0,10));
+ /* 隐藏入口：1.2 秒内连点页脚日期 10 次 → 同步状态看板。
+    只是「不显眼」，不是「保密」—— data/_status.json 本来就公开可读，所以那里不放敏感内容。 */
+ (function(){var el=document.getElementById('fnote'),n=0,last=0;
+  el.style.cursor='default';
+  el.addEventListener('click',function(){
+   var now=Date.now(); if(now-last>1200)n=0; last=now; n++;
+   if(n>=7&&n<10)el.style.opacity=String(1-(n-6)*0.15);   // 第 7 下起微微变淡，给点手感
+   if(n>=10){n=0;el.style.opacity='';location.href='../status/';}});})();
+}).catch(function(){});
+if(AGENT){fetch('../data/j/'+encodeURIComponent(norm(AGENT))+'.json?v='+Date.now())
+ .then(function(r){if(r.status===404)throw new Error('gone');   // 码不存在，刷新没用
+                   if(!r.ok)throw new Error('net');             // 其它 HTTP 错误当网络问题
+                   return r.json();})
+ .then(function(d){CODES={byJob:d.byJob};REFNAME=d.name;MOVED=d.movedTo||'';REFFAIL=false;REFBAD=false;
+  /* ✅ 只有解析成功才写 —— 这是"坏链接永久废掉设备"那个 bug 的正解 */
+  try{localStorage.setItem('muke_agent_name',AGENT);}catch(e){}
+  showRef();paint();})
+ .catch(function(e){
+  if(e&&e.message==='gone'){REFBAD=true;
+   /* 自愈：把已经被存进来的坏码清掉，这台设备下次打开 /join/ 就恢复正常。
+      只在存的就是这个坏码时才删 —— 否则会误伤他之前那条有效的归因。 */
+   try{if(localStorage.getItem('muke_agent_name')===AGENT)localStorage.removeItem('muke_agent_name');}catch(e2){}
+  }else{REFFAIL=true;}
+  showRef();paint();});}
+else if(REF){
+ /* ?r=<星探码>：查 data/s/<码>.json（生成器出，只含姓名+岗位，公开可读、无业绩）。
+    命中 → 单岗位页：把 CODES 设成「只有这一个岗位」，于是 allowed() 只放行它、
+           refFor() 只给这个码 —— 整套既有机制原样复用，不需要第二条渲染路径。
+           星探一行 = 一个码 = 一个岗位，所以这里天然是单岗，与经纪人的多岗 j/ 不同。
+    未命中 → 与 ?a= 失效同样处理：明确报错 + 出口按钮，不展示任何岗位。
+           两个入口口径必须一致，否则「哪种链接坏了会怎样」就没人说得清。 */
+ fetch('../data/s/'+encodeURIComponent(REF.toLowerCase())+'.json?v='+Date.now())
+  .then(function(r){if(r.status===404)throw new Error('gone');
+                    if(!r.ok)throw new Error('net');return r.json();})
+  .then(function(d){
+   CODES={byJob:{}}; if(d.job)CODES.byJob[d.job]=d.ref||REF;
+   REFNAME=d.name||'';MOVED='';SCOUT=true;REFFAIL=false;REFBAD=false;
+   try{localStorage.setItem('muke_ref',REF);}catch(e){}    // 查通了才存
+   showRef();paint();})
+  .catch(function(e){
+   if(e&&e.message==='gone'){REFBAD=true;
+    try{if(String(localStorage.getItem('muke_ref')||'')===REF)localStorage.removeItem('muke_ref');}catch(e2){}
+   }else{REFFAIL=true;}
+   showRef();paint();});}
+/* 🔥 保险丝：动画/字体再慢，2.2s 后强制让内容可见（教训见 STATE 迎新页） */
+setTimeout(function(){Array.prototype.forEach.call(document.querySelectorAll('h1 span,.sub,.facts'),function(e){
+ e.style.opacity='1';e.style.transform='none';});},2200);
+</script></body></html>

@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>MUKE · 同步状态</title>
+<style>
+:root{--bg:#07070b;--sf:rgba(255,255,255,.045);--sf2:rgba(255,255,255,.075);--ln:rgba(255,255,255,.11);
+--tx:#f4f4f7;--dim:#9a9aab;--pk:#ff2d78;--gr:#33d69f;--am:#ffb020;
+--f:'Archivo','Noto Sans SC',system-ui,-apple-system,'Segoe UI',sans-serif;--m:'IBM Plex Mono',ui-monospace,monospace}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:var(--f);line-height:1.55;
+padding:28px 18px 60px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:860px;margin:0 auto}
+h1{font-size:20px;font-weight:800;letter-spacing:-.01em;margin:0 0 4px}
+.sub{color:var(--dim);font-size:13px;margin-bottom:24px}
+.sub b{color:var(--tx);font-family:var(--m);font-weight:600}
+h2{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+color:var(--dim);margin:26px 0 10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));gap:9px}
+.card{background:var(--sf);border:1px solid var(--ln);border-radius:10px;padding:12px 13px}
+.card .k{color:var(--dim);font-size:11px;letter-spacing:.02em}
+.card .v{font-family:var(--m);font-size:21px;font-weight:600;margin-top:3px;line-height:1.2}
+.card .v small{font-size:12px;color:var(--dim);font-weight:400}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--ln)}
+th{color:var(--dim);font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase}
+td.n{font-family:var(--m);text-align:right;width:88px}
+.ok{color:var(--gr)}.warn{color:var(--am)}.bad{color:var(--pk)}
+.pill{display:inline-block;font-family:var(--m);font-size:11px;padding:2px 8px;border-radius:99px;
+background:var(--sf2);border:1px solid var(--ln)}
+ul{margin:8px 0 0;padding-left:18px;font-size:13px;color:var(--dim)}
+li{margin:3px 0}
+.note{color:var(--dim);font-size:12px;margin-top:28px;padding-top:14px;border-top:1px solid var(--ln)}
+a{color:var(--dim)}
+#err{color:var(--pk);font-family:var(--m);font-size:13px}
+/* 对外展示的手动配置区 */
+.mrow{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 0}
+.mrow label{flex:1 1 190px;font-size:12px;color:var(--dim)}
+.mrow input{display:block;width:100%;margin-top:5px;background:var(--sf);color:var(--tx);
+border:1px solid var(--ln);border-radius:8px;padding:9px 11px;font-family:var(--m);font-size:14px}
+.mrow input:focus{outline:none;border-color:var(--dim)}
+#mOut{background:var(--sf);border:1px solid var(--ln);border-radius:8px;padding:11px 13px;
+font-family:var(--m);font-size:12px;color:var(--tx);white-space:pre;overflow-x:auto;margin:11px 0 0}
+.mbtn{display:inline-flex;align-items:center;gap:6px;margin:10px 8px 0 0;padding:8px 14px;
+border-radius:8px;border:1px solid var(--ln);background:var(--sf2);color:var(--tx);
+font-family:var(--f);font-size:13px;cursor:pointer;text-decoration:none}
+.mbtn:hover{border-color:var(--dim)}
+.mhint{color:var(--dim);font-size:12px;margin-top:10px;line-height:1.6}
+#mJobs{width:100%;border-collapse:collapse;font-size:13px;margin-top:12px}
+#mJobs th{color:var(--dim);font-size:11px;font-weight:600;letter-spacing:.05em;
+text-transform:uppercase;text-align:left;padding:6px 8px;border-bottom:1px solid var(--ln)}
+#mJobs td{padding:5px 8px;border-bottom:1px solid var(--ln);vertical-align:middle}
+#mJobs td:first-child{white-space:nowrap;color:var(--dim);font-size:12px;width:1%}
+#mJobs input{width:100%;background:var(--sf);color:var(--tx);border:1px solid var(--ln);
+border-radius:7px;padding:6px 9px;font-family:var(--f);font-size:13px}
+#mJobs input:focus{outline:none;border-color:var(--dim)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>报名页同步状态</h1>
+  <div class="sub" id="head">读取中…</div>
+  <div id="err" hidden></div>
+  <div id="body" hidden>
+    <h2>运营指标</h2>
+    <div class="grid" id="live"></div>
+
+    <h2>护栏</h2>
+    <table id="guards"></table>
+
+    <h2>本次拉取</h2>
+    <table id="rows"></table>
+
+    <h2>全局基准（对外展示用）</h2>
+    <div class="grid" id="bench"></div>
+
+    <h2>对外展示（手动维护 · 不跟真实数据）</h2>
+    <div class="grid" id="manual"></div>
+    <div class="mrow">
+      <label>在职员工（想写什么就写什么，"65+" 这种也行）
+        <input id="mStaff" type="text" autocomplete="off"></label>
+      <label>入职周期（天）
+        <input id="mSpeed" type="number" min="0" step="1" autocomplete="off"></label>
+    </div>
+    <table id="mJobs"></table>
+    <pre id="mOut"></pre>
+    <button type="button" class="mbtn" id="mCopy">复制这段</button>
+    <a class="mbtn" id="mLink" target="_blank" rel="noopener">在 GitHub 上打开 manual.json →</a>
+    <div class="mhint">
+      改法：上面填好 → 点「复制这段」→ 点右边按钮打开 GitHub → 全选粘贴 → 页面底部 Commit changes。
+      提交后**立即生效**，不用等下一轮同步。<br>
+      报名页那两个数字只认这个文件，拿不到就显示横杠 —— 不会偷偷回退成真实数字。<br>
+      岗位卡片上的职级标签同理：这里留空，卡片上就不显示那一块，不会回退去露人数。<br>
+      「招 N 人」不在这里 —— 它反映的是招聘需求不是编制，仍随 A01 需求表实时变。
+    </div>
+
+    <h2>生效配置</h2>
+    <table id="config"></table>
+
+    <div id="diffWrap" hidden>
+      <h2>岗位变化</h2>
+      <ul id="diff"></ul>
+    </div>
+
+    <div class="note">
+      本页只读，数据来自最近一次同步产生的 <span class="pill">data/_status.json</span>。
+      同步每天 11:00 与 16:00（雅加达）各跑一次，也可在 GitHub Actions 手动触发。<br>
+      🔒 数据在生成时用 PIN 加密（PBKDF2-150k + AES-256-GCM），与星探面板同一套。
+      仓库是公开的，藏文件名没有意义，只能让内容本身没有 PIN 打不开。
+      即便如此这里也不放表 ID、凭据、姓名与电话 —— 加密是第二道，不是第一道。
+    </div>
+  </div>
+</div>
+<script>
+var $=function(id){return document.getElementById(id);};
+var esc=function(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){
+  return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
+var card=function(k,v,sm){return '<div class="card"><div class="k">'+esc(k)+'</div>'+
+  '<div class="v">'+esc(v)+(sm?' <small>'+esc(sm)+'</small>':'')+'</div></div>';};
+var rowsOf=function(pairs){return '<tr><th>项</th><th class="n" style="text-align:right">值</th></tr>'+
+  pairs.map(function(p){return '<tr><td>'+esc(p[0])+'</td><td class="n'+(p[2]?' '+p[2]:'')+'">'+esc(p[1])+'</td></tr>';}).join('');};
+
+/* 解密：PBKDF2-SHA256 → AES-256-GCM，与星探面板同一套。
+   仓库公开，藏文件名没用，只能让内容本身没有 PIN 打不开。
+   同步端未配 STATUS_PIN 时产物是明文，这里自动识别、直接渲染。 */
+function b64(x){var raw=atob(x),a=new Uint8Array(raw.length);
+  for(var i=0;i<raw.length;i++)a[i]=raw.charCodeAt(i);return a;}
+function unlock(pin,blob){
+  var C=window.crypto&&window.crypto.subtle;
+  if(!C)return Promise.reject(new Error('该浏览器不支持解密'));
+  var enc=new TextEncoder();
+  return C.importKey('raw',enc.encode(pin),'PBKDF2',false,['deriveKey'])
+    .then(function(kb){return C.deriveKey(
+      {name:'PBKDF2',salt:b64(blob.salt),iterations:blob.it,hash:'SHA-256'},
+      kb,{name:'AES-GCM',length:256},false,['decrypt']);})
+    .then(function(key){return C.decrypt({name:'AES-GCM',iv:b64(blob.iv)},key,b64(blob.ct));})
+    .then(function(buf){return JSON.parse(new TextDecoder().decode(buf));});
+}
+function askPin(blob){
+  $('head').innerHTML='本页数据已加密。<input id="pin" type="password" placeholder="输入 PIN" '+
+    'style="background:var(--sf2);border:1px solid var(--ln);border-radius:8px;color:var(--tx);'+
+    'padding:7px 11px;font-family:var(--m);font-size:13px;width:180px;margin:0 8px">'+
+    '<button id="go" style="background:var(--tx);color:var(--bg);border:0;border-radius:8px;'+
+    'padding:8px 15px;font-weight:700;cursor:pointer">解锁</button>';
+  var run=function(){
+    var v=($('pin').value||'').trim();
+    if(!v){$('err').hidden=false;$('err').textContent='请先输入 PIN。';return;}
+    $('err').hidden=true; $('head').textContent='解锁中…';
+    unlock(v,blob).then(render).catch(function(){
+      $('err').hidden=false; $('err').textContent='PIN 不对，或数据已损坏。';
+      askPin(blob); setTimeout(function(){var e=$('pin');if(e)e.focus();},30);
+    });
+  };
+  $('go').onclick=run;
+  $('pin').onkeydown=function(e){if(e.key==='Enter')run();};
+  setTimeout(function(){var e=$('pin');if(e)e.focus();},30);
+}
+
+fetch('../data/_status.json?v='+Date.now()).then(function(r){
+  if(!r.ok) throw new Error('HTTP '+r.status);
+  return r.json();
+}).then(function(d){
+  if(d&&d.ct&&d.salt&&d.iv){askPin(d);return;}   // 密文 → 先要 PIN
+  render(d);
+}).catch(function(e){
+  $('head').textContent='';
+  $('err').hidden=false;
+  $('err').textContent='读不到 data/_status.json（'+e.message+'）—— 可能是同步还没跑过新版本。';
+});
+
+function render(d){
+  var g=d.guards||{}, L=d.live||{}, b=d.bench||{}, c=d.config||{};
+  $('head').innerHTML='最近同步 <b>'+esc(d.syncedAt||d.stamp||'?')+'</b>'+
+    (g.forced?' · <span class="warn">本次跳过了护栏（FORCE_SYNC）</span>':'');
+
+  $('live').innerHTML=
+    card('在职员工',L.activeStaff,'试用+转正')+
+    card('开放岗位',L.openJobs)+
+    card('经纪人',L.agents,'/ '+L.taskCodes+' 码')+
+    card('入口文件',L.entryFiles,'j/*.json')+
+    card('星探面板',L.scoutPanels,L.scoutNoPin?L.scoutNoPin+' 人无 PIN':'全员有 PIN')+
+    card('渠道选项',L.channels);
+
+  $('guards').innerHTML=rowsOf([
+    ['敏感内容扫描', g.sensitive==='pass'?'通过':'未通过', g.sensitive==='pass'?'ok':'bad'],
+    ['jobs.json 体积变化', g.jobsVolume, /−?[3-9]\d%|\d{3}%/.test(String(g.jobsVolume))?'warn':'ok'],
+    ['入口文件数', g.entryFiles, 'ok'],
+    ['是否强制跳过护栏', g.forced?'是':'否', g.forced?'warn':'ok']
+  ]);
+
+  var rk=Object.keys(d.rows||{});
+  $('rows').innerHTML='<tr><th>表</th><th class="n" style="text-align:right">行数</th></tr>'+
+    rk.map(function(k){return '<tr><td>'+esc(k)+'</td><td class="n">'+esc(d.rows[k])+'</td></tr>';}).join('');
+
+  $('bench').innerHTML=
+    card('简历总数',b.cv)+card('面试率',b.ivRate+'%')+
+    card('二面通过率',b.passRate+'%')+card('入职率',b.hireRate+'%')+
+    card('中位入职',b.days,'天');
+
+  $('config').innerHTML=rowsOf([
+    ['同步时刻', c.schedule],
+    ['加密轮数', c.pbkdf2Iter],
+    ['体积熔断阈值', c.volumeCap],
+    ['入口骤减容差', c.entryTolerance],
+    ['离职链接接手人', c.handoff],
+    ['简历表单', c.cvForm==='ok'?'已找到':'未找到', c.cvForm==='ok'?'ok':'bad']
+  ]);
+
+  /* 对外展示值来自 data/manual.json（公开、不加密、sync 不覆盖）。
+     这里同时把真实值摆在旁边 —— 本页有 PIN 才打得开，真实数字放这儿是安全的，
+     而且改固定值时需要知道真实值是多少才好拿捏。 */
+  fetch('../data/manual.json?v='+Date.now()).then(function(r){return r.json();}).then(function(m){
+    $('manual').innerHTML=
+      card('在职员工',m.staff==null?'—':m.staff,'真实 '+(L.activeStaff==null?'?':L.activeStaff))+
+      card('入职周期',m.speed==null?'—':m.speed,'天 · 真实 '+(b.days==null?'?':b.days));
+    $('mStaff').value=m.staff==null?'':m.staff;
+    $('mSpeed').value=m.speed==null?'':m.speed;
+    var README=m._readme||'对外展示用的固定值，手动维护。sync 不会覆盖这个文件，改完提交即生效。改法见 /status/ 页最下方。';
+
+    /* 每个岗位的职级标签。岗位清单以 manual.json 里已有的为准，
+       但如果 jobs.json 里出现了新岗位（manual 里还没有），也要列出来 ——
+       否则新岗位的标签永远是空的，而且没人会发现。 */
+    var order=Object.keys(m.jobs||{});
+    fetch('../data/jobs.json?v='+Date.now()).then(function(r){return r.json();}).then(function(jd){
+      (jd.jobs||[]).forEach(function(x){ if(order.indexOf(x.cn)<0) order.push(x.cn); });
+    }).catch(function(){}).then(function(){ drawJobs(); });
+
+    function drawJobs(){
+      $('mJobs').innerHTML='<tr><th>岗位</th><th>中文标签</th><th>印尼语标签</th></tr>'+
+        order.map(function(cn){
+          var v=(m.jobs||{})[cn]||{};
+          return '<tr><td>'+esc(cn)+'</td>'+
+            '<td><input data-j="'+esc(cn)+'" data-k="cn" value="'+esc(v.cn||'')+'"></td>'+
+            '<td><input data-j="'+esc(cn)+'" data-k="id" value="'+esc(v.id||'')+'"></td></tr>';
+        }).join('');
+      Array.prototype.forEach.call($('mJobs').querySelectorAll('input'),
+        function(el){ el.oninput=refresh; });
+      refresh();
+    }
+
+    function collectJobs(){
+      var out={};
+      Array.prototype.forEach.call($('mJobs').querySelectorAll('input'),function(el){
+        var j=el.getAttribute('data-j'), k=el.getAttribute('data-k');
+        if(!out[j])out[j]={cn:'',id:''};
+        out[j][k]=el.value;
+      });
+      // 两个都空的岗位不写进文件 —— 空标签在页面上本来就不显示，留着只是噪音
+      Object.keys(out).forEach(function(j){ if(!out[j].cn&&!out[j].id)delete out[j]; });
+      return out;
+    }
+
+    function build(){
+      var sp=parseInt($('mSpeed').value,10);
+      return JSON.stringify({_readme:README,staff:$('mStaff').value,
+        speed:isNaN(sp)?null:sp, jobs:collectJobs()},null,1);
+    }
+    function refresh(){ $('mOut').textContent=build(); }
+    $('mStaff').oninput=refresh; $('mSpeed').oninput=refresh; refresh();
+    $('mCopy').onclick=function(){
+      var txt=build(), btn=$('mCopy'), old=btn.textContent;
+      var done=function(ok){btn.textContent=ok?'已复制 ✓':'复制失败，手动选中';
+        setTimeout(function(){btn.textContent=old;},1600);};
+      if(navigator.clipboard&&navigator.clipboard.writeText)
+        navigator.clipboard.writeText(txt).then(function(){done(true);},function(){done(false);});
+      else done(false);
+    };
+    $('mLink').href='https://github.com/zanboooo/muke/edit/main/data/manual.json';
+  }).catch(function(){
+    $('manual').innerHTML=card('对外展示','读不到','data/manual.json');
+  });
+
+  if((d.jobDiff||[]).length){ $('diffWrap').hidden=false;
+    $('diff').innerHTML=d.jobDiff.map(function(x){return '<li>'+esc(x)+'</li>';}).join(''); }
+
+  $('body').hidden=false;
+}
+</script>
+</body>
+</html>

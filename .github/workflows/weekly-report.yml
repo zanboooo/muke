@@ -1,0 +1,41 @@
+name: 报名周报
+
+on:
+  schedule:
+    # 雅加达周一 10:00 = UTC 周一 03:00。此时上一自然周刚结束，数据完整。
+    - cron: '0 3 * * 1'
+  workflow_dispatch:          # 需要补发时手动触发
+
+permissions:
+  contents: read              # 只读数据，不写仓库
+
+concurrency:
+  group: weekly-report
+  cancel-in-progress: false
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with: { node-version: '24' }
+
+      - name: 生成并发送周报
+        env:
+          LARK_APP_ID:        ${{ secrets.LARK_APP_ID }}
+          LARK_APP_SECRET:    ${{ secrets.LARK_APP_SECRET }}
+          LARK_BASE_TOKEN:    ${{ secrets.LARK_BASE_TOKEN }}
+          # 周报含经纪人业绩对比，收件群单独配；没配就回落到告警群
+          LARK_ALERT_CHAT_ID: ${{ secrets.LARK_REPORT_CHAT_ID || secrets.LARK_ALERT_CHAT_ID }}
+        run: node tools/weekly-report.js
+
+      - name: 失败时通知 Lark 群
+        if: failure()
+        env:
+          LARK_APP_ID:        ${{ secrets.LARK_APP_ID }}
+          LARK_APP_SECRET:    ${{ secrets.LARK_APP_SECRET }}
+          LARK_ALERT_CHAT_ID: ${{ secrets.LARK_ALERT_CHAT_ID }}
+          FAIL_REASON:        '周报生成失败，本周数据未发送'
+        run: node tools/notify.js

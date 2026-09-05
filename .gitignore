@@ -1,0 +1,18 @@
+# 门户 PIN 绝不能进这个公开仓库（它们在 D:/项目/AI CEO/output/portal_pins.json）
+*pins*.json
+*secret*
+*.key
+.claude/
+_preview_*.html
+
+# 2026-09-06 补：现有 *secret* 匹配不到 appkey.txt；*.bundle 最要紧
+# —— output/backup/ 下两份 119MB 的 bundle 装的是清理前的脏历史，
+#    一旦被 add 进来就等于把今天删掉的东西原样推回公网。
+appkey*.txt
+.env
+.env.*
+node_modules/
+*.bundle
+*.pem
+id_rsa*
+*.log

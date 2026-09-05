@@ -1,0 +1,197 @@
+{
+ "stamp": "2026-09-05",
+ "cvForm": "https://mukestar.jp.larksuite.com/share/base/form/shrjpgDWfZ1dEoZGg1MNuqgToPc",
+ "links": {
+  "主播": {
+   "bg": "https://mukestar.jp.larksuite.com/share/base/form/shrjpnKT1ZM1q3BM5VqOPTcO3Rb",
+   "ex": "https://mukestar.jp.larksuite.com/share/base/form/shrjpkb4VsiHfvjTcMoROA7kNSd"
+  },
+  "主持": {
+   "bg": "https://mukestar.jp.larksuite.com/share/base/form/shrjpywLRXXrL5E7NBR8PSFTOtb",
+   "ex": "https://mukestar.jp.larksuite.com/share/base/form/shrjpxHkv3MkQ3ToMCDzYNVHyPg"
+  },
+  "拍摄剪辑": {
+   "bg": "https://mukestar.jp.larksuite.com/share/base/form/shrjpv9hGTriLvTIi3oAbYSqnZc",
+   "ex": "https://mukestar.jp.larksuite.com/share/base/form/shrjpA4O3YYnh1fA4hPOsYuH4Tc"
+  },
+  "人事": {
+   "bg": "https://mukestar.jp.larksuite.com/share/base/form/shrjpyVJsTbp3SOyuFqbzhmRFOf",
+   "ex": "https://mukestar.jp.larksuite.com/share/base/form/shrjp9Nv2aSQwptDHRg8Flmwqlf"
+  },
+  "财务": {
+   "bg": "https://mukestar.jp.larksuite.com/share/base/form/shrjp5w9o8R5vfAqbsQVqJdYQRg",
+   "ex": "https://mukestar.jp.larksuite.com/share/base/form/shrjp72prbn9W2zGkUUZEEzDiNc"
+  },
+  "舞导": {
+   "bg": "https://mukestar.jp.larksuite.com/share/base/form/shrjpanW5dJJktYV86JVVKMZjPh",
+   "ex": "https://mukestar.jp.larksuite.com/share/base/form/shrjpXFRti5kR2I14UXxoMtxwUf"
+  },
+  "妆造": {
+   "bg": "https://mukestar.jp.larksuite.com/share/base/form/shrjpQmzeHYCl9o9rMtJX4ejwBg",
+   "ex": "https://mukestar.jp.larksuite.com/share/base/form/shrjpUJvlVbbyv52YD9HyXLKCGg"
+  },
+  "团播运营": {
+   "bg": "https://mukestar.jp.larksuite.com/share/base/form/shrjpJ5EfxAnWZV1zBiKkkE4B7c",
+   "ex": "https://mukestar.jp.larksuite.com/share/base/form/shrjpcHsXsPylZwRNDuKJVxsvxe"
+  },
+  "翻译": {
+   "ex": "https://mukestar.jp.larksuite.com/share/base/form/shrjpOrxGL78bsidH0vSAN6m83f",
+   "bg": "https://mukestar.jp.larksuite.com/share/base/form/shrjp2NqD5w4EHP82GqTD0cmzN2"
+  },
+  "艺人经纪": {
+   "ex": "https://mukestar.jp.larksuite.com/share/base/form/shrjpuDJd2TPUB30MeJN4B3E7tG",
+   "bg": "https://mukestar.jp.larksuite.com/share/base/form/shrjplHyJ5TJLkA6TSHWPO11kCf"
+  },
+  "运镜": {
+   "ex": "https://mukestar.jp.larksuite.com/share/base/form/shrjppR1q7gVaQWdX2TbOucnUUc",
+   "bg": "https://mukestar.jp.larksuite.com/share/base/form/shrjp1YHYHk8nyxGEJJLOlNmYcc"
+  },
+  "舞蹈培训师": {
+   "bg": "https://mukestar.jp.larksuite.com/share/base/form/shrjpanW5dJJktYV86JVVKMZjPh",
+   "ex": "https://mukestar.jp.larksuite.com/share/base/form/shrjpXFRti5kR2I14UXxoMtxwUf"
+  },
+  "直播间技术": {
+   "bg": "https://mukestar.jp.larksuite.com/share/base/form/shrjpoF4AlnZ7MPsmqXIfnvsK4f",
+   "ex": "https://mukestar.jp.larksuite.com/share/base/form/shrjpB2K7qLAvLRajEZcKwWUowd"
+  },
+  "印尼员工": {}
+ },
+ "srcOpts": [
+  "🎵TikTok",
+  "📸Instagram",
+  "💬WhatsApp",
+  "✈️Telegram",
+  "👥Facebook",
+  "💼JobStreet",
+  "🌐Portal lain",
+  "🎪Job Fair",
+  "🎓Campus/SMK",
+  "🌟Talent Scout",
+  "👤Referensi internal",
+  "🏢Agensi/Headhunter",
+  "🚶Walk-in",
+  "❓Lain-lain"
+ ],
+ "jobs": [
+  {
+   "cn": "主持",
+   "id": "MC Live",
+   "goal": 2,
+   "urgent": true,
+   "track": "S 主播艺人轨",
+   "open": true,
+   "hue": 335,
+   "jd": "串场控节奏、引导互动与打赏氛围、衔接节目环节",
+   "jdId": "Mengatur tempo acara, memandu interaksi dan suasana pemberian gift, serta menyambungkan antar segmen.",
+   "jid": "P113"
+  },
+  {
+   "cn": "主播",
+   "id": "Host Live",
+   "goal": 30,
+   "urgent": false,
+   "track": "S 主播艺人轨",
+   "open": true,
+   "hue": 335,
+   "jd": "按排班出镜直播，完成麦时与流水目标，维护直播间互动与粉丝留存",
+   "jdId": "Siaran langsung sesuai jadwal, memenuhi target jam siaran dan omzet, menjaga interaksi serta retensi penonton.",
+   "jid": "P111"
+  },
+  {
+   "cn": "翻译",
+   "id": "Penerjemah",
+   "goal": 2,
+   "urgent": true,
+   "track": "P 专业技术轨",
+   "open": true,
+   "hue": 335,
+   "jd": "中文/印尼语/英语互译、直播字幕、跨语沟通支持",
+   "jdId": "Penerjemahan Mandarin/Indonesia/Inggris, subtitle siaran, dan dukungan komunikasi lintas bahasa.",
+   "jid": "P120"
+  },
+  {
+   "cn": "艺人经纪",
+   "id": "Manajer Artis",
+   "goal": 20,
+   "urgent": false,
+   "track": "",
+   "open": true,
+   "hue": 272,
+   "jd": "主播签约与培训规划、档期协调、分成谈判、对外输出对接",
+   "jdId": "Penandatanganan kontrak dan perencanaan pelatihan host, koordinasi jadwal, negosiasi bagi hasil, serta penempatan ke pihak eksternal.",
+   "jid": "P412"
+  },
+  {
+   "cn": "舞蹈培训师",
+   "id": "Pelatih Tari",
+   "goal": 5,
+   "urgent": false,
+   "track": "",
+   "open": true,
+   "hue": 272,
+   "jd": "素人主播舞蹈课程设计与授课、阶段考核评级",
+   "jdId": "Merancang dan mengajar kelas tari untuk host pemula, serta melakukan penilaian berjenjang.",
+   "jid": "P413"
+  },
+  {
+   "cn": "舞导",
+   "id": "Pengarah Tari",
+   "goal": 2,
+   "urgent": false,
+   "track": "",
+   "open": true,
+   "hue": 335,
+   "jd": "编舞与舞蹈排练，直播舞蹈节目质量把控",
+   "jdId": "Menyusun koreografi dan memimpin latihan tari, menjaga kualitas segmen tari saat siaran.",
+   "jid": "P117"
+  },
+  {
+   "cn": "妆造",
+   "id": "Penata Rias & Rambut",
+   "goal": 6,
+   "urgent": false,
+   "track": "",
+   "open": true,
+   "hue": 335,
+   "jd": "主播妆面与造型设计、跟播补妆、化妆品耗材管理",
+   "jdId": "Merancang tata rias dan gaya penampilan host, retouch selama siaran, serta mengelola stok kosmetik.",
+   "jid": "P116"
+  },
+  {
+   "cn": "财务",
+   "id": "Keuangan",
+   "goal": 1,
+   "urgent": false,
+   "track": "",
+   "open": true,
+   "hue": 168,
+   "jd": "收付结算、税务申报、工资发放、财务与资金报表",
+   "jdId": "Penerimaan dan pembayaran, pelaporan pajak, pembayaran gaji, serta laporan keuangan dan arus kas.",
+   "jid": "P612"
+  },
+  {
+   "cn": "运镜",
+   "id": "Kameramen & Switcher",
+   "goal": 2,
+   "urgent": false,
+   "track": "",
+   "open": true,
+   "hue": 335,
+   "jd": "机位调度与运镜、画面构图、与中控配合完成镜头切换",
+   "jdId": "Mengatur posisi dan gerak kamera, menyusun komposisi gambar, serta berkoordinasi dengan operator untuk perpindahan shot.",
+   "jid": "P118"
+  },
+  {
+   "cn": "直播间技术",
+   "id": "Teknisi Live Streaming",
+   "goal": 1,
+   "urgent": false,
+   "track": "",
+   "open": true,
+   "hue": 205,
+   "jd": "直播间搭建调试、声光电设备维护、直播故障应急处理",
+   "jdId": "Membangun dan mengkalibrasi studio, merawat perangkat audio-visual dan kelistrikan, serta menangani gangguan saat siaran.",
+   "jid": "P512"
+  }
+ ]
+}

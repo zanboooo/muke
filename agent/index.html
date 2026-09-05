@@ -1,0 +1,370 @@
+<!doctype html><html lang="id"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive"><meta name="color-scheme" content="dark">
+<title>MUKE · Panel Scout</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&family=Noto+Sans+SC:wght@400;600;800&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+:root{--bg:#0b0b0f;--sf:#15151c;--sf2:#1d1d27;--ln:#2a2a36;--tx:#f2f2f5;--dim:#9b9baa;
+--pk:#ff2d78;--gr:#33d69f;--am:#ffb020;--rd:#ff4d5e;
+--f:'Archivo','Noto Sans SC',system-ui,-apple-system,'Segoe UI',sans-serif;--m:'IBM Plex Mono',ui-monospace,monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--tx);font:400 16px/1.55 var(--f);-webkit-font-smoothing:antialiased}
+html[lang="zh"] body{font-family:'Noto Sans SC','Archivo',system-ui,'Microsoft YaHei',sans-serif}
+.wrap{max-width:860px;margin:0 auto;padding:0 18px}
+header{position:sticky;top:0;z-index:9;background:rgba(11,11,15,.93);backdrop-filter:blur(12px);border-bottom:1px solid var(--ln)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;height:58px}
+.logo{font-weight:800;letter-spacing:.14em;font-size:18px;font-family:'Archivo',sans-serif}.logo i{color:var(--pk);font-style:normal}
+.hd{display:flex;align-items:center;gap:8px}
+.lang{display:flex;border:1px solid var(--ln);border-radius:99px;overflow:hidden}
+.lang button{background:none;border:0;color:var(--dim);font:600 12px var(--f);padding:5px 11px;cursor:pointer}
+.lang button.on{background:var(--pk);color:#fff}
+.out{font-size:12px;color:var(--dim);background:none;border:1px solid var(--ln);border-radius:99px;padding:5px 12px;cursor:pointer;font-family:inherit}
+.out:hover{border-color:var(--pk);color:var(--tx)}
+h2{font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin:32px 0 12px;display:flex;align-items:center;gap:10px}
+h2::after{content:"";flex:1;height:1px;background:var(--ln)}
+/* h2 是 display:flex，会盖掉 [hidden] 的浏览器默认 display:none —— 必须显式兜住，
+   否则 JS 隐藏邀请链接块时标题会孤零零留在页面上（WO-A94 验证时实测） */
+[hidden]{display:none!important}
+.card{background:var(--sf);border:1px solid var(--ln);border-radius:14px;padding:16px 18px}
+#login{padding:70px 0}
+#login h1{font-size:clamp(26px,6vw,36px);font-weight:800;letter-spacing:-.02em}
+#login p{color:var(--dim);margin:12px 0 22px;max-width:48ch}
+.inrow{display:flex;gap:10px;flex-wrap:wrap}
+input{flex:1;min-width:200px;background:var(--sf);border:1px solid var(--ln);border-radius:12px;
+padding:14px 16px;color:var(--tx);font:600 17px var(--m);letter-spacing:.06em}
+input:focus{outline:none;border-color:var(--pk)}
+button.go{background:var(--pk);color:#fff;border:0;border-radius:12px;padding:14px 26px;font:600 16px var(--f);cursor:pointer}
+button.go:hover{filter:brightness(1.1)}
+button.go:disabled{opacity:.45;cursor:default}
+.hint{margin-top:16px;font-size:13px;color:var(--dim);line-height:1.6}
+.err{background:#2a1520;border:1px solid #5c2338;color:#ffb3cc;border-radius:12px;padding:13px;font-size:14px;margin-top:14px}
+.who{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;padding:26px 0 2px}
+.who b{font-size:clamp(24px,5.5vw,32px);font-weight:800;letter-spacing:-.01em}
+.who s{text-decoration:none;color:var(--dim);font-size:14px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.kpi{background:var(--sf);border:1px solid var(--ln);border-radius:14px;padding:15px}
+.kpi .lb{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+.kpi .vl{font:800 30px/1.15 var(--f);margin:6px 0 3px}
+.kpi .cmp{font-size:12px;color:var(--dim)}.kpi .cmp b{font-weight:600}
+.up{color:var(--gr)}.dn{color:var(--rd)}.flat{color:var(--am)}
+.kpi.hero{border-color:var(--pk);background:linear-gradient(180deg,#1e1220,var(--sf))}
+.kpi.dead{opacity:.5}.kpi.dead .vl{color:var(--dim)}
+.note{font-size:13px;color:var(--dim);margin-top:10px;line-height:1.5}
+.fn{display:flex;flex-direction:column;gap:7px}
+.fnr{display:grid;grid-template-columns:96px 1fr 96px;align-items:center;gap:10px;font-size:13px}
+.fnr .bar{height:24px;background:var(--sf2);border-radius:7px;overflow:hidden}
+.fnr .bar i{display:block;height:100%;border-radius:7px}
+.fnr .nm{color:var(--dim)}.fnr .vn{text-align:right;font:600 13px var(--m)}
+.lk{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.lk code{flex:1;min-width:200px;background:var(--bg);border:1px solid var(--ln);border-radius:10px;
+padding:11px 13px;font:500 12px var(--m);color:var(--gr);overflow-wrap:anywhere}
+button.cp{background:var(--sf2);border:1px solid var(--ln);color:var(--tx);border-radius:10px;padding:11px 18px;font:600 14px var(--f);cursor:pointer}
+button.cp:hover{border-color:var(--pk)}
+button.cp.ok{background:var(--gr);color:#06281c;border-color:var(--gr)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);font-weight:600;padding:0 12px 9px 0}
+th:last-child,td:last-child{padding-right:0}
+td{padding:10px 12px 10px 0;border-top:1px solid var(--ln);vertical-align:top}
+td.r{text-align:right;font:500 13px var(--m)}
+.pill{display:inline-block;font-size:11px;border:1px solid var(--ln);border-radius:99px;padding:2px 9px;color:var(--dim)}
+.pill.o{border-color:var(--gr);color:var(--gr)}
+.pill.w{border-color:var(--am);color:var(--am)}.pill.d{border-color:var(--rd);color:var(--rd)}
+.lock{font-size:12px;color:var(--dim);margin-top:22px;padding-top:16px;border-top:1px solid var(--ln);line-height:1.6}
+footer{border-top:1px solid var(--ln);margin-top:44px;padding:22px 0 40px;color:var(--dim);font-size:12px}
+</style></head><body>
+<header><div class="wrap"><div class="logo">MUKE<i>&#9679;</i></div>
+<div class="hd"><div class="lang"><button id="lid" class="on">ID</button><button id="lzh">中</button></div>
+<button class="out" id="out" hidden></button></div></div></header>
+<div class="wrap">
+
+<section id="login">
+<h1 data-t="title"></h1>
+<p data-t="lead"></p>
+<form class="inrow" id="lf" action="#" novalidate>
+<input id="code" maxlength="32" autocomplete="off" spellcheck="false"
+ autocapitalize="characters" autocorrect="off" enterkeyhint="go" inputmode="text">
+<button class="go" id="btn" type="submit" disabled></button>
+</form>
+<div id="lerr"></div>
+<div class="hint" data-t="lhint"></div>
+<div class="lock" data-t="privacy"></div>
+</section>
+
+<main id="app" hidden>
+<div class="who"><b id="nm"></b><s id="sub"></s></div>
+
+<h2 data-t="h_link" id="hlink"></h2>
+<div class="card" id="clink">
+<div style="font-size:14px;color:var(--dim)" data-t="link_lead"></div>
+<div class="lk"><code id="lurl"></code><button class="cp" id="cp"></button></div>
+<div class="note" data-t="link_note"></div>
+</div>
+
+<h2 data-t="h_kpi"></h2>
+<div class="kpis" id="kpis"></div>
+<div class="note" id="knote"></div>
+
+<h2 data-t="h_fn"></h2>
+<div class="card"><div class="fn" id="fn"></div></div>
+
+<!-- WO-A94：卡单／任务／团队三块已移除。
+     WO-0255 起后端只为星探产出汇总数字，明确不放候选人姓名，
+     这三块的数据源（stuck / tasks / subs）不复存在。对应的 i18n 键保留未删。 -->
+<footer><span id="stamp"></span> &middot; <span data-t="foot"></span></footer>
+</main>
+</div>
+<script>
+/* ── 文案：印尼文 / 中文 ─────────────────────────────── */
+var L={
+id:{
+ title:'Panel Scout', btn:'Masuk', loading:'Memuat…', out:'Keluar', copy:'Salin', copied:'Tersalin',
+ ph:'PIN kamu, misal AB12-C3D4E5F6',
+ lead:'Masukkan <b>PIN</b> kamu. PIN dikasih HR, cuma buat kamu sendiri.',
+ lhint:'Biasanya kamu tidak perlu ketik — buka saja link yang dikirim HR, langsung masuk. Simpan link itu di layar depan HP.',
+ privacy:'🔒 Data kamu dikunci pakai PIN kamu. Agen lain tidak bisa lihat angka kamu, dan kamu tidak bisa lihat angka mereka.',
+ e_empty:'Ketik PIN kamu dulu.',
+ e_form:'Format PIN salah. Contoh: AB12-C3D4E5F6',
+ e_nouser:'PIN ini tidak terdaftar. Minta HR di grup AG.',
+ e_wrong:'PIN salah. Cek lagi, atau minta HR kirim ulang linknya.',
+ e_net:'Gagal memuat data. Cek koneksi lalu refresh halaman.',
+ e_old:'HP/browser ini terlalu lama untuk membuka panel. Coba Chrome versi baru.',
+ k_active:'Aktif kerja',
+ sub_line:function(job,code,up){return [job,code&&('Kode '+code),up&&('Agen '+up)].filter(Boolean).join(' · ');},
+ ta_note:function(tr,cf){return 'trial '+tr+' · tetap '+cf;},
+ cv7_note:function(n){return n>0?('7 hari terakhir +'+n):'7 hari terakhir belum ada';},
+ e_render:'Panel ini tidak cocok dengan data kamu. PIN kamu benar — kasih tau HR di grup AG.',
+ link_lead:'Link undangan khusus kamu. Pelamar yang masuk lewat link ini otomatis tercatat atas nama kamu.',
+ link_note:'Kirim di WhatsApp atau taruh di bio TikTok.',
+ h_link:'Link undangan kamu', h_kpi:'Kualitas rekrutan kamu', h_fn:'Corong kamu',
+ h_stuck:'Yang lagi nyangkut', h_task:'Tugas kamu', h_team:'Tim kamu',
+ k_pass:'Lolos interview', k_hire:'Sampai masuk kerja', k_speed:'Kecepatan (hari)',
+ k_total:'Total lamaran', k_iv1:'Lolos tahap 1',
+ avg:'rata-rata', days:' hari', worked:function(n){return n+' sudah kerja';},
+ iv1_dead:'semua agen 100% — tidak dipakai lagi',
+ knote:'<b>Cara hitung:</b> «Lolos interview» = yang lolos ÷ yang diinterview. '+
+   '«Sampai masuk kerja» = yang benar-benar masuk ÷ yang lolos — <b>bukan</b> dibagi total lamaran. '+
+   'Kirim 30 orang tapi cuma 2 yang masuk, itu bukan prestasi.',
+ f1:'Lamaran', f2:'Interview', f3:'Lolos', f4:'Masuk kerja',
+ st_name:'Nama', st_stage:'Tahap', st_idle:'Diam', st_none:'Tidak ada yang nyangkut. Bagus.',
+ st_note:'Nyangkut di <b>Nunggu interview</b> atau <b>Nunggu masuk kerja</b> = bukan salah kamu, itu di HR. Tunjukkan tabel ini ke HR di grup dan minta dipercepat.',
+ stage:{masuk:'Lamaran masuk',wait_iv:'Nunggu interview',pass1:'Lolos tahap 1',wait_join:'Nunggu masuk kerja',reject:'Ditolak',hired:'Sudah kerja'},
+ t_pos:'Posisi', t_code:'Kode', t_cv:'Lamaran', t_hire:'Masuk kerja',
+ p_open:'masih cari', p_full:'sudah penuh',
+ t_note:function(n){return 'Link kamu cuma menampilkan posisi yang <b>masih cari</b> — sekarang '+n+' posisi. '+
+   'Kode itu <b>menentukan posisi</b> pelamar, jadi posisi yang kamu belum pegang tidak bisa ikut lewat link kamu.';},
+ t_gap:function(s){return ' Lagi dibuka tapi belum kamu pegang: <b>'+s+'</b>. Minta HR di grup kalau mau ambil.';},
+ team_none:'Belum ada anggota tim. Mau ajak orang jadi scout? Minta HR daftarkan — dia dapat kode sendiri dan hasilnya ikut ke kamu.',
+ updated:'Diperbarui ', foot:'Data dari sistem MUKE.'
+},
+zh:{
+ title:'星探面板', btn:'登录', loading:'加载中…', out:'退出', copy:'复制', copied:'已复制',
+ ph:'你的 PIN，如 AB12-C3D4E5F6',
+ lead:'输入你的 <b>PIN</b>。PIN 由 HR 发放，只对应你一个人。',
+ lhint:'平时不用手打 —— 直接点 HR 发给你的链接就进来了。把那条链接存到手机桌面。',
+ privacy:'🔒 你的数据用你的 PIN 加锁。别的经纪人看不到你的数字，你也看不到他们的。',
+ e_empty:'请先输入 PIN。',
+ e_form:'PIN 格式不对。例：AB12-C3D4E5F6',
+ e_nouser:'这个 PIN 没有登记，去 AG 群找 HR。',
+ e_wrong:'PIN 不对。再核对一下，或让 HR 重发链接。',
+ e_net:'数据加载失败。检查网络后刷新页面。',
+ e_old:'这台手机/浏览器版本太老，打不开面板。换新版 Chrome 试试。',
+ k_active:'在岗人数',
+ sub_line:function(job,code,up){return [job,code&&('归因码 '+code),up&&('上线 '+up)].filter(Boolean).join(' · ');},
+ ta_note:function(tr,cf){return '试用 '+tr+' ・ 转正 '+cf;},
+ cv7_note:function(n){return n>0?('近 7 天 +'+n):'近 7 天无新增';},
+ e_render:'面板版本与你的数据不匹配。你的 PIN 是对的，去 AG 群找 HR。',
+ link_lead:'你的专属邀请链接。通过它报名的人自动记到你名下。',
+ link_note:'发到 WhatsApp，或者放进 TikTok 简介。',
+ h_link:'你的邀请链接', h_kpi:'你的招人质量', h_fn:'你的漏斗',
+ h_stuck:'卡住的人', h_task:'你的任务', h_team:'你的团队',
+ k_pass:'二面通过率', k_hire:'入职率', k_speed:'入职速度（天）',
+ k_total:'简历总数', k_iv1:'一面通过率',
+ avg:'平均', days:' 天', worked:function(n){return n+' 人已入职';},
+ iv1_dead:'所有经纪人都是 100% —— 已不作为考核项',
+ knote:'<b>口径：</b>「二面通过率」＝ 通过 ÷ 面试。'+
+   '「入职率」＝ 入职 ÷ 通过，<b>不是</b>除以简历总数。送来 30 个只进 2 个，那不叫业绩。',
+ f1:'简历', f2:'面试', f3:'通过', f4:'入职',
+ st_name:'姓名', st_stage:'阶段', st_idle:'停滞', st_none:'没有卡住的人，很好。',
+ st_note:'卡在<b>等面试</b>或<b>等入职</b>=不是你的问题，在 HR 那边。把这张表甩到群里让 HR 加快。',
+ stage:{masuk:'简历已提交',wait_iv:'等面试',pass1:'一面已过',wait_join:'等入职',reject:'已淘汰',hired:'已入职'},
+ t_pos:'岗位', t_code:'归因码', t_cv:'简历', t_hire:'入职',
+ p_open:'还在招', p_full:'已招满',
+ t_note:function(n){return '你的链接只展示<b>还在招</b>的岗位 —— 现在 '+n+' 个。'+
+   '归因码<b>决定求职者报的是哪个岗位</b>，所以你没有码的岗位不能走你的链接。';},
+ t_gap:function(s){return ' 在招但你还没接的：<b>'+s+'</b>。想接就去群里找 HR。';},
+ team_none:'还没有团队成员。想拉人做下线？让 HR 登记 —— 他会有自己的码，业绩算到你头上。',
+ updated:'更新于 ', foot:'数据来自 MUKE 系统。'
+}};
+var LANG='id';
+try{var sv=localStorage.getItem('muke_lang');if(sv==='zh'||sv==='id')LANG=sv;}catch(e){}
+function t(k){var v=L[LANG][k];return v===undefined?L.id[k]:v;}
+
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){
+  return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function pct(a,b){return b?Math.round(a/b*100):0;}
+var JOBS=null,BENCH=null,ME=null,PIN='';
+var qs=new URLSearchParams(location.search);
+var want=(qs.get('k')||qs.get('pin')||'').trim();
+if(!want){try{want=localStorage.getItem('muke_pin')||'';}catch(e){}}
+
+function fail(m){document.getElementById('lerr').innerHTML='<div class="err">'+m+'</div>';}
+function clearErr(){document.getElementById('lerr').innerHTML='';}
+
+/* ── 语言切换：静态文案 + 已渲染内容一起重刷 ── */
+function applyLang(){
+  document.documentElement.lang=LANG==='zh'?'zh':'id';
+  document.getElementById('lid').className=LANG==='id'?'on':'';
+  document.getElementById('lzh').className=LANG==='zh'?'on':'';
+  Array.prototype.forEach.call(document.querySelectorAll('[data-t]'),function(el){
+    el.innerHTML=t(el.getAttribute('data-t'));});
+  document.getElementById('code').placeholder=t('ph');
+  document.getElementById('out').textContent=t('out');
+  document.getElementById('cp').textContent=t('copy');
+  var b=document.getElementById('btn');
+  b.textContent=b.disabled?t('loading'):t('btn');
+  if(ME)render();
+}
+function setLang(v){LANG=v;try{localStorage.setItem('muke_lang',v);}catch(e){}applyLang();}
+document.getElementById('lid').onclick=function(){setLang('id');};
+document.getElementById('lzh').onclick=function(){setLang('zh');};
+
+/* ── 解密：PBKDF2-SHA256 → AES-256-GCM ──
+   仓库是公开的，所以「藏文件名」没用，只能让内容本身没有 PIN 打不开。 */
+function b64(s){var raw=atob(s),a=new Uint8Array(raw.length);
+  for(var i=0;i<raw.length;i++)a[i]=raw.charCodeAt(i);return a;}
+function unlock(pin,blob){
+  var C=window.crypto&&window.crypto.subtle;
+  if(!C)return Promise.reject(new Error('nocrypto'));
+  var enc=new TextEncoder();
+  return C.importKey('raw',enc.encode(pin),'PBKDF2',false,['deriveKey'])
+    .then(function(kb){return C.deriveKey(
+      {name:'PBKDF2',salt:b64(blob.salt),iterations:blob.it,hash:'SHA-256'},
+      kb,{name:'AES-GCM',length:256},false,['decrypt']);})
+    .then(function(key){return C.decrypt({name:'AES-GCM',iv:b64(blob.iv)},key,b64(blob.ct));})
+    .then(function(buf){return JSON.parse(new TextDecoder().decode(buf));});
+}
+
+function login(raw){
+  clearErr();
+  var pin=String(raw||'').toUpperCase().replace(/[^A-Z0-9-]/g,'');
+  if(!pin){fail(t('e_empty'));return;}
+  var m=/^([A-Z0-9]+)-([A-Z0-9]{4,})$/.exec(pin);
+  if(!m){fail(t('e_form'));return;}
+  var slug=m[1].toLowerCase();
+  var btn=document.getElementById('btn');btn.disabled=true;btn.textContent=t('loading');
+  fetch('../data/p/'+encodeURIComponent(slug)+'.json?v='+Date.now())
+    .then(function(r){if(r.status===404)throw new Error('nouser');
+      if(!r.ok)throw new Error('net');return r.json();})
+    .then(function(blob){return unlock(pin,blob);})
+    .then(function(me){
+      PIN=pin;ME=normalize(me);
+      try{localStorage.setItem('muke_pin',pin);}catch(e){}
+      /* render 的异常必须就地处理：落进下面的 catch 会被归类成 e_wrong，
+         正确 PIN 也显示「PIN 错误」，还会顺手清掉 localStorage（WO-A94 事故） */
+      try{render();}
+      catch(err){
+        document.getElementById('login').hidden=false;
+        document.getElementById('app').hidden=true;
+        btn.disabled=false;btn.textContent=t('btn');
+        fail(t('e_render'));
+        if(window.console&&console.error)console.error('render:',err);}
+      })
+    .catch(function(e){
+      btn.disabled=false;btn.textContent=t('btn');
+      var k=e&&e.message==='nouser'?'e_nouser':(e&&e.message==='net'?'e_net':
+            (e&&e.message==='nocrypto'?'e_old':'e_wrong'));
+      fail(t(k));
+      try{localStorage.removeItem('muke_pin');}catch(x){}});
+}
+
+/* 兜底归一化：payload 缺字段时降级，绝不让 render 抛异常。
+   WO-A94 教训：WO-0255 把面板收缩为只服务星探后，后端不再产出 tasks/stuck/subs，
+   前端仍读 ME.tasks.length → TypeError → 被 login 的 catch 吞成 e_wrong
+   → 正确 PIN 也报「PIN 错误」，面板 100% 打不开。 */
+function normalize(me){
+  me=me||{};me.agg=me.agg||{};
+  ['cv','pr','ex','iv','pass','hired','trial','conf','active'].forEach(function(k){
+    me.agg[k]=Number(me.agg[k])||0;});
+  ['name','code','up','job','jobId','status','funnel','stamp'].forEach(function(k){
+    me[k]=me[k]==null?'':String(me[k]);});
+  me.url=String(me.url==null?'':me.url).trim();
+  return me;}
+/* Lark 的 Pass% / Hire% 是带对齐空格的字符串（" 88%"），除零时是 " ➖" */
+function rate(v){var m=/(-?\d+)\s*%/.exec(String(v==null?'':v));return m?Number(m[1]):null;}
+function num(v){var m=/-?\d+/.exec(String(v==null?'':v));return m?Number(m[0]):0;}
+
+function render(){
+  document.getElementById('login').hidden=true;
+  document.getElementById('app').hidden=false;
+  document.getElementById('out').hidden=false;
+  var s=ME.agg,b=BENCH||{};
+  document.getElementById('nm').textContent=ME.name;
+  document.getElementById('sub').textContent=t('sub_line')(ME.job,ME.code,ME.up);
+
+  /* 邀请链接只认 A04.Invite URL —— 空就整块隐藏。
+     绝不拼 join/?a=<姓名>：星探没有 data/j/<姓名>.json，那样必定 404。 */
+  var hasURL=!!ME.url;
+  document.getElementById('hlink').hidden=!hasURL;
+  document.getElementById('clink').hidden=!hasURL;
+  if(hasURL)document.getElementById('lurl').textContent=ME.url;
+
+  /* 比率一律用 Lark 现成的列，不在前端重算 —— Hire% 是 Hired÷Pass，重算极易写成 ÷CV */
+  var passR=rate(ME.passRate),hireR=rate(ME.conv);
+  function cmp(mine,bench,unit,invert){
+    if(bench==null||mine==null)return '<span class="cmp">'+t('avg')+' &mdash;</span>';
+    var d=mine-bench,cls=d===0?'flat':((invert?d<0:d>0)?'up':'dn');
+    return '<span class="cmp">'+t('avg')+' '+bench+unit+' &middot; <b class="'+cls+'">'+(d>0?'+':'')+d+unit+'</b></span>';}
+  function shw(v,u){return v==null?'&mdash;':(v+u);}
+  document.getElementById('kpis').innerHTML=
+   '<div class="kpi hero"><div class="lb">'+t('k_pass')+'</div><div class="vl">'+shw(passR,'%')+'</div>'+cmp(passR,b.passRate,'%')+'</div>'+
+   '<div class="kpi hero"><div class="lb">'+t('k_hire')+'</div><div class="vl">'+shw(hireR,'%')+'</div>'+cmp(hireR,b.hireRate,'%')+'</div>'+
+   '<div class="kpi"><div class="lb">'+t('k_active')+'</div><div class="vl">'+s.active+'</div>'+
+     '<span class="cmp">'+t('ta_note')(s.trial,s.conf)+'</span></div>'+
+   '<div class="kpi"><div class="lb">'+t('k_total')+'</div><div class="vl">'+s.cv+'</div>'+
+     '<span class="cmp">'+t('worked')(s.hired)+' &middot; '+t('cv7_note')(num(ME.week))+'</span></div>';
+  document.getElementById('knote').innerHTML=t('knote');
+
+  var steps=[[t('f1'),s.cv,'#ff2d78'],[t('f2'),s.iv,'#ff6b9d'],[t('f3'),s.pass,'#ffb020'],[t('f4'),s.hired,'#33d69f']];
+  var mx=Math.max.apply(null,steps.map(function(x){return x[1];}))||1;
+  document.getElementById('fn').innerHTML=steps.map(function(x,i){
+    var rt=i&&steps[0][1]>0?(' &middot; '+pct(x[1],steps[0][1])+'%'):'';
+    return '<div class="fnr"><span class="nm">'+esc(x[0])+'</span><span class="bar"><i style="width:'+
+      Math.max(2,Math.round(x[1]/mx*100))+'%;background:'+x[2]+'"></i></span><span class="vn">'+x[1]+rt+'</span></div>';}).join('');
+
+  document.getElementById('stamp').textContent=t('updated')+String(ME.stamp||'').slice(0,10);
+}
+
+function submit(){
+  var v=document.getElementById('code').value.trim();
+  if(!v){fail(t('e_empty'));return;}
+  login(v);}
+document.getElementById('lf').addEventListener('submit',function(e){e.preventDefault();submit();});
+document.getElementById('btn').onclick=function(e){if(e)e.preventDefault();submit();};
+document.getElementById('code').addEventListener('keydown',function(e){
+  if(e.key==='Enter'||e.keyCode===13){e.preventDefault();submit();}});
+document.getElementById('code').addEventListener('input',clearErr);
+document.getElementById('out').onclick=function(){
+  try{localStorage.removeItem('muke_pin');}catch(e){}
+  location.href=location.pathname;};
+document.getElementById('cp').onclick=function(){
+  var x=document.getElementById('lurl').textContent,btn=this;
+  function done(){btn.textContent=t('copied');btn.classList.add('ok');
+    setTimeout(function(){btn.textContent=t('copy');btn.classList.remove('ok');},1600);}
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(x).then(done,function(){});}
+  else{var ta=document.createElement('textarea');ta.value=x;document.body.appendChild(ta);ta.select();
+    try{document.execCommand('copy');done();}catch(e){}document.body.removeChild(ta);}};
+
+applyLang();
+fetch('../data/jobs.json?v='+Date.now()).then(function(r){return r.json();}).then(function(d){
+  JOBS=d;}).catch(function(){});   /* WO-A94：render 不再用 JOBS，无需二次渲染 */
+fetch('../data/bench.json?v='+Date.now()).then(function(r){
+  if(!r.ok)throw new Error('net');return r.json();}).then(function(d){
+  BENCH=d.bench;
+  var btn=document.getElementById('btn');btn.disabled=false;btn.textContent=t('btn');
+  if(want)login(want);
+}).catch(function(){
+  document.getElementById('btn').textContent=t('btn');
+  document.getElementById('btn').disabled=false;
+  fail(t('e_net'));});
+</script></body></html>

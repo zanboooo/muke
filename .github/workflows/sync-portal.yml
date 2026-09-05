@@ -1,0 +1,80 @@
+name: 同步报名页数据
+
+on:
+  schedule:
+    # 雅加达 10:00–17:00 每个整点，共 8 次（张博 2026-09-05 定）。
+    #
+    # 加密不等于「部署变多」：下面有 `git diff --quiet data/` 判空，数据没变化就
+    # 直接 exit 0，不提交也不部署。所以多出来的次数大多是几十秒空跑，真正的部署次数
+    # 由「数据实际变了几次」决定，跟 cron 密度基本无关 —— 加密只让同一批变化更早上线、
+    # 每次 diff 更小。
+    #
+    # 为什么不打扰正在报名的候选人（2026-09-05 读代码核实，不是推测）：
+    # join 页的 5 个 fetch 全在顶层、加载时一次取完，之后不再请求（无轮询、无懒加载）；
+    # 报名表单在 Lark 侧，点「应聘」是跳去 Lark，全程不回头请求本站。
+    # 已经打开页面的人，数据早在内存里，部署换的是服务器上的文件，与他无关。
+    #
+    # ⚠ 唯一残余窗口：恰好在 CDN 切换那一刻**新开**页面，5 个并发请求可能跨新旧两版
+    #   （如新 jobs.json 配旧 j/xxx.json）。后果限于那一次加载看到不一致数据，不影响
+    #   表单提交（表单在 Lark）；j/*.json 也不会因同步消失（离职是改写不是删除，孤儿
+    #   清扫还有 3 个的熔断）。
+    - cron: '0 3-10 * * *'   # UTC 03:00–10:00 = 雅加达 10:00–17:00，整点 8 次
+  workflow_dispatch:          # 网页/手机手动触发
+    inputs:
+      force:
+        description: '跳过变更量熔断（数据源确实大改时才用）'
+        type: boolean
+        default: false
+  repository_dispatch:        # Anycross 发布按钮 → GitHub API 触发
+    types: [sync-portal]
+
+permissions:
+  contents: write             # 需要写权限提交产物
+
+concurrency:                  # 同一时间只跑一个，避免并发写冲突
+  group: sync-portal
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with: { node-version: '24' }
+
+      - name: 拉数据并生成
+        env:
+          LARK_APP_ID:         ${{ secrets.LARK_APP_ID }}
+          LARK_APP_SECRET:     ${{ secrets.LARK_APP_SECRET }}
+          LARK_BASE_TOKEN:     ${{ secrets.LARK_BASE_TOKEN }}
+          FORCE_SYNC:          ${{ inputs.force && '1' || '0' }}
+          # 状态文件的加密口令。没配则产物退回明文，日志会显式警告。
+          STATUS_PIN:          ${{ secrets.STATUS_PIN }}
+          # ⚠ 2026-09-06 补：sync-portal.js 在这一步里会调 NOTIFY.send 发护栏告警，
+          # 但原来这个 env 块**没有** LARK_ALERT_CHAT_ID —— 于是告警永远发不出去，
+          # 而工作流照常绿。补上它，护栏才真的连着人。
+          LARK_ALERT_CHAT_ID:  ${{ secrets.LARK_ALERT_CHAT_ID }}
+        run: node tools/sync-portal.js
+
+      - name: 提交产物
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet data/; then
+            echo "数据无变化，不提交" >> $GITHUB_STEP_SUMMARY
+            exit 0
+          fi
+          git add data/
+          git commit -m "同步报名页数据（$(date -u -d '+7 hours' '+%Y-%m-%d %H:%M') 雅加达）"
+          git push
+          echo "已提交并推送" >> $GITHUB_STEP_SUMMARY
+      - name: 失败时通知 Lark 群
+        if: failure()
+        env:
+          LARK_APP_ID:         ${{ secrets.LARK_APP_ID }}
+          LARK_APP_SECRET:     ${{ secrets.LARK_APP_SECRET }}
+          LARK_ALERT_CHAT_ID:  ${{ secrets.LARK_ALERT_CHAT_ID }}
+          FAIL_REASON:         '拉数据或护栏检查未通过，产物未提交'
+        run: node tools/notify.js

@@ -1,0 +1,687 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>crew</title>
+<style>
+  html,body{margin:0;height:100%;background:#07070b;overflow:hidden}
+  #pool{position:absolute;width:2px;height:2px;opacity:0;pointer-events:none;left:-10px;top:-10px;overflow:hidden}
+  #stage{position:absolute;inset:0;width:100%;height:100%;display:block}
+
+  /* 字幕：淡入 1s → 停留 4s → 淡出 1s → 留白 10s，共 16s 一轮。
+     改文案只动 <b id="cap"> 里的字；改节奏只动下面的百分比与 16s。 */
+  #cap{position:absolute;left:0;right:0;bottom:var(--capBottom,16%);text-align:center;
+       font:600 clamp(13px,2.1vw,20px)/1.5 'Archivo','Noto Sans SC',system-ui,sans-serif;
+       letter-spacing:.02em;color:#f4f4f7;
+       text-shadow:0 0 20px rgba(0,0,0,.9),0 1px 3px rgba(0,0,0,.95);
+       opacity:0;animation:cap var(--capCycle,16s) ease-in-out infinite;pointer-events:none}
+  #cap em{font-style:normal;color:#ff2d78}
+  @keyframes cap{
+    0%    {opacity:0;transform:translateY(6px)}
+    6.25% {opacity:1;transform:translateY(0)}
+    31.25%{opacity:1;transform:translateY(0)}
+    37.5% {opacity:0;transform:translateY(-4px)}
+    100%  {opacity:0;transform:translateY(6px)}
+  }
+  @media (prefers-reduced-motion:reduce){ #cap{animation:none;opacity:1} }
+
+  /* 调参面板：只在「单独打开本页」时出现；被 iframe 嵌入时整块隐藏。
+     报名页嵌的是同一个文件，所以调好的默认值那边照样生效，不必改报名页。 */
+  #lab{position:fixed;left:0;right:0;bottom:0;z-index:9;max-height:46vh;overflow:auto;
+    background:rgba(10,10,16,.94);border-top:1px solid rgba(255,255,255,.14);
+    backdrop-filter:blur(8px);padding:12px 14px 14px;
+    font:12px/1.5 system-ui,-apple-system,'Noto Sans SC',sans-serif;color:#c9c9d4}
+  #lab.hide{display:none}
+  #lab h4{margin:0 0 8px;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:#8a8a99;font-weight:700}
+  #lab .row{display:grid;grid-template-columns:104px 1fr 54px;align-items:center;gap:9px;margin:5px 0}
+  #lab label{color:#9a9aab}
+  #lab input[type=range]{width:100%;accent-color:#ff2d78}
+  #lab input[type=text]{width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);
+    border-radius:7px;color:#f4f4f7;padding:6px 9px;font:12px system-ui}
+  #lab .v{font:600 12px ui-monospace,monospace;color:#f4f4f7;text-align:right}
+  #lab .bar{display:flex;gap:8px;margin-top:11px;flex-wrap:wrap}
+  #lab button{border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.08);color:#f4f4f7;
+    border-radius:8px;padding:7px 13px;font:600 12px system-ui;cursor:pointer}
+  #lab button.pri{background:#ff2d78;border-color:#ff2d78}
+  #lab .hint{color:#71717f;margin-top:8px;line-height:1.6}
+  #lab textarea{width:100%;height:70px;margin-top:8px;background:rgba(0,0,0,.45);
+    border:1px solid rgba(255,255,255,.16);border-radius:8px;color:#9fe8c8;
+    font:11px/1.5 ui-monospace,monospace;padding:8px;resize:vertical}
+</style></head><body>
+<!-- 抠像滤镜。素材是「饱和红底 + 中性黑人影」：
+     背景 R 远大于 G，人影 R≈G。所以判据取 (R-G)，不取亮度 ——
+     取亮度会把画面里一切暗的东西（舞台地面、暗角、阴影）都当成人，
+     抠出来是横贯整幅的白块，四个实例叠加后就是一道道竖直硬边（2026-09-05 事故）。
+     矩阵算 1-(R-G)：背景→0.2，人影→1.0；再用 feComponentTransfer 在 0.73 处切开。 -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<filter id="redkey" color-interpolation-filters="sRGB">
+  <!-- alpha 行必须是 0 0 0 1 0（原样保留），不能写成 0 0 0 0 1（强制不透明）：
+       后者会把画面上一切透明区域也算成 1-(R-G)=1 → 输出不透明纯白，整块画布被刷白。
+       canvas 的 filter 作用域是整次绘制，图像矩形以外全是透明像素，照样吃这条规则。 -->
+  <feColorMatrix type="matrix" values="-1 1 0 0 1  -1 1 0 0 1  -1 1 0 0 1  0 0 0 1 0"/>
+  <feComponentTransfer>
+    <feFuncR type="linear" slope="9" intercept="-6.6"/>
+    <feFuncG type="linear" slope="9" intercept="-6.6"/>
+    <feFuncB type="linear" slope="9" intercept="-6.6"/>
+  </feComponentTransfer>
+</filter>
+</defs></svg>
+<div id="pool" aria-hidden="true"></div><canvas id="stage" aria-hidden="true"></canvas>
+<div id="cap" aria-hidden="true"></div>
+<div id="lab" class="hide">
+  <h4>效果调参 · 调好点「复制配置」发给 AI CEO 落盘</h4>
+  <div id="labRows"></div>
+  <div class="row" style="grid-template-columns:104px 1fr">
+    <label>字幕文案</label><input type="text" id="capText">
+  </div>
+  <div class="bar">
+    <button class="pri" id="labCopy">复制配置</button>
+    <button id="labReset">恢复默认</button>
+    <button id="labFold">收起</button>
+  </div>
+  <div class="hint">改动实时生效并存在本机浏览器；<b>要让所有访客看到，需把配置落盘一次</b>。
+    报名页嵌入的是同一个文件，落盘后那边自动跟着变，你不用碰报名页。</div>
+  <textarea id="labOut" readonly hidden></textarea>
+</div>
+<script>
+(function(){
+  'use strict';
+
+  /* ── 参数：默认值 ← localStorage ← URL 三级覆盖 ──
+     DEFAULTS 是落盘的那一份，对所有访客生效；改它需要提交一次。
+     localStorage 只影响本机预览，URL 参数优先级最高（便于分享某组效果）。 */
+  /* ═══ 素材表 ═══
+     蒙版的目标恒定：人=白、背景=黑。不同素材达到这个目标的路子不同，
+     所以**抠像判据必须跟素材绑在一起**——只换 src 不换 key，画面会整块发白或全黑
+     （2026-09-05 就是把红底素材套进为黑底素材写的亮度链，抠出满屏白块）。
+     构图参数一并绑：全身素材和特写胸像的 figH 差一倍不止，照抄必然出事。
+
+       key='none'   素材本身就是黑底白影，直接当蒙版用，最省。
+       key='redkey' 红底黑影，走 SVG 滤镜按红绿通道差抠（见 <head> 后面的 #redkey）。
+
+     换素材 = 改下面这一行 USE，别去动 DEFAULTS。 */
+  const MATERIALS = {
+    // 原作者素材：384×216，10.00s，全身舞者，黑底白影，人物纵向占画面 13%~100%
+    dancer:  { src:'../assets/dancer.mp4',  key:'none',   crop:1.00, figH:0.92 },
+    // 张博 2026-09-05 提供（Honeycam 由 GIF 转出）：340×204，29.0s，红底黑影，
+    // 特写胸像、人占满取景框。底部有一条中性白舞台灯线，只能靠 crop 切掉。
+    honey:   { src:'../assets/dancer.webm', key:'redkey', crop:0.80, figH:0.50 },
+  };
+  const USE_NAME = 'dancer';          // ← 换素材改这里
+  const USE = MATERIALS[USE_NAME];
+
+  const DEFAULTS = {
+    cell:5, fill:0.76, bloom:0.82, base:0.42, floor:0.085, smooth:0.40,
+    rays:0.95,        // 丁达尔光束强度
+    rayIter:16,
+    titleX:-9, titleY:-9, titleSize:0.088,   // 标题移出画外（底部装饰不要大标题）
+    figH:USE.figH,    // 主舞者身高占画面高（跟素材走，见上面的素材表）
+    ground:1.00,      // 脚底位置
+    // 只取素材顶部这一截。用途是切掉素材底部那些会被误抠成人的东西
+    // （红底素材底部有舞台地面 + 中性白灯线；黑底素材没有，取 1.00 即全幅）。
+    crop:USE.crop,    // 素材保留高度（从顶部算起），跟素材走
+    maxCells:26000,
+    capText:'Kamu <em>tidak</em> naik panggung sendirian',
+    capCycle:16,      // 字幕一轮总秒数（含留白）
+    capBottom:16,     // 字幕距底 %
+  };
+  const CONFIG = (function(){
+    var c = {}; for (var k in DEFAULTS) c[k] = DEFAULTS[k];
+    // 本机存的参数是按**某一份素材**调出来的：全身素材的 figH=0.92 套到特写胸像上
+    // 会把一个胸像放大到铺满画布。所以换素材后旧参数一律作废，回到该素材的默认值。
+    try { var ls = JSON.parse(localStorage.getItem('crewcfg') || '{}');
+          if (ls._mat === USE_NAME) { for (var k2 in ls) if (k2 in c) c[k2] = ls[k2]; }
+          else if (ls._mat !== undefined || Object.keys(ls).length)
+            console.info('[crew] 本机存的是素材「' + (ls._mat||'未标注') + '」的参数，已改用「' + USE_NAME + '」的默认值');
+    } catch(e){}
+    try { new URLSearchParams(location.search).forEach(function(v,k3){
+            if (!(k3 in c)) return;
+            c[k3] = (typeof DEFAULTS[k3] === 'number') ? parseFloat(v) : v;
+          }); } catch(e){}
+    return c;
+  })();
+
+  // 素材：10 秒无缝循环的抠像蒙版（白色人影 / 黑底）
+  // 只挂 webm。assets/dancer.mp4 是另一段完全不同的舞蹈（384×216，16:9），
+  // 曾作为 fallback 挂在这里 —— 等于同一个模块在不同浏览器上放不同的人。
+  // 不支持 webm 的浏览器现在退化成"只有光点、没有人影"，这比放错素材安全。
+  const SRC = [USE.src];
+  // ⚠ 别写死。素材实际 29.0 秒；写死 10 会让下面的取模算出素材里根本不存在的时刻，
+  //   进而让对齐判据恒真、每 4 秒强制 seek 一次（2026-09-05 撕裂事故根因之一）。
+  let UNIT = 10;        // 素材循环长度，loadedmetadata 时以真实 duration 覆盖
+  const CYCLE = 30;     // 整体编排长度：独舞 → 团舞 → 收回独舞
+
+  // 六位舞者：横向位置、缩放、素材时间偏移、入场次序
+  const CREW = [
+    {x:0.500, s:1.00, off:0.0, ord:-1},
+    {x:0.250, s:0.92, off:3.3, ord:0},
+    {x:0.750, s:0.92, off:6.6, ord:1},
+    {x:0.080, s:0.80, off:1.7, ord:2},
+  ];
+  const JOIN=9.0, JOIN_STEP=0.20, JOIN_DUR=0.40;   // 团舞入场
+  const LEAVE=28.0, LEAVE_STEP=0.14, LEAVE_DUR=0.45;
+
+  const TL = { solo:0.45, crew:1.75, line1:1.95, line2:2.95, done:6.0 };
+  const CH1='你不会一个人', CH2='上场。';
+  const PAL=['#FF2E63','#B234FF','#4A6BFF','#22D3EE','#3DE8A0','#FFC46B'];
+
+  // canvas 的 filter 支持 url(#id) 的浏览器才用红绿差抠像；不支持就退回亮度链。
+  // 探测方式：拿一个纯红像素过一遍滤镜，抠对了它应该变黑。
+  // 不做特性探测的话，Safari 这类不支持的浏览器会静默忽略滤镜 → 直接画出整块红。
+  const MATTE_KEY = (function(){
+    // 黑底白影的素材本身就是蒙版，不需要任何滤镜 —— 也别"顺手"加一层亮度链，
+    // 那条链带 invert，会把黑底白影整幅翻成白底黑影，画面当场全白。
+    if (USE.key === 'none') return 'none';
+    var FALLBACK = 'grayscale(1) invert(1) brightness(0.55) contrast(20)';
+    try{
+      // 源图只占目标画布左上角 1px，右边那格故意留空 ——
+      // 必须同时验证「红→黑」和「空白仍是空白」。只测前者会漏掉 alpha 行写错
+      // 导致整幅刷白的情况（2026-09-05 就是这么漏过去的）。
+      var s=document.createElement('canvas'); s.width=s.height=1;
+      var sx=s.getContext('2d'); sx.fillStyle='#e01414'; sx.fillRect(0,0,1,1);
+      var d=document.createElement('canvas'); d.width=2; d.height=1;
+      var dx=d.getContext('2d',{willReadFrequently:true});
+      dx.filter='url(#redkey)'; dx.drawImage(s,0,0);
+      var px=dx.getImageData(0,0,2,1).data;
+      var redOK   = px[0]<40 && px[1]<40;          // 红底被抠成黑
+      var blankOK = px[7]<40;                       // 空白处 alpha 仍接近 0
+      if(redOK && blankOK) return 'url(#redkey)';
+    }catch(e){}
+    console.warn('[crew] 本浏览器不支持 canvas url() 滤镜，抠像退回亮度链');
+    return FALLBACK;
+  })();
+
+  const cv=document.getElementById('stage'), ctx=cv.getContext('2d',{alpha:false});
+  const pool=document.getElementById('pool');
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const SS=4;
+
+  const mk=()=>document.createElement('canvas');
+  const scene=mk(), sctx=scene.getContext('2d');
+  const crew =mk(), cctx=crew.getContext('2d');     // 全体舞者蒙版：白影黑底
+  const inv  =mk(), ictx=inv.getContext('2d');      // 反相蒙版，用于遮挡光线
+  const occ  =mk(), octx=occ.getContext('2d');
+  const ray  =mk(), rctx=ray.getContext('2d');
+  const tmp  =mk(), tctx=tmp.getContext('2d');      // 标题逐字切片
+  const smp  =mk(), mctx=smp.getContext('2d',{willReadFrequently:true});
+  const glyph=mk(), gctx=glyph.getContext('2d');
+  const atlas=mk(), actx=atlas.getContext('2d');
+
+  let W=0,H=0,DPR=1,DW=0,DH=0,cols=0,rows=0,cellDev=0,sw=0,sh=0;
+  let jitter=null,lumBuf=null,revCol=null,motes=null;
+  let vids=[], ready=false;
+  let t0=performance.now(), running=true;
+  const SLICES=11, SR=[]; for(let i=0;i<220;i++) SR.push(Math.random());
+
+  /* ═══ 视频池：同一文件的多个实例，各自错开时间 ═══ */
+  CREW.forEach((c,i)=>{
+    const v=document.createElement('video');
+    v._delay = (c.off % UNIT) * 1000;   // 起播延迟，必须在挂监听之前就位
+    v.muted=true; v.loop=true; v.playsInline=true; v.preload='auto';
+    v.setAttribute('playsinline',''); v.setAttribute('muted','');
+    SRC.forEach(s=>{ const so=document.createElement('source');
+      so.src=s; so.type=s.endsWith('.webm')?'video/webm':'video/mp4'; v.appendChild(so); });
+    v.addEventListener('loadedmetadata',()=>{
+      if(v.duration>0.5 && isFinite(v.duration)) UNIT=v.duration;
+    });
+    v.addEventListener('loadeddata',()=>{
+      v._t0 = performance.now();
+      arm(v);
+      if(vids.every(x=>x.readyState>=2)) ready=true;
+    });
+    pool.appendChild(v); vids.push(v);
+  });
+  /* 相位差靠**错开起播时刻**做，不靠 seek。两条理由：
+     ① 现用素材 dancer.mp4 的 seekable 是 [0,0]，整段虽已缓冲却没有跳转索引，
+        任何 currentTime 赋值都弹回 0 —— 靠 seek 排相位在这份素材上根本不成立。
+     ② 就算能 seek 也不该用：另一份素材 dancer.webm 是 GIF 转出的 VP8，
+        723 帧只有 7 个关键帧、最大间隔 6.05 秒，每次 seek 都要重解一百多帧，
+        赶不及就交出没重建完的帧（2026-09-05 画面撕裂事故）。
+     视频是 loop 的，晚 off 秒起播，第一圈之后偏移就永久固定下来。
+     舞群成员在编排的第 9 秒才入场，最大 6.6 秒的等待期看不见。 */
+  function arm(v){
+    if(!v._t0) return;
+    var wait = Math.max(0, v._delay - (performance.now() - v._t0));
+    clearTimeout(v._timer);
+    // 一律走定时器，哪怕 wait=0。在 loadeddata 回调里**同步**调 play() 会被 Chrome 拒掉：
+    // 2026-09-05 实测 off=0 的主舞者因此永远停在第 0 帧，而靠定时器起播的另外三个都正常。
+    v._timer = setTimeout(function(){
+      v.play().catch(function(){});
+      // 再兜一次：自动播放被策略拦下时等首次交互的 kick，但"策略允许、只是那一瞬没就绪"
+      // 这种情况没人会再来叫它，只能自己重试。
+      setTimeout(function(){ if(v.paused) v.play().catch(function(){}); }, 1200);
+    }, wait);
+  }
+  // 自动播放被拦时，首次交互补启动
+  const kick=()=>{
+    var now = performance.now();
+    vids.forEach(function(v){
+      // 被拦下时四个实例都还停在第 0 帧。此时若沿用 loadeddata 那个 _t0，
+      // 各自的等待时间早就过完 → 四个人同时起播、相位差归零，看起来像复制粘贴。
+      // 所以对没起播过的实例，以"首次交互这一刻"为新起点重排相位。
+      if(v.paused && v.currentTime === 0) v._t0 = now;
+      arm(v);
+    });
+  };
+  ['pointerdown','keydown','touchstart'].forEach(e=>addEventListener(e,kick,{once:true,passive:true}));
+
+  /* ⚠ 2026-09-05 移除 syncPhases（原本每 4 秒把各实例对齐回主舞者）。
+     两条理由，缺一条都不该删：
+     ① 它没用 —— 四个实例都是 1× 常速 loop 同一份素材，相位差恒定，本来就不会漂。
+     ② 它有害 —— UNIT 当时写死 10、素材却是 29 秒，(base+off)%10 与真实时间永远
+        对不上，判据 d>0.20 恒真，于是每 4 秒无条件 seek 一次。叠加上面说的
+        6 秒 GOP，等于常年不停地制造撕裂帧。
+     结论：相位靠初始化时 seek 一次定死，之后永不再 seek。*/
+
+  /* ═══ 字符集：程序化绘制，跨设备一致 ═══ */
+  const GLYPHS=[
+    (a,s)=>{const r=s*0.18;a.fillRect(s/2-r/2,s/2-r/2,r,r);},
+    (a,s)=>{a.beginPath();a.moveTo(s/2,s*0.13);a.lineTo(s/2,s*0.87);
+            a.moveTo(s*0.13,s/2);a.lineTo(s*0.87,s/2);a.stroke();},
+    (a,s)=>{a.beginPath();a.moveTo(s/2,s*0.05);a.lineTo(s/2,s*0.95);
+            a.moveTo(s*0.05,s/2);a.lineTo(s*0.95,s/2);
+            a.moveTo(s*0.21,s*0.21);a.lineTo(s*0.79,s*0.79);
+            a.moveTo(s*0.79,s*0.21);a.lineTo(s*0.21,s*0.79);a.stroke();},
+    (a,s)=>{a.strokeRect(s*0.10,s*0.10,s*0.80,s*0.80);},
+    (a,s)=>{a.strokeRect(s*0.07,s*0.07,s*0.86,s*0.86);
+            a.beginPath();a.moveTo(s/2,s*0.07);a.lineTo(s/2,s*0.93);
+            a.moveTo(s*0.07,s/2);a.lineTo(s*0.93,s/2);a.stroke();},
+    (a,s,w)=>{a.save();a.lineWidth=w*1.55;a.lineCap='square';a.beginPath();
+            a.moveTo(s*0.13,s*0.13);a.lineTo(s*0.87,s*0.87);
+            a.moveTo(s*0.87,s*0.13);a.lineTo(s*0.13,s*0.87);a.stroke();a.restore();},
+  ];
+
+  function buildAtlas(){
+    const cs=Math.max(4,Math.round(cellDev));
+    atlas.width=cs*GLYPHS.length; atlas.height=cs;
+    actx.clearRect(0,0,atlas.width,atlas.height);
+    actx.strokeStyle='#fff'; actx.fillStyle='#fff';
+    const inner=cs*CONFIG.fill, pad=(cs-inner)/2, lw=Math.max(1,cs*0.115);
+    for(let i=0;i<GLYPHS.length;i++){
+      actx.save(); actx.translate(i*cs+pad,pad); actx.lineWidth=lw;
+      GLYPHS[i](actx,inner,lw); actx.restore();
+    }
+  }
+
+  function titleSize(){ return Math.min(sw*CONFIG.titleSize, sh*0.148); }
+
+  function resize(){
+    W=cv.clientWidth||innerWidth; H=cv.clientHeight||innerHeight;
+    DPR=Math.min(devicePixelRatio||1,1.5);
+    DW=Math.round(W*DPR); DH=Math.round(H*DPR); cv.width=DW; cv.height=DH;
+    let c=Math.max(6,CONFIG.cell*(W<640?0.7:1));
+    if((W/c)*(H/c)>CONFIG.maxCells) c=Math.sqrt(W*H/CONFIG.maxCells);
+    cellDev=c*DPR;
+    cols=Math.max(8,Math.ceil(DW/cellDev)); rows=Math.max(8,Math.ceil(DH/cellDev));
+    sw=cols*SS; sh=rows*SS;
+    [scene,crew,inv,occ,ray].forEach(cn=>{cn.width=sw;cn.height=sh;});
+    smp.width=cols; smp.height=rows; glyph.width=DW; glyph.height=DH;
+    const fs=titleSize(); tmp.width=Math.ceil(fs*2.2); tmp.height=Math.ceil(fs*2.4);
+
+    jitter=new Float32Array(cols*rows); lumBuf=new Float32Array(cols*rows);
+    for(let y=0;y<rows;y++)for(let x=0;x<cols;x++){
+      const n=Math.sin(x*127.1+y*311.7)*43758.5453;
+      jitter[y*cols+x]=(n-Math.floor(n))-0.5;
+    }
+    motes=[];
+    for(let i=0;i<70;i++) motes.push({x:Math.random(),y:Math.random(),
+      r:0.4+Math.random()*1.4, sp:0.004+Math.random()*0.016,
+      ph:Math.random()*7, c:PAL[(Math.random()*PAL.length)|0]});
+    buildAtlas();
+  }
+
+  /* ═══ 编排：独舞 → 团舞 → 收回独舞 ═══
+     30 秒 = 素材循环 10 秒 × 3，所以循环点上所有实例相位一致，接缝无损。
+     收尾时其余舞者依次退场，只剩主舞者，正好接回开头。 */
+  function crewAlpha(L, ord){
+    if(ord<0) return 1;                       // 主舞者全程在场
+    const inT = JOIN + ord*JOIN_STEP;
+    const outT= LEAVE + (4-ord)*LEAVE_STEP;
+    if(L < inT) return 0;
+    if(L < inT+JOIN_DUR) return ease((L-inT)/JOIN_DUR);
+    if(L < outT) return 1;
+    if(L < outT+LEAVE_DUR) return 1-ease((L-outT)/LEAVE_DUR);
+    return 0;
+  }
+
+  function drawCrewMatte(L){
+    cctx.setTransform(1,0,0,1,0,0);
+    cctx.globalCompositeOperation='source-over'; cctx.globalAlpha=1;
+    cctx.fillStyle='#000'; cctx.fillRect(0,0,sw,sh);
+    if(!ready){ if(vids.length && vids.every(x=>x.readyState>=2)) ready=true; else return false; }
+    cctx.globalCompositeOperation='lighter';
+    for(let i=0;i<CREW.length;i++){
+      const c=CREW[i], a=reduce?(c.ord<0?1:1):crewAlpha(L,c.ord);
+      if(a<=0.002) continue;
+      // seeking 期间解码器交出来的是没重建完的帧，长 GOP 素材上表现为块状撕裂。
+      // 上面已经把 seek 减到初始一次，这里再兜一道 —— 换素材的人不必再懂这段历史。
+      const v=vids[i]; if(v.readyState<2 || v.seeking) continue;
+      // 只取素材顶部 crop 那一截；比例也要按裁切后的区域算，否则人会被压扁
+      const srcH=Math.max(8, Math.round(v.videoHeight*CONFIG.crop));
+      const hgt=sh*CONFIG.figH*c.s, wid=hgt*(v.videoWidth/srcH);
+      cctx.globalAlpha=a;
+      cctx.filter=MATTE_KEY;
+      cctx.drawImage(v, 0, 0, v.videoWidth, srcH,
+                        c.x*sw-wid/2, sh*CONFIG.ground-hgt, wid, hgt);
+    }
+    cctx.filter='none';
+    cctx.globalAlpha=1; cctx.globalCompositeOperation='source-over';
+    return true;
+  }
+
+  /* ═══ 丁达尔光束：顶灯为光源，舞者为遮挡物 ═══ */
+  function godRays(t, hasCrew){
+    const lx=sw*(0.5+Math.sin(t*0.19)*0.10), ly=-sh*0.30;
+    octx.setTransform(1,0,0,1,0,0); octx.filter='none'; octx.globalAlpha=1;
+    octx.globalCompositeOperation='source-over';
+    octx.fillStyle='#000'; octx.fillRect(0,0,sw,sh);
+
+    octx.globalCompositeOperation='lighter';
+    octx.filter=`blur(${sw*0.013}px)`;
+    for(let i=0;i<6;i++){
+      const c=PAL[i%PAL.length];
+      const x=sw*(0.09+i*0.165)+Math.sin(t*0.4+i)*sw*0.02;
+      const y=sh*(0.01+((i%2)?0.06:0)), rr=sw*0.10;
+      const g=octx.createRadialGradient(x,y,0,x,y,rr);
+      g.addColorStop(0,hexA(c,0.98)); g.addColorStop(0.45,hexA(c,0.34)); g.addColorStop(1,hexA(c,0));
+      octx.fillStyle=g; octx.fillRect(x-rr,y-rr,rr*2,rr*2);
+    }
+    octx.filter='none';
+
+    if(hasCrew){
+      // 反相蒙版 × 光场 = 舞者身体把光切断，人与人之间漏出光缝
+      ictx.setTransform(1,0,0,1,0,0); ictx.globalAlpha=1;
+      ictx.globalCompositeOperation='source-over';
+      ictx.fillStyle='#fff'; ictx.fillRect(0,0,sw,sh);
+      ictx.globalCompositeOperation='difference';
+      ictx.drawImage(crew,0,0);
+      octx.globalCompositeOperation='multiply';
+      octx.drawImage(inv,0,0);
+    }
+
+    rctx.setTransform(1,0,0,1,0,0); rctx.clearRect(0,0,sw,sh);
+    rctx.globalCompositeOperation='lighter';
+    for(let i=0;i<CONFIG.rayIter;i++){
+      const sc=1+i*0.042;
+      rctx.globalAlpha=0.28*Math.pow(0.87,i);
+      rctx.setTransform(sc,0,0,sc, lx-lx*sc, ly-ly*sc);
+      rctx.drawImage(occ,0,0);
+    }
+    rctx.setTransform(1,0,0,1,0,0); rctx.globalAlpha=1;
+  }
+
+  function drawMotes(t){
+    sctx.save(); sctx.globalCompositeOperation='lighter';
+    for(const m of motes){
+      const y=((m.y+t*m.sp)%1.15)-0.075, x=m.x+Math.sin(t*0.35+m.ph)*0.012;
+      const a=Math.max(0,0.30+0.30*Math.sin(t*1.5+m.ph));
+      sctx.fillStyle=hexA(m.c,a*0.55);
+      sctx.beginPath(); sctx.arc(x*sw,y*sh,m.r*sw*0.0016,0,Math.PI*2); sctx.fill();
+    }
+    sctx.restore();
+  }
+
+  /* ═══ 标题：逐字切片解析 ═══ */
+  function drawChar(ch,x,baseline,fs,p,fill,glow){
+    if(p<=0) return 0;
+    sctx.font=`600 ${fs}px "PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif`;
+    const wdt=sctx.measureText(ch).width;
+    if(p>=1){
+      sctx.save(); sctx.globalCompositeOperation='lighter';
+      sctx.shadowColor=glow; sctx.shadowBlur=fs*0.50;
+      sctx.fillStyle=fill; sctx.fillText(ch,x,baseline); sctx.restore();
+      return wdt;
+    }
+    const padX=fs*0.55, padY=fs*0.55;
+    tctx.setTransform(1,0,0,1,0,0);
+    tctx.clearRect(0,0,tmp.width,tmp.height);
+    tctx.font=`600 ${fs}px "PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif`;
+    tctx.textAlign='left'; tctx.textBaseline='alphabetic';
+    tctx.shadowColor=glow; tctx.shadowBlur=fs*0.50; tctx.fillStyle=fill;
+    tctx.fillText(ch,padX,padY+fs);
+    const shs=tmp.height/SLICES, amp=(1-p)*fs*1.15;
+    sctx.save(); sctx.globalCompositeOperation='lighter';
+    for(let i=0;i<SLICES;i++){
+      const r=SR[(i*7+Math.round(x)+Math.round(baseline))%SR.length];
+      const a=clamp(p*1.5-(1-r)*0.35,0,1); if(a<=0) continue;
+      sctx.globalAlpha=a;
+      sctx.drawImage(tmp,0,i*shs,tmp.width,shs,
+        x-padX+(r-0.5)*2*amp*(0.35+r), baseline-padY-fs+i*shs, tmp.width, shs);
+    }
+    sctx.restore();
+    return wdt;
+  }
+
+  function drawTitle(t){
+    const fs=titleSize(), x0=sw*CONFIG.titleX;
+    const y1=sh*CONFIG.titleY+fs, y2=y1+fs*1.02;
+    sctx.save(); sctx.textAlign='left'; sctx.textBaseline='alphabetic';
+    let x=x0;
+    for(let i=0;i<CH1.length;i++){
+      const p=reduce?1:ease(clamp((t-TL.line1-i*0.085)/0.55,0,1));
+      x+=drawChar(CH1[i],x,y1,fs,p,'rgba(255,255,255,0.96)','#4A6BFF');
+    }
+    x=x0;
+    for(let i=0;i<CH2.length;i++){
+      const p=reduce?1:ease(clamp((t-TL.line2-i*0.085)/0.55,0,1));
+      const dot=CH2[i]==='。';
+      x+=drawChar(CH2[i],x,y2,fs,p,
+        dot?'rgba(255,255,255,0.96)':'rgba(255,74,122,0.99)','#FF2E63');
+    }
+    if(!reduce){
+      const k=(t-TL.line1)/(TL.line2+0.7-TL.line1);
+      if(k>0&&k<1){
+        const yy=y1-fs+(y2+fs*0.25-(y1-fs))*k;
+        sctx.globalCompositeOperation='lighter';
+        const g=sctx.createLinearGradient(0,yy-fs*0.10,0,yy+fs*0.10);
+        g.addColorStop(0,'rgba(120,180,255,0)');
+        g.addColorStop(0.5,`rgba(180,220,255,${0.30*Math.sin(k*Math.PI)})`);
+        g.addColorStop(1,'rgba(120,180,255,0)');
+        sctx.fillStyle=g; sctx.fillRect(x0-fs*0.4,yy-fs*0.10,fs*8,fs*0.20);
+      }
+    }
+    sctx.restore();
+  }
+
+  /* ═══ 源画面 ═══ */
+  function drawScene(t,L){
+    const hasCrew=drawCrewMatte(L);
+
+    sctx.setTransform(1,0,0,1,0,0); sctx.filter='none'; sctx.globalAlpha=1;
+    sctx.globalCompositeOperation='source-over';
+    const bg=sctx.createLinearGradient(0,0,0,sh);
+    bg.addColorStop(0,'#0A0716'); bg.addColorStop(0.55,'#06060E'); bg.addColorStop(1,'#0C0612');
+    sctx.fillStyle=bg; sctx.fillRect(0,0,sw,sh);
+
+    godRays(t,hasCrew);
+    sctx.save(); sctx.globalCompositeOperation='lighter';
+    sctx.globalAlpha=CONFIG.rays; sctx.drawImage(ray,0,0); sctx.restore();
+
+    drawMotes(t);
+
+    if(hasCrew){
+      // 蒙版是灰度白影，用横向彩虹渐变染色 —— 每位舞者自动拿到所在位置的灯色
+      cctx.globalCompositeOperation='multiply';
+      const g=cctx.createLinearGradient(0,0,sw,0);
+      PAL.forEach((c,i)=>g.addColorStop(i/(PAL.length-1),c));
+      cctx.fillStyle=g; cctx.fillRect(0,0,sw,sh);
+      cctx.globalCompositeOperation='source-over';
+
+      sctx.save();
+      sctx.globalCompositeOperation='lighter';
+      sctx.globalAlpha=0.95; sctx.drawImage(crew,0,0);
+      sctx.filter=`blur(${sw*0.008}px)`; sctx.globalAlpha=0.55;
+      sctx.drawImage(crew,0,0);                       // 人物自发光
+      sctx.restore();
+
+      sctx.save(); sctx.globalCompositeOperation='lighter';
+      const fl=sctx.createLinearGradient(0,sh*0.82,0,sh);
+      fl.addColorStop(0,'rgba(120,60,200,0)'); fl.addColorStop(1,'rgba(160,80,220,0.18)');
+      sctx.fillStyle=fl; sctx.fillRect(0,sh*0.82,sw,sh*0.18); sctx.restore();
+    }
+
+    drawTitle(t);
+    sctx.filter='none'; sctx.globalAlpha=1;
+  }
+
+  function revealAt(t,x){
+    if(reduce||t>=TL.crew) return 1;
+    if(t<TL.solo) return 0;
+    const u=(x+0.5)/cols-0.5;
+    const k=ease(clamp((t-TL.solo)/(TL.crew-TL.solo),0,1));
+    const half=0.05+k*0.55, edge=0.12, d=Math.abs(u);
+    return d>half+edge?0:d<half?1:1-(d-half)/edge;
+  }
+
+  function glyphPass(t){
+    mctx.clearRect(0,0,cols,rows);
+    let d;
+    try{ mctx.drawImage(scene,0,0,cols,rows); d=mctx.getImageData(0,0,cols,rows).data; }
+    catch(err){
+      console.warn('[hero] 画布被跨域视频污染。视频需与页面同源，或由服务端返回 CORS 头。',err);
+      return false;
+    }
+    const cs=Math.max(4,Math.round(cellDev)), last=GLYPHS.length-1, sm=CONFIG.smooth;
+    if(!revCol||revCol.length!==cols) revCol=new Float32Array(cols);
+    for(let x=0;x<cols;x++) revCol[x]=revealAt(t,x);
+    gctx.setTransform(1,0,0,1,0,0);
+    gctx.globalCompositeOperation='source-over'; gctx.clearRect(0,0,DW,DH);
+    for(let y=0;y<rows;y++){
+      for(let x=0;x<cols;x++){
+        const i=y*cols+x, p=i*4;
+        let lum=(d[p]*0.299+d[p+1]*0.587+d[p+2]*0.114)/255;
+        lum=Math.pow(lum,0.70)*revCol[x];
+        lumBuf[i]=lumBuf[i]*sm+lum*(1-sm);
+        let v=lumBuf[i];
+        v = v<0.012 ? CONFIG.floor*0.5 : Math.max(v,CONFIG.floor);
+        const q=Math.min(last,Math.max(0,Math.round(v*last+jitter[i]*0.6)));
+        gctx.globalAlpha=Math.min(1,0.26+v*0.88);
+        gctx.drawImage(atlas,q*cs,0,cs,cs,x*cellDev,y*cellDev,cellDev,cellDev);
+      }
+    }
+    gctx.globalAlpha=1;
+    gctx.globalCompositeOperation='source-in';   // 取场景 RGB 给字符上色
+    gctx.imageSmoothingEnabled=true;
+    gctx.drawImage(scene,0,0,DW,DH);
+    gctx.globalCompositeOperation='source-over';
+    return true;
+  }
+
+  function composite(t){
+    ctx.setTransform(1,0,0,1,0,0); ctx.filter='none'; ctx.globalAlpha=1;
+    ctx.globalCompositeOperation='source-over';
+    ctx.fillStyle='#05050B'; ctx.fillRect(0,0,DW,DH);
+    ctx.globalCompositeOperation='lighter';
+    if(CONFIG.base>0){
+      ctx.filter=`blur(${17*DPR}px)`; ctx.globalAlpha=CONFIG.base;
+      ctx.drawImage(scene,0,0,DW,DH);
+    }
+    ctx.filter='none'; ctx.globalAlpha=1; ctx.drawImage(glyph,0,0);
+    let punch=0;
+    if(!reduce&&t>TL.line2+0.25&&t<TL.line2+0.80) punch=Math.pow(1-(t-TL.line2-0.25)/0.55,2.2);
+    if(CONFIG.bloom>0){
+      ctx.filter=`blur(${5*DPR}px)`;  ctx.globalAlpha=CONFIG.bloom*(0.85+punch*0.7);
+      ctx.drawImage(glyph,0,0);
+      ctx.filter=`blur(${16*DPR}px)`; ctx.globalAlpha=CONFIG.bloom*(0.46+punch*0.6);
+      ctx.drawImage(glyph,0,0);
+    }
+    if(punch>0){ ctx.filter='none'; ctx.globalAlpha=punch*0.14;
+      ctx.fillStyle='#FF2E63'; ctx.fillRect(0,0,DW,DH); }
+    ctx.filter='none'; ctx.globalAlpha=1; ctx.globalCompositeOperation='source-over';
+  }
+
+  function frame(now){
+    requestAnimationFrame(frame);
+    if(!running) return;
+    const t=(now-t0)/1000, tt=reduce?TL.done:t;
+    // 30 秒编排与素材循环长度无关：各实例自行 loop，编排只管入场/退场时序。
+    const L=reduce?14:(t%CYCLE);
+    drawScene(tt, L);
+    if(!glyphPass(tt)) return;
+    composite(tt);
+  }
+
+  function clamp(v,a,b){return v<a?a:v>b?b:v;}
+  function ease(x){return x<0.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;}
+  function hexA(h,a){const n=parseInt(h.slice(1),16);
+    return `rgba(${(n>>16)&255},${(n>>8)&255},${n&255},${a})`;}
+
+  let rt; addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(resize,140);});
+  /* ⚠ 2026-09-05 移除 IntersectionObserver：
+     本模块以 iframe 懒加载嵌入，加载完成那一刻它往往还没进视口，
+     observer 初判 false 把 running 关掉；此后 iframe 一直可见、再无状态变化，
+     回调不会重来，于是永久卡在暂停 —— 表现为「滚到底部什么都不动」。
+     iframe 的 loading=lazy 已经承担了「没看到就不加载」，
+     滚出视口后浏览器也会自动节流不可见 iframe 的 rAF，无需再判一次。 */
+  document.addEventListener('visibilitychange',()=>{running=!document.hidden;});
+
+  /* ── 字幕：文案与节奏来自 CONFIG ── */
+  var capEl=document.getElementById('cap');
+  function applyCap(){
+    capEl.innerHTML=CONFIG.capText;
+    document.documentElement.style.setProperty('--capCycle', CONFIG.capCycle+'s');
+    document.documentElement.style.setProperty('--capBottom', CONFIG.capBottom+'%');
+    capEl.style.animation='none'; void capEl.offsetWidth; capEl.style.animation='';   // 重启动画
+  }
+  applyCap();
+
+  /* ── 调参面板 ──
+     只在「单独打开本页」时出现（window.self===window.top）。
+     报名页是用 iframe 嵌的，那边 self!==top，面板整块隐藏，只留效果。
+     所以同一个文件既是调参台、又是线上产物，不必维护两份。 */
+  var EMBEDDED = (function(){ try { return window.self !== window.top; } catch(e){ return true; } })();
+  if(!EMBEDDED){
+    var SPEC=[
+      ['figH','人物高度',0.3,1.4,0.01], ['ground','脚底位置',0.6,1.4,0.01],
+      ['crop','素材裁切',0.30,1.00,0.01],
+      ['cell','格子大小',3,14,1],       ['fill','字符密度',0.3,1,0.02],
+      ['rays','光束强度',0,1.6,0.05],   ['bloom','辉光',0,1.6,0.02],
+      ['base','底亮',0,1,0.02],         ['floor','地面亮度',0,0.4,0.005],
+      ['capCycle','字幕周期(秒)',6,40,1],['capBottom','字幕高度(%)',2,60,1],
+    ];
+    var lab=document.getElementById('lab'), labBox=document.getElementById('labRows');
+    lab.classList.remove('hide');
+    SPEC.forEach(function(sp){
+      var k=sp[0];
+      var d=document.createElement('div'); d.className='row';
+      d.innerHTML='<label>'+sp[1]+'</label><input type="range" min="'+sp[2]+'" max="'+sp[3]+
+                  '" step="'+sp[4]+'" value="'+CONFIG[k]+'"><span class="v">'+CONFIG[k]+'</span>';
+      var inp=d.querySelector('input'), out=d.querySelector('.v');
+      inp.addEventListener('input',function(){
+        CONFIG[k]=parseFloat(inp.value); out.textContent=inp.value;
+        if(k==='cell'||k==='fill') resize();          // 这两个要重建字符图集与缓冲
+        if(k==='capCycle'||k==='capBottom') applyCap();
+        save();
+      });
+      labBox.appendChild(d);
+    });
+    var capIn=document.getElementById('capText'); capIn.value=CONFIG.capText;
+    capIn.addEventListener('input',function(){ CONFIG.capText=capIn.value; applyCap(); save(); });
+
+    function save(){ try{
+      var o={}; for(var k in DEFAULTS) if(CONFIG[k]!==DEFAULTS[k]) o[k]=CONFIG[k];
+      o._mat = USE_NAME;                 // 标上是给哪份素材调的
+      localStorage.setItem('crewcfg', JSON.stringify(o));
+    }catch(e){} }
+
+    document.getElementById('labCopy').onclick=function(){
+      var o={}; for(var k in DEFAULTS) if(CONFIG[k]!==DEFAULTS[k]) o[k]=CONFIG[k];
+      var txt=Object.keys(o).length
+        ? JSON.stringify(o,null,2)
+        : '（与默认值一致，无需落盘）';
+      var ta=document.getElementById('labOut'); ta.hidden=false; ta.value=txt;
+      ta.select(); try{ document.execCommand('copy'); }catch(e){}
+      this.textContent='已复制 ✓'; var b=this; setTimeout(function(){b.textContent='复制配置';},1600);
+    };
+    document.getElementById('labReset').onclick=function(){
+      try{ localStorage.removeItem('crewcfg'); }catch(e){}
+      location.href=location.pathname;
+    };
+    document.getElementById('labFold').onclick=function(){ lab.classList.add('hide'); };
+  }
+
+  resize(); requestAnimationFrame(frame);
+})();
+
+</script>
+</body></html>

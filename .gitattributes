@@ -1,0 +1,2 @@
+# 统一行尾：Windows 上编辑、Linux CI 上跑，不做归一化会让整个文件在 diff 里翻红
+* text=auto eol=lf
