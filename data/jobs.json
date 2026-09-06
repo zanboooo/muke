@@ -134,18 +134,6 @@
    "jid": "P413"
   },
   {
-   "cn": "舞导",
-   "id": "Pengarah Tari",
-   "goal": 2,
-   "urgent": false,
-   "track": "",
-   "open": true,
-   "hue": 335,
-   "jd": "编舞与舞蹈排练，直播舞蹈节目质量把控",
-   "jdId": "Menyusun koreografi dan memimpin latihan tari, menjaga kualitas segmen tari saat siaran.",
-   "jid": "P117"
-  },
-  {
    "cn": "妆造",
    "id": "Penata Rias & Rambut",
    "goal": 6,
