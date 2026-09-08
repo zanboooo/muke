@@ -352,7 +352,12 @@ const encrypt = (pin, obj) => {
              pass: num("Pass"), hired: num("Hired"),
              trial: num("Trial"), conf: num("Conf"), active: num("Active") },
       conv: V(f["Hire%"]), passRate: V(f["Pass%"]),
-      week: V(f["CV7d"]), iv7d: V(f["IV7d"]), funnel: V(f.Funnel),
+      // ⚠ 两个名字都认：Base 侧 2026-09-07 把 CV7d/IV7d 改成 CV/7d、IV/7d（四张表统一）。
+      //   保留旧名兜底，是为了改名当天不出现「脚本已更新但 Base 还没改」的断窗，
+      //   也为了以后谁再动列名时这里不会静默变空。用 in 判断而不是 ||，因为 0 是合法值。
+      week: V("CV/7d" in f ? f["CV/7d"] : f["CV7d"]),
+      iv7d: V("IV/7d" in f ? f["IV/7d"] : f["IV7d"]),
+      funnel: V(f.Funnel),
       // 抬头要显示"这是哪个岗位的码" —— 同一个人可能有 4 个码，不标岗位在页面上完全一样
       job: V(f["Job-CN"]), jobId: V(f["Job-ID"]), status: V(f["SC Status"]),
       // ⚠ 邀请链接只认 A04.Invite URL，空就空着 —— 前端整块隐藏。
