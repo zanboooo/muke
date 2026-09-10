@@ -1,5 +1,5 @@
 {
- "stamp": "2026-09-09",
+ "stamp": "2026-09-10",
  "cvForm": "https://mukestar.jp.larksuite.com/share/base/form/shrjpgDWfZ1dEoZGg1MNuqgToPc",
  "links": {
   "主播": {
@@ -73,18 +73,6 @@
   "❓Lain-lain"
  ],
  "jobs": [
-  {
-   "cn": "主持",
-   "id": "MC Live",
-   "goal": 2,
-   "urgent": true,
-   "track": "S 主播艺人轨",
-   "open": true,
-   "hue": 335,
-   "jd": "串场控节奏、引导互动与打赏氛围、衔接节目环节",
-   "jdId": "Mengatur tempo acara, memandu interaksi dan suasana pemberian gift, serta menyambungkan antar segmen.",
-   "jid": "P113"
-  },
   {
    "cn": "主播",
    "id": "Host Live",
