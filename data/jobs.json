@@ -168,6 +168,18 @@
    "jd": "直播间搭建调试、声光电设备维护、直播故障应急处理",
    "jdId": "Membangun dan mengkalibrasi studio, merawat perangkat audio-visual dan kelistrikan, serta menangani gangguan saat siaran.",
    "jid": "P512"
+  },
+  {
+   "cn": "主持",
+   "id": "MC Live",
+   "goal": 5,
+   "urgent": true,
+   "track": "",
+   "open": true,
+   "hue": 335,
+   "jd": "串场控节奏、引导互动与打赏氛围、衔接节目环节",
+   "jdId": "Mengatur tempo acara, memandu interaksi dan suasana pemberian gift, serta menyambungkan antar segmen.",
+   "jid": "P113"
   }
  ]
 }
