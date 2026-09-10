@@ -219,7 +219,15 @@ const encrypt = (pin, obj) => {
       // 离职判据 = Emp Status（lookup H01.Status，WO-0229 起唯一源头；手工「状态」列已删）。
       // lookup 套 select 经 API 读出是选项 id（坑#5），RESID 在下方从 H01 字段元数据动态解析。
       off: V(f["Emp Status"]) === RESNAME || V(f["Emp Status"]) === RESID,
-      open: f.Open === true,     // A03.Open 复选（WO-0228）：勾上才对外展示；码本身始终有效
+      // 两道独立的闸（WO-A122，张博 2026-09-10 定的口径）：
+      //   · 需求状态 —— 管「这个岗还招不招」。A03.Status 是所属需求 Status 的 lookup。
+      //   · Open     —— 管「这个人还推不推」。码本身始终有效，与两道闸都无关。
+      // 需求一旦不是「进行中」，无论 Open 勾没勾都下线；需求重开则自动恢复，零写操作。
+      // ⚠ 加这道闸之前实测：17 行 Open 勾着但需求已关，其中 8 行真的漏在门户上 ——
+      //   主持这个岗被新需求撑着，旧需求那批行就跟着漏了出来。
+      // 判据安全性实测（2026-09-10）：A03 的 REQS 全表 195/195 都是一对一，
+      //   Status 取值只有 已完成／进行中／已停止 三种，所以单值正则判据成立。
+      open: f.Open === true && /进行中/.test(V(f.Status)),
       stats: s }; }).filter(Boolean);
   const tasks = tasksAll.filter(t => !t.off);
   const gone  = tasksAll.filter(t => t.off);
