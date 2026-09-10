@@ -806,7 +806,12 @@ function renderPanel(job){
   h+='<div class="who">✅ <b>'+esc(ME.n)+'</b> · '+esc(ME.p)+'<button class="b-chg">'+esc(t('chg'))+'</button></div>'+
      '<div class="hint" style="margin-top:9px">'+t('ready')+'</div><div class="steps">';
   for(var i=0;i<3;i++){
-   var stt=stState(job,i),lock=(i>0&&stState(job,i-1)===0),u=stepUrl(i,job);
+   /* ⚠ 2026-09-11 张博定案：锁判据从 ===0 收紧为 !==2。
+      原来只要前一步“点开过”(stState===1) 就解锁下一步 —— 实测有人点开简历表单没提交
+      就去填了背调，A06 建行时 A05 还没这个人（历史上 3 例，最早的早 63 小时）。
+      现在必须真的提交并跳回本站（stState===2）才解锁下一步。
+      ⚠ 拦不住“直接拿到表单链接填”（链接在 data/jobs.json 里公开），那是结构性的，网页端补不了。 */
+   var stt=stState(job,i),lock=(i>0&&stState(job,i-1)!==2),u=stepUrl(i,job);
    var cls=stt===2?' done':(stt===1?' wip':'');
    var mark=stt===2?'':(stt===1?'<em>'+esc(t('wip'))+'</em>':'→');
    h+='<a class="st'+cls+((lock||!u)?' lock':'')+'" data-s="'+i+'">'+
