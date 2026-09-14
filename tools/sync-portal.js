@@ -557,7 +557,7 @@ const encrypt = (pin, obj) => {
     config: {
       schedule: "10:00–17:00 WIB 每整点",
       pbkdf2Iter: ITER,
-      volumeCap: "30%",
+      volumeCap: "骤减 50%（增长不拦；岗位归零必拦）",
       entryTolerance: 3,
       handoff: HANDOFF,                           // 离职链接的接手人
       cvForm: CVURL ? "ok" : "missing",

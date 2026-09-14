@@ -20,7 +20,9 @@
 <meta name="twitter:image" content="https://zanboooo.github.io/muke/og/card.png">
 <link rel="icon" href="https://zanboooo.github.io/muke/og/card.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800;900&family=Noto+Sans+SC:wght@400;600;800&family=IBM+Plex+Mono:wght@500&display=swap">
+<!-- 字体非阻塞加载：先按 print 媒体加载（不阻塞渲染），加载完再切 all。fonts.googleapis 被墙/超时时首屏照常出字（系统字体），字体到了再换。（2026-09-14 体检 #17） -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800;900&family=Noto+Sans+SC:wght@400;600;800&family=IBM+Plex+Mono:wght@500&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800;900&family=Noto+Sans+SC:wght@400;600;800&family=IBM+Plex+Mono:wght@500&display=swap"></noscript>
 <style>
 :root{--bg:#07070b;--sf:rgba(255,255,255,.045);--sf2:rgba(255,255,255,.075);--ln:rgba(255,255,255,.11);
 --tx:#f4f4f7;--dim:#9a9aab;--pk:#ff2d78;--gr:#33d69f;--am:#ffb020;
@@ -159,6 +161,8 @@ input::placeholder{color:#5b5b6b;font-size:14px}
 .st{display:flex;align-items:center;gap:12px;padding:13px 14px;border-radius:13px;cursor:pointer;
 background:rgba(255,255,255,.045);border:1px solid var(--ln);text-decoration:none;color:inherit;transition:.18s;min-height:58px}
 .st:hover{border-color:hsla(var(--h),70%,60%,.5);background:rgba(255,255,255,.075)}
+.unlk{display:block;margin:-4px 0 10px 53px;font-size:12px;color:var(--dim);text-decoration:underline dotted;cursor:pointer}
+.unlk:hover{color:hsl(var(--h),70%,65%)}
 .st i{width:27px;height:27px;border-radius:99px;flex:none;display:grid;place-items:center;font:700 12px var(--m);font-style:normal;
 background:hsla(var(--h),70%,55%,.17);color:hsl(var(--h),80%,78%);border:1px solid hsla(var(--h),70%,60%,.32)}
 .st div{flex:1;min-width:0}
@@ -361,7 +365,12 @@ var REFFAIL=false;   // 网络加载失败：可重试 → 仍挡住报名，提
 var MANUAL=null;
 var REFBAD=false;    // 码不存在(404)：不可重试 → 正常展示岗位，只提示推荐不计入
 var SCOUT=false;     // ?r=<星探码> 命中：单岗位页，页脚露出星探的数据入口
-if(!AGENT&&!REF){try{AGENT=localStorage.getItem('muke_agent_name')||'';REF=localStorage.getItem('muke_ref')||'';}catch(e){}}
+/* 粘性归因：URL 没带参数时从本机恢复。两个键都在时取**最近一次解析成功**的那个，
+   而不是永远经纪人优先（原先先开过 A 的链接、后走星探链接报名，之后裸链接/跳回都归 A）。
+   没有时间戳的老存档维持原判（经纪人优先），向后兼容。（2026-09-14 体检 #7） */
+if(!AGENT&&!REF){try{var la=localStorage.getItem('muke_agent_name')||'',lr=localStorage.getItem('muke_ref')||'';
+ var ta=+(localStorage.getItem('muke_agent_ts')||0),tr=+(localStorage.getItem('muke_ref_ts')||0);
+ if(la&&lr){if(tr>ta)REF=lr;else AGENT=la;}else{AGENT=la;REF=lr;}}catch(e){}}
 /* ⛔ 绝不在这里写 localStorage —— 此刻还没 fetch，根本不知道这个码有没有对应文件。
    原先无条件写入的后果：打开一次坏链接 → 坏码被存下 → 之后连不带参数的公开入口
    /join/ 也会从 localStorage 把坏码读回来 → 这台手机永远看不到任何岗位。
@@ -394,6 +403,8 @@ id:{eyebrow:'Sedang merekrut', h1:'Bangun karier di<br><em>live streaming</em>.'
  maps:'Buka di Google Maps →', tk:'Tentang & sosial', about:'Tentang MUKE', nowtag:'sekarang',
  h_jobs:'Lowongan', h_flow:'Prosesnya',
  wait_ref:'Kode undangan masih dimuat, coba klik lagi sebentar.', noform:'form belum tersedia',
+ unlk_q:'Sudah kirim form sebelumnya tapi tidak kembali ke sini? Lanjutkan',
+ unlk_t:'Sudah kirim form sebelumnya?', unlk_p:'Pastikan form sebelumnya benar-benar sudah dikirim. Kalau belum, data kamu tidak akan diproses.', unlk_y:'Sudah dikirim, lanjut',
  need:function(n){return 'butuh '+n+' orang';}, urgent:'urgent',
  invited:function(n){return 'Diundang oleh '+n;}, moved:function(a,b){return a+' · kini '+b;}, code:function(c){return 'Kode: '+c;},
  none:'Belum ada lowongan terbuka saat ini.',
@@ -441,6 +452,8 @@ zh:{eyebrow:'正在招聘', h1:'在<em>直播</em>行业<br>做一份长久的�
  maps:'在 Google 地图打开 →', tk:'了解与关注', about:'关于我们', nowtag:'当前',
  h_jobs:'在招岗位', h_flow:'流程',
  wait_ref:'邀请码还在加载，请稍候再点。', noform:'表单未配置',
+ unlk_q:'上一步已经提交但没跳回本页？点此继续',
+ unlk_t:'上一步已经提交了吗？', unlk_p:'请先确认上一张表单确实提交成功，再继续下一步。', unlk_y:'已提交，继续',
  need:function(n){return '招 '+n+' 人';}, urgent:'加急',
  invited:function(n){return n+' 邀请';}, moved:function(a,b){return a+' · 现由 '+b+' 负责';}, code:function(c){return '归因码：'+c;},
  none:'目前没有开放的岗位。',
@@ -751,7 +764,7 @@ function isDone(job,n){return stState(job,n)===2;}
 function isOpened(job,n){return stState(job,n)>=1;}
 function markOpen(job,n){if(!ME)return;ME.d=ME.d||{};var k=doneKey(job,n);
  if(stState(job,n)!==2)ME.d[k]={t:Date.now(),ok:false};save(ME);}
-function markDone(job,n){if(!ME)return;ME.d=ME.d||{};ME.d[doneKey(job,n)]={t:Date.now(),ok:true};save(ME);paintFlow();}
+function markDone(job,n,manual){if(!ME)return;ME.d=ME.d||{};var v={t:Date.now(),ok:true};if(manual)v.manual=true;ME.d[doneKey(job,n)]=v;save(ME);paintFlow();}
 
 function toast(msg){
  var d=document.createElement('div');d.className='toast';d.textContent=msg;
@@ -777,7 +790,12 @@ function openStep(job,n){
  var u=stepUrl(n,job); if(!u)return;
  try{localStorage.setItem('muke_lastjob',job);}catch(e){}
  try{localStorage.setItem('muke_laststep',String(n));}catch(e){}
- var go=function(){markOpen(job,n);renderPanel(job);window.open(u,'_blank','noopener');};
+ /* 弹窗被拦（部分 Android 内置浏览器）就当前页跳转，不再「点了没反应却记成进行中」。
+    ⚠ 不能带 'noopener' 特性 —— 带了 window.open 按规范总是返回 null，判不出被没被拦；
+    改为拿到窗口后手动断开 opener，安全效果等价。（2026-09-14 体检 #4） */
+ var go=function(){markOpen(job,n);renderPanel(job);
+  var w=null;try{w=window.open(u,'_blank');}catch(e){}
+  if(w){try{w.opener=null;}catch(e){}}else{location.href=u;}};
  /* 笔试有时限、不能随手重做：只要点开过（含「进行中」）就要确认；
     前两步只在「已完成」时才拦。这样即使笔试表单不配回跳，也不会被误点重做。 */
  var guard=(n===2)?isOpened(job,n):isDone(job,n);
@@ -825,7 +843,13 @@ function renderPanel(job){
    /* 第 2/3 步没有表单链接（H28 漏贴）时明说「表单未配置」，不再静默灰掉（2026-09-14 体检 #3） */
    var mark=stt===2?'':(stt===1?'<em>'+esc(t('wip'))+'</em>':(!u&&i>0?'<em>'+esc(t('noform'))+'</em>':'→'));
    h+='<a class="st'+cls+((lock||!u||refPending())?' lock':'')+'" data-s="'+i+'">'+
-      '<i>'+(i+1)+'</i><div><b>'+esc(t('steps')[i][0])+'</b><span>'+esc(t('steps')[i][1])+'</span></div><u>'+mark+'</u></a>';}
+      '<i>'+(i+1)+'</i><div><b>'+esc(t('steps')[i][0])+'</b><span>'+esc(t('steps')[i][1])+'</span></div><u>'+mark+'</u></a>';
+   /* 逃生口（2026-09-14 体检 #2）：前一步「点开过但没跳回」超过 5 分钟，才露出一行「已经交过了？继续」。
+      默认仍是「必须真提交才解锁」；这条只解决表单在外部浏览器打开、跳不回本站的人。
+      点了要二次确认，并在存档里记 manual:true，可追溯。 */
+   var pv=(i>0&&lock)?(ME.d&&ME.d[doneKey(job,i-1)]):null;
+   if(pv&&!pv.ok&&pv.t&&(Date.now()-pv.t)>5*60*1000)
+    h+='<a class="unlk" data-u="'+(i-1)+'">'+esc(t('unlk_q'))+'</a>';}
   h+='</div>';
   var allDone=[0,1,2].every(function(i){return isDone(job,i);});
   h+=allDone?('<div class="fin"><b>'+esc(t('fin_t'))+'</b><span>'+esc(t('fin_p'))+'</span></div>')
@@ -848,6 +872,9 @@ function renderPanel(job){
   setTimeout(function(){var el=p.querySelector('.i-n');if(el)el.focus();},60);};
  Array.prototype.forEach.call(p.querySelectorAll('.st'),function(a){
   a.onclick=function(ev){ev.preventDefault();openStep(job,+a.getAttribute('data-s'));};});
+ Array.prototype.forEach.call(p.querySelectorAll('.unlk'),function(a){
+  a.onclick=function(ev){ev.preventDefault();var k=+a.getAttribute('data-u');
+   modal(t('unlk_t'),t('unlk_p'),t('unlk_y'),t('dup_n'),function(){markDone(job,k,true);renderPanel(job);});};});
  /* ⚠ 内容换了（表单→三步、或多出一行报错）必须让容器重新自适应。
     max-height 只用于展开那一下的动画，展开后一律交回 none —— 否则内容变高会被裁在容器外，
     表现就是「点了没反应」（2026-08-31 张博实测报的两个 bug 同一根因）。 */
@@ -994,13 +1021,17 @@ fetch('../data/bench.json?v='+Date.now()).then(function(r){return r.json();}).th
    if(n>=7&&n<10)el.style.opacity=String(1-(n-6)*0.15);   // 第 7 下起微微变淡，给点手感
    if(n>=10){n=0;el.style.opacity='';location.href='../status/';}});})();
 }).catch(function(){});
-if(AGENT){fetch('../data/j/'+encodeURIComponent(norm(AGENT))+'.json?v='+Date.now())
- .then(function(r){if(r.status===404)throw new Error('gone');   // 码不存在，刷新没用
-                   if(!r.ok)throw new Error('net');             // 其它 HTTP 错误当网络问题
-                   return r.json();})
+/* 取码文件：404 先当「可能是 CDN 切换的瞬时 404」，1.5 秒后再试一次，还是 404 才算 gone。
+   否则一次瞬时 404 就会触发下面的「自愈」，把这台设备上原本有效的粘性归因删掉。（2026-09-14 体检 #22） */
+function fetchJson(url){var once=function(){return fetch(url+'?v='+Date.now())
+  .then(function(r){if(r.status===404)throw new Error('gone');   // 码不存在，刷新没用
+                    if(!r.ok)throw new Error('net');             // 其它 HTTP 错误当网络问题
+                    return r.json();});};
+ return once().catch(function(e){if(e&&e.message==='gone')return new Promise(function(res){setTimeout(res,1500);}).then(once);throw e;});}
+if(AGENT){fetchJson('../data/j/'+encodeURIComponent(norm(AGENT))+'.json')
  .then(function(d){CODES={byJob:d.byJob};REFNAME=d.name;MOVED=d.movedTo||'';REFFAIL=false;REFBAD=false;
   /* ✅ 只有解析成功才写 —— 这是"坏链接永久废掉设备"那个 bug 的正解 */
-  try{localStorage.setItem('muke_agent_name',AGENT);}catch(e){}
+  try{localStorage.setItem('muke_agent_name',AGENT);localStorage.setItem('muke_agent_ts',String(Date.now()));}catch(e){}
   showRef();paint();})
  .catch(function(e){
   if(e&&e.message==='gone'){REFBAD=true;
@@ -1016,13 +1047,11 @@ else if(REF){
            星探一行 = 一个码 = 一个岗位，所以这里天然是单岗，与经纪人的多岗 j/ 不同。
     未命中 → 与 ?a= 失效同样处理：明确报错 + 出口按钮，不展示任何岗位。
            两个入口口径必须一致，否则「哪种链接坏了会怎样」就没人说得清。 */
- fetch('../data/s/'+encodeURIComponent(REF.toLowerCase())+'.json?v='+Date.now())
-  .then(function(r){if(r.status===404)throw new Error('gone');
-                    if(!r.ok)throw new Error('net');return r.json();})
+ fetchJson('../data/s/'+encodeURIComponent(REF.toLowerCase())+'.json')
   .then(function(d){
    CODES={byJob:{}}; if(d.job)CODES.byJob[d.job]=d.ref||REF;
    REFNAME=d.name||'';MOVED='';SCOUT=true;REFFAIL=false;REFBAD=false;
-   try{localStorage.setItem('muke_ref',REF);}catch(e){}    // 查通了才存
+   try{localStorage.setItem('muke_ref',REF);localStorage.setItem('muke_ref_ts',String(Date.now()));}catch(e){}    // 查通了才存
    showRef();paint();})
   .catch(function(e){
    if(e&&e.message==='gone'){REFBAD=true;

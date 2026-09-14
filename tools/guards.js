@@ -33,9 +33,17 @@ function guardVolume(name, next, prevPath, limit) {
   let prev; try { prev = JSON.parse(prevRaw); } catch (e) { return "上次产物不可解析"; }
   const a = JSON.stringify(prev).length, b = JSON.stringify(next).length;
   const d = Math.abs(b - a) / Math.max(a, 1);
-  const cap = limit == null ? 0.3 : limit;
-  if (d > cap) throw new Error(
-    "护栏② 变更量熔断：" + name + " 体积变化 " + Math.round(d * 100) + "%（阈值 " + Math.round(cap * 100) + "%）" +
+  // 2026-09-14 体检 #9：这道护栏防的是「数据源被误清空、岗位一夜全下线」，所以：
+  //   · 只看骤减，不看增长（新开岗位、JD 变长都不是事故）
+  //   · 阈值 50%（原 30%：10 个岗位同时关 3–4 个就熔断，之后每小时全红、页面停在旧数据）
+  //   · 岗位数从 >0 变成 0 无论体积如何都熔断（这才是它要拦的那种事故）
+  const cap = limit == null ? 0.5 : limit;
+  const pj = Array.isArray(prev.jobs) ? prev.jobs.length : null, nj = Array.isArray(next.jobs) ? next.jobs.length : null;
+  if (pj > 0 && nj === 0) throw new Error(
+    "护栏② 变更量熔断：" + name + " 岗位数由 " + pj + " 降到 0" +
+    "\n   数据源可能异常（A01 状态列/选项被改？），同步已中止。确认无误后可用 FORCE_SYNC=1 跳过本护栏。");
+  if (b < a && d > cap) throw new Error(
+    "护栏② 变更量熔断：" + name + " 体积骤减 " + Math.round(d * 100) + "%（阈值 " + Math.round(cap * 100) + "%）" +
     "\n   数据源可能异常，同步已中止。确认无误后可用 FORCE_SYNC=1 跳过本护栏。");
   return (b >= a ? "+" : "−") + Math.round(d * 100) + "%";
 }
