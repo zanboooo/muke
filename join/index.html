@@ -393,6 +393,7 @@ id:{eyebrow:'Sedang merekrut', h1:'Bangun karier di<br><em>live streaming</em>.'
  addr:"PT MUKE · Landmark Pluit Tower E9, Lantai 3\nJl. Pluit Selatan Raya No.2, Pluit, Jakarta Utara 14450\nMasuk lewat Lantai P1",
  maps:'Buka di Google Maps →', tk:'Tentang & sosial', about:'Tentang MUKE', nowtag:'sekarang',
  h_jobs:'Lowongan', h_flow:'Prosesnya',
+ wait_ref:'Kode undangan masih dimuat, coba klik lagi sebentar.', noform:'form belum tersedia',
  need:function(n){return 'butuh '+n+' orang';}, urgent:'urgent',
  invited:function(n){return 'Diundang oleh '+n;}, moved:function(a,b){return a+' · kini '+b;}, code:function(c){return 'Kode: '+c;},
  none:'Belum ada lowongan terbuka saat ini.',
@@ -439,6 +440,7 @@ zh:{eyebrow:'正在招聘', h1:'在<em>直播</em>行业<br>做一份长久的�
  addr:"PT MUKE · Landmark Pluit Tower E9 三层\nJl. Pluit Selatan Raya No.2, Pluit, 北雅加达 14450\n从 P1 层入口进",
  maps:'在 Google 地图打开 →', tk:'了解与关注', about:'关于我们', nowtag:'当前',
  h_jobs:'在招岗位', h_flow:'流程',
+ wait_ref:'邀请码还在加载，请稍候再点。', noform:'表单未配置',
  need:function(n){return '招 '+n+' 人';}, urgent:'加急',
  invited:function(n){return n+' 邀请';}, moved:function(a,b){return a+' · 现由 '+b+' 负责';}, code:function(c){return '归因码：'+c;},
  none:'目前没有开放的岗位。',
@@ -764,7 +766,14 @@ function modal(title,body,yes,no,onYes){
  document.getElementById('mN').onclick=function(){m.className='';m.innerHTML='';};
  document.getElementById('mY').onclick=function(){m.className='';m.innerHTML='';onYes();};}
 
+/* 带 ?a=/?r= 进来、码文件还没回来（既没成功也没失败）的窗口期：refFor() 会回落成公司码 MX5J，
+   慢网下这一单就静默归公司。这段时间不放行，提示稍后再点；码到了 paint() 会重绘解锁。（2026-09-14 体检 #1） */
+function refPending(){return !!(AGENT||REF)&&!CODES&&!REFFAIL&&!REFBAD;}
+/* 码文件 12 秒还没回来就按「网络失败」处理（走既有的 REFFAIL：挡住报名、提示刷新），
+   免得连接挂住时按钮永远锁着又没有任何提示。 */
+setTimeout(function(){if(refPending()){REFFAIL=true;showRef();paint();}},12000);
 function openStep(job,n){
+ if(refPending()){toast(t('wait_ref'));return;}
  var u=stepUrl(n,job); if(!u)return;
  try{localStorage.setItem('muke_lastjob',job);}catch(e){}
  try{localStorage.setItem('muke_laststep',String(n));}catch(e){}
@@ -813,8 +822,9 @@ function renderPanel(job){
       ⚠ 拦不住“直接拿到表单链接填”（链接在 data/jobs.json 里公开），那是结构性的，网页端补不了。 */
    var stt=stState(job,i),lock=(i>0&&stState(job,i-1)!==2),u=stepUrl(i,job);
    var cls=stt===2?' done':(stt===1?' wip':'');
-   var mark=stt===2?'':(stt===1?'<em>'+esc(t('wip'))+'</em>':'→');
-   h+='<a class="st'+cls+((lock||!u)?' lock':'')+'" data-s="'+i+'">'+
+   /* 第 2/3 步没有表单链接（H28 漏贴）时明说「表单未配置」，不再静默灰掉（2026-09-14 体检 #3） */
+   var mark=stt===2?'':(stt===1?'<em>'+esc(t('wip'))+'</em>':(!u&&i>0?'<em>'+esc(t('noform'))+'</em>':'→'));
+   h+='<a class="st'+cls+((lock||!u||refPending())?' lock':'')+'" data-s="'+i+'">'+
       '<i>'+(i+1)+'</i><div><b>'+esc(t('steps')[i][0])+'</b><span>'+esc(t('steps')[i][1])+'</span></div><u>'+mark+'</u></a>';}
   h+='</div>';
   var allDone=[0,1,2].every(function(i){return isDone(job,i);});
@@ -946,7 +956,10 @@ fetch('../data/jobs.json?v='+Date.now()).then(function(r){return r.json();}).the
  if(DONE&&ME){
   var jb='',stp=-1;
   try{jb=localStorage.getItem('muke_lastjob')||'';stp=parseInt(localStorage.getItem('muke_laststep'),10);}catch(e){}
-  if(map[DONE]>0)stp=map[DONE];                       // 带 done=bg/ex 时以它为准（向前兼容旧配置）
+  /* done=cv 也要以 URL 为准（原先 >0 把 cv=0 漏掉，muke_laststep 缺失/NaN 时简历提交就无声丢掉）；
+     ?j=岗位 若带了就优先，多岗位切换时不再把勾盖到最后点开的岗位上。（2026-09-14 体检 #8） */
+  if(DONE in map&&map[DONE]>=0)stp=map[DONE];
+  var qj=qs.get('j'); if(qj)jb=qj;
   /* ⚠ 2026-09-05 张博指出：候选人提交完表单**会跳回本站**（?done=cv|bg|ex），
      所以「填表期间同步改了数据」是真会撞上的。原先这里要求岗位仍在 JOBS.jobs 里
      才标记完成 —— 一旦他填表的十几分钟内该岗位转成「已停止」，就**静默不标记**：

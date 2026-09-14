@@ -48,8 +48,12 @@ async function prefillKeys(J, H, APP, spec) {
   for (const [label, tbl, keys] of spec) {
     let names = null;
     try {
-      const r = await J(H, "GET", "/open-apis/bitable/v1/apps/" + APP + "/tables/" + tbl + "/fields?page_size=200");
-      names = ((r.data || {}).items || []).map((f) => f.field_name);
+      // fields 接口单页硬顶 100（A06 有 142 列），必须翻页，否则排在后面的列会被误报「不存在」
+      names = []; let pt = "", guard = 0;
+      do {
+        const r = await J(H, "GET", "/open-apis/bitable/v1/apps/" + APP + "/tables/" + tbl + "/fields?page_size=100" + (pt ? "&page_token=" + pt : ""));
+        names = names.concat(((r.data || {}).items || []).map((f) => f.field_name)); pt = (r.data || {}).page_token || "";
+      } while (pt && ++guard < 10);
     } catch (e) { names = null; }
     if (!names || !names.length) { miss.push(label + "：整表读不到字段"); continue; }
     keys.forEach((k) => { if (names.indexOf(k) < 0) miss.push(label + "「" + k + "」"); });
@@ -202,7 +206,8 @@ function publishedNotLive(a02, jAll, V) {
   (a02 || []).forEach((r) => {
     const f = r.fields || {};
     if (V(f["T-Status"]).indexOf("发布") < 0) return;      // 只查已发布的
-    if (V(f["Emp Status"]).indexOf("离职") >= 0) return;   // 离职的本来就该下站
+    // 离职的本来就该下站。锚 RES 后缀而不是「离职」二字：「待离职 NTC」含这两个字但仍在站，按字匹配会把它跳过（与 sync-portal 同口径）
+    if (/RES\s*$/.test(V(f["Emp Status"]))) return;
     const ref = V(f.ARef);
     if (!ref) { noRef.push(1); return; }
     if (!live.has(ref)) notLive.push(ref);

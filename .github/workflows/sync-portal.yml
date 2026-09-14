@@ -67,7 +67,9 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if git diff --quiet data/; then
+          # git diff 看不见新增的未跟踪文件（新经纪人的 j/*.json、新星探的 s/*.json）——
+          # 原先要靠 _status.json 顺带变化才被 git add 带上。改用 status --porcelain 把新文件也算「有变化」。（2026-09-14 体检 #10）
+          if [ -z "$(git status --porcelain data/)" ]; then
             echo "数据无变化，不提交" >> $GITHUB_STEP_SUMMARY
             exit 0
           fi

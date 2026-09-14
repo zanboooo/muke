@@ -275,7 +275,9 @@ function login(raw){
       var k=e&&e.message==='nouser'?'e_nouser':(e&&e.message==='net'?'e_net':
             (e&&e.message==='nocrypto'?'e_old':'e_wrong'));
       fail(t(k));
-      try{localStorage.removeItem('muke_pin');}catch(x){}});
+      /* 只有 PIN 本身不对（错/未登记）才清掉；网络抖动、旧浏览器、渲染异常都不是 PIN 的错，
+         清了只会让星探每次断网后重输一遍。（2026-09-14 体检 #18） */
+      if(k==='e_wrong'||k==='e_nouser'){try{localStorage.removeItem('muke_pin');}catch(x){}}});
 }
 
 /* 兜底归一化：payload 缺字段时降级，绝不让 render 抛异常。

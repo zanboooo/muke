@@ -46,6 +46,13 @@ if (require.main === module) {
     const why = process.env.FAIL_REASON || "同步流程中止";
     const jkt = new Date(Date.now() + 7 * 3600e3).toISOString().replace("T", " ").slice(0, 16);
 
+    // 带命令行参数 = 调用方自带完整文案（guard.yml 的护栏拦截告警走这里）。
+    // 原先 argv 被无视，群里收到的是「报名页同步失败」模板 —— 隐私泄露被包装成同步故障。（2026-09-14 体检 #12）
+    if (process.argv[2]) {
+      await send([String(process.argv[2]).slice(0, 1500), "", "时间：" + jkt + "（雅加达）"]);
+      return;
+    }
+
     // 只发状态与链接，不带任何业务内容 —— 群里可能有非管理层成员
     await send([
       "🔴 报名页同步失败",

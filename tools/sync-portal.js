@@ -50,6 +50,12 @@ const pull = async (H, t) => { let r = [], pt, guard = 0;
     await sleep(260);
   } while (pt && ++guard < 20);
   return r; };
+// fields 接口单页硬顶 100，传 page_size=200 也静默截断（A06 有 142 列）。不翻页就会把排在后面的列当「不存在」。
+const fieldsAll = async (H, t) => { let r = [], pt, guard = 0;
+  do { const q = await J(H, "GET", `/open-apis/bitable/v1/apps/${APP}/tables/${t}/fields?page_size=100` + (pt ? "&page_token=" + pt : ""));
+    r = r.concat(((q || {}).data || {}).items || []); pt = ((q || {}).data || {}).page_token;
+  } while (pt && ++guard < 10);
+  return { data: { items: r } }; };
 const med = (a) => { if (!a.length) return null; const s = [...a].sort((x, y) => x - y); return s[Math.floor(s.length / 2)]; };
 const slugOf = (s) => String(s || "").toLowerCase().replace(/[^a-z0-9]/g, "");
 // 人员字段取名：优先 en_name（Lark 通讯录英文名），因为 slugOf 会把中文剥成空字符串 ——
@@ -90,7 +96,7 @@ const encrypt = (pin, obj) => {
   const { A01: a01, A02: a02, A03: a03, A04: a04, A08: a08, A09: a09, H01: h01, H22: h22, H28: h28 } = got;
 
   // ── 0. 解析 H01.Status 的「离职」选项 id（动态查元数据，选项改名/换 emoji 不断逻辑）──
-  const h01f = await J(H, "GET", "/open-apis/bitable/v1/apps/" + APP + "/tables/" + T.H01 + "/fields?page_size=200");
+  const h01f = await fieldsAll(H, T.H01);
   const stOpts = ((h01f.data.items.find(x => x.field_name === "Status") || {}).property || {}).options || [];
   // 「⛔ 离职 RES」的唯一锚 = RES 后缀（“待离职 NTC”含“离职”二字，不能按中文匹配）
   const resOpt = stOpts.find(o => /RES\s*$/.test(o.name));
@@ -130,7 +136,7 @@ const encrypt = (pin, obj) => {
   // 岗位主题色：H22.Job-CN 的选项 color 只作「色系分组」用，不复制色值 —— 每组给一个为网站配色挑的色相
   // （张博 2026-08-31：主题色仅接近色相即可，以网站美观为主）
   const HUE = { 6: 335, 7: 32, 3: 272, 9: 168, 2: 205, 8: 200, 5: 190 };
-  const h22f = await J(H, "GET", "/open-apis/bitable/v1/apps/" + APP + "/tables/" + T.H22 + "/fields?page_size=200");
+  const h22f = await fieldsAll(H, T.H22);
   const jobOpts = ((h22f.data.items.find(x => x.field_name === "Job-CN") || {}).property || {}).options || [];
   const colorOf = {}; jobOpts.forEach(o => colorOf[o.name] = o.color);
 
@@ -138,7 +144,7 @@ const encrypt = (pin, obj) => {
   // 页面靠 UA 认出「TikTok」这类关键词后，在这份列表里模糊找对应项 ——
   // 这样张博在 UI 改 emoji、改措辞、加新渠道，次日同步后自动适配，不用改代码。
   // （prefill 对单选是严格精确匹配，差一个空格就静默失败，所以值必须来自线上而非手抄。）
-  const a05f = await J(H, "GET", "/open-apis/bitable/v1/apps/" + APP + "/tables/" + T.A05 + "/fields?page_size=200");
+  const a05f = await fieldsAll(H, T.A05);
   const kanalOpts = (((a05f.data.items || []).find(x => x.field_name === "Kanal") || {}).property || {}).options || [];
   const srcOpts = kanalOpts.map(o => o.name);
   const jdBy = {};
@@ -258,14 +264,19 @@ const encrypt = (pin, obj) => {
   // ── 6. 按人归并（81 个码只对应 14 个人）──
   const byPerson = {};
   const noLatin = new Set();
+  const slugClash = new Set();
   tasks.forEach(t => { if (!t.name) return;
     // 名字里没有拉丁字符（en_name 也是中文/空）→ 退回归因码做 slug，绝不产出空名文件。
     // 归因码全局唯一，链接照样可用；同步日志会点名提示去通讯录补英文名。
     const k = hasLatin(t.name) ? slugOf(t.name) : slugOf(t.ref);
     if (!hasLatin(t.name)) noLatin.add(t.ref);
     if (!k) return;
+    // 同名撞车：两个不同的人算出同一个 slug 就会共用一个入口文件，归因全给先出现的那个。
+    // 这里只记录、不改行为（改命名会让老链接失效），交给巡检发群里。
+    if (byPerson[k] && byPerson[k].name !== t.name) slugClash.add(k);
     (byPerson[k] = byPerson[k] || { slug: k, name: t.name, rows: [] }).rows.push(t); });
   if (noLatin.size) console.log("  ⚠ " + noLatin.size + " 位经纪人无拉丁名，链接已退回归因码（请在 Lark 通讯录补英文名）");
+  if (slugClash.size) console.log("  🔴 " + slugClash.size + " 个入口 slug 被多人共用（同名经纪人），归因会串到先出现的人 —— 详情见群告警");
 
   // ── 7. 凭据 ──
   // WO-0255 定案后经纪人不再有网页面板，A02 的 PIN 已作废；
@@ -401,7 +412,15 @@ const encrypt = (pin, obj) => {
   const companyByJob = {};
   jobs.forEach(j => { if (j.cn) companyByJob[j.cn] = COMPANY; });   // 公司码覆盖全部在招岗位
   const goneBy = {};
-  gone.forEach(t => { if (t.name) (goneBy[slugOf(t.name)] = goneBy[slugOf(t.name)] || t.name); });
+  let goneSkipped = 0;
+  gone.forEach(t => { if (!t.name) return;
+    // 与在职段同一套 slug 规则（中文名退回归因码，不再写出 j/.json）
+    const k = hasLatin(t.name) ? slugOf(t.name) : slugOf(t.ref);
+    if (!k) return;
+    // 离职者与在职者同名：绝不覆盖在职者的入口文件（否则在职者的链接被静默改成公司码）
+    if (byPerson[k]) { goneSkipped++; slugClash.add(k); return; }
+    goneBy[k] = goneBy[k] || t.name; });
+  if (goneSkipped) console.log("  🔴 " + goneSkipped + " 个离职者与在职经纪人同名，已跳过不写入口文件");
   Object.entries(goneBy).forEach(([slug, name]) => {
     fs.writeFileSync(OUT + "/j/" + slug + ".json",
       JSON.stringify({ name, movedTo: HANDOFF, byJob: companyByJob }, null, 1));
@@ -410,7 +429,7 @@ const encrypt = (pin, obj) => {
     if (fs.existsSync(pf)) { fs.unlinkSync(pf); console.log("  🗑 已删离职面板 p/" + slug + ".json"); }
   });
   if (Object.keys(goneBy).length)
-    console.log("  🏢 离职链接归公司（" + COMPANY + "）：" + Object.values(goneBy).join("、"));
+    console.log("  🏢 离职链接归公司（" + COMPANY + "）：" + Object.keys(goneBy).length + " 人");   // 公开日志不列姓名（姓名+离职状态=人事信息）
 
   // ── 8c. 清理孤儿文件（WO-0276）──
   // 生成器本来只写不删，所以一旦 A02/A04 删了行，对应的 j/ 或 p/ 文件会永远留着 ——
@@ -427,11 +446,11 @@ const encrypt = (pin, obj) => {
     const orphan = files.map((f) => f.replace(/.json$/, "")).filter((k) => !keep.has(k));
     if (!orphan.length) return [];
     if (orphan.length > 3) {
-      console.log("  ⚠ " + label + " 有 " + orphan.length + " 个孤儿（超过 3 个，疑似数据源异常，本次不删）：" + orphan.join("、"));
+      console.log("  ⚠ " + label + " 有 " + orphan.length + " 个孤儿（超过 3 个，疑似数据源异常，本次不删；文件名即人名，不进公开日志）");
       return orphan;
     }
-    orphan.forEach((k) => { fs.unlinkSync(OUT + "/" + dir + "/" + k + ".json");
-      console.log("  🗑 已删孤儿 " + dir + "/" + k + ".json（对应记录已不存在）"); });
+    orphan.forEach((k) => { fs.unlinkSync(OUT + "/" + dir + "/" + k + ".json"); });
+    console.log("  🗑 已删 " + orphan.length + " 个孤儿 " + dir + "/ 文件（对应记录已不存在；文件名即人名，不进公开日志）");
     return [];
   };
   const orphanJ = sweep("j", keepJ, "入口文件 j/");
@@ -498,6 +517,15 @@ const encrypt = (pin, obj) => {
     "manual.json": back("manual.json"),
     "p/<任一>.json": scoutSample,                     // 密文核对不了，用内存里的明文
   }));
+  // 第六道（2026-09-14 体检 #3）：每个在招岗位都必须有背调+笔试链接，否则报名页第 2/3 步只会灰掉。
+  const noLink = jobs.filter(j => !(links[j.cn] && links[j.cn].bg && links[j.cn].ex)).map(j => j.cn);
+  checks.push({ name: "岗位表单链接", ok: noLink.length === 0,
+    msg: noLink.length ? noLink.length + " 个在招岗位缺背调/笔试链接（H28 漏贴）" : "在招岗位背调/笔试链接齐全",
+    detail: noLink.length ? "缺链接的岗位：" + noLink.join("、") + "。去 H28 补贴该岗位的问卷与笔试表单链接。" : null });
+  // 第七道（2026-09-14 体检 #5/#6）：入口 slug 被多人共用（同名经纪人／离职者与在职者同名）。
+  checks.push({ name: "入口撞名", ok: slugClash.size === 0,
+    msg: slugClash.size ? slugClash.size + " 个入口 slug 被多人共用，归因会串到先出现的人" : "入口 slug 无撞车",
+    detail: slugClash.size ? "撞车的 slug：" + [...slugClash].join("、") + "。同名经纪人须在通讯录改英文名区分（如加姓氏首字母）。" : null });
   checks.forEach((c) => console.log("  " + (c.ok ? "✅" : "⚠️") + " " + c.name + "：" + c.msg));
   const alert = CK.compose(checks, jkt);
   if (alert) await NOTIFY.send(alert);
