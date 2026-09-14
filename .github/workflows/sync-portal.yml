@@ -73,7 +73,17 @@ jobs:
           fi
           git add data/
           git commit -m "同步报名页数据（$(date -u -d '+7 hours' '+%Y-%m-%d %H:%M') 雅加达）"
-          git push
+          # ⚠ 2026-09-14：checkout 拉的是「任务建立那一刻」的 SHA。GitHub 一旦排队久
+          #   （当天一次等了 23 小时），远端早被别的运行推过，直接 push 必被拒（fetch first）。
+          #   所以推之前先 rebase 到最新 main；产物是从 Lark 现拉的，冲突一律以本次为准（-X theirs）。
+          pushed=0
+          for i in 1 2 3; do
+            git fetch origin main
+            git rebase -X theirs origin/main || { git rebase --abort; echo "rebase 失败（第 $i 次）"; }
+            if git push; then pushed=1; break; fi
+            echo "push 被拒（第 $i 次），5 秒后重试"; sleep 5
+          done
+          [ "$pushed" = 1 ] || { echo "三次都没推上去"; exit 1; }
           echo "已提交并推送" >> $GITHUB_STEP_SUMMARY
       - name: 失败时通知 Lark 群
         if: failure()
