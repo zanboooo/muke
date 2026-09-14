@@ -1,5 +1,5 @@
 {
- "stamp": "2026-09-13",
+ "stamp": "2026-09-14",
  "cvForm": "https://mukestar.jp.larksuite.com/share/base/form/shrjpgDWfZ1dEoZGg1MNuqgToPc",
  "links": {
   "主播": {
@@ -120,6 +120,18 @@
    "jd": "素人主播舞蹈课程设计与授课、阶段考核评级",
    "jdId": "Merancang dan mengajar kelas tari untuk host pemula, serta melakukan penilaian berjenjang.",
    "jid": "P413"
+  },
+  {
+   "cn": "舞导",
+   "id": "Pengarah Tari",
+   "goal": 2,
+   "urgent": false,
+   "track": "",
+   "open": true,
+   "hue": 335,
+   "jd": "编舞与舞蹈排练，直播舞蹈节目质量把控",
+   "jdId": "Menyusun koreografi dan memimpin latihan tari, menjaga kualitas segmen tari saat siaran.",
+   "jid": "P117"
   },
   {
    "cn": "妆造",
