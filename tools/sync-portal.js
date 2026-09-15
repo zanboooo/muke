@@ -398,16 +398,20 @@ const encrypt = (pin, obj) => {
   //（同 j/*.json 的口径：候选人链接必须匿名可解析）。
   // 星探一行 = 一个码 = 一个岗位，所以这个索引天然是「一码一岗」，与经纪人的多岗位 j/ 不同。
   fs.mkdirSync(OUT + "/s", { recursive: true });
-  let sOut = 0;
+  let sOut = 0, sInactive = 0;
   a04.forEach(r => {
     const f = r.fields;
     const code = V(f.SRef).trim(); if (!code) return;
-    const sObj = { name: V(f.Scot), job: V(f["Job-CN"]), ref: code };
+    // 2026-09-15 张博定：只有 SC Status 带 🟢 的行才按星探归因；其余（⏸暂停/⛔终止/📋存量）
+    // 页面不下线（老链接永不失效，同经纪人离职规则），归因直接落公司码 COMPANY。
+    const live = V(f["SC Status"]).trim().startsWith("🟢");
+    if (!live) sInactive++;
+    const sObj = { name: V(f.Scot), job: V(f["Job-CN"]), ref: live ? code : COMPANY };
     G.guardPublic("s/" + code.toLowerCase() + ".json", sObj);
     fs.writeFileSync(OUT + "/s/" + code.toLowerCase() + ".json", JSON.stringify(sObj, null, 1));
     sOut++;
   });
-  console.log("  🔗 星探码索引 s/ " + sOut + " 个（?r=<码> 用，只含姓名+岗位）");
+  console.log("  🔗 星探码索引 s/ " + sOut + " 个（?s=<码> 用，只含姓名+岗位；" + sInactive + " 个非🟢已归公司码）");
 
   // ── 8b. 离职经纪人：页面不下线，码归公司 ──
   // 老链接永远有效，候选人照常看到当前全部在招岗位，只是归因落到 COMPANY。
