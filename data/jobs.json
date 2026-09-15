@@ -180,6 +180,18 @@
    "jd": "串场控节奏、引导互动与打赏氛围、衔接节目环节",
    "jdId": "Mengatur tempo acara, memandu interaksi dan suasana pemberian gift, serta menyambungkan antar segmen.",
    "jid": "P113"
+  },
+  {
+   "cn": "团播运营",
+   "id": "Operasional Live",
+   "goal": 2,
+   "urgent": false,
+   "track": "",
+   "open": true,
+   "hue": 200,
+   "jd": "直播间排播策划、数据复盘、主播状态管理、活动策划执行",
+   "jdId": "Menyusun jadwal konten studio, evaluasi data, memantau kondisi host, serta merencanakan dan menjalankan event.",
+   "jid": "P211"
   }
  ]
 }
