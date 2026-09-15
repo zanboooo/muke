@@ -88,7 +88,11 @@ function head(url, timeout) {
 async function formLinks(list) {
   const bad = [];
   for (const it of list) {
-    const r = await head(it.url);
+    let r = await head(it.url);
+    /* 2026-09-15：Lark 对巡检机器偶发 429（请求太频繁），和「表单被删」是两回事。
+       429/5xx 等 3 秒再试一次；还是限流就不算打不开（下一个整点自然复查）。 */
+    if (!r.ok && /^HTTP (429|5\d\d)$/.test(r.why)) { await new Promise((s) => setTimeout(s, 3000)); r = await head(it.url); }
+    if (!r.ok && /^HTTP (429|5\d\d)$/.test(r.why)) { await new Promise((s) => setTimeout(s, 250)); continue; }
     if (!r.ok) bad.push(it.label + "（" + r.why + "）");
     await new Promise((s) => setTimeout(s, 250));   // 别把 Lark 打急了
   }

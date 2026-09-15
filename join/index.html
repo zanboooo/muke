@@ -714,7 +714,11 @@ function showRef(){var el=document.getElementById('ref');
  /* 公司直招（裸链）与离职归公司，对候选人是同一件事：他是被 MUKE 招的，不是被某个人。
     离职者的名字刻意不显示 —— 人已经走了，摆出来只会引出「他还在吗」这种没法回答的问题。 */
  if(MOVED||!CODES){el.textContent='MUKE MEDIA';return;}
- el.textContent=REFNAME?t('invited')(REFNAME):t('code')(REF);}
+ /* 徽章带上码本身（2026-09-15）：Dinda 案例里三张表单的预填参数在候选人手机上丢了，
+    Ref 题露出来却没人知道该填什么。表单 Ref 题的说明已改成「空了就填报名页上的码」，
+    所以页面必须让候选人随时看得到自己的码。经纪人 9 岗共一码，取任一即可；星探就是 REF。 */
+ var cd=REF||'';if(!cd&&CODES&&CODES.byJob){for(var k in CODES.byJob){if(CODES.byJob[k]){cd=CODES.byJob[k];break;}}}
+ el.textContent=(REFNAME?t('invited')(REFNAME):t('code')(REF))+(cd&&REFNAME?' · '+cd:'');}
 
 function applyLang(){
  document.documentElement.lang=LANG==='zh'?'zh':'id';
