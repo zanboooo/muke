@@ -165,12 +165,14 @@ const encrypt = (pin, obj) => {
   const openCn = {}; jobs.forEach(j => { openCn[j.cn] = 1; });
 
   // ── 2. 表单链接（H28 通用简历）──
-  const cvForm = h28.find(r => /通用简历|简历/.test(V(r.fields.LinkType) + V(r.fields["描述"])));
-  const CVURL = cvForm ? V(cvForm.fields["原始链接"]) : "";
+  // H28 2026-09-15 英文化：原始链接→URL、描述→Note、表单名称→Name。这里新旧名都认，改表窗口不断
+  const U = (f) => V(f.URL) || V(f["原始链接"]); const NOTE = (f) => V(f.Note) || V(f["描述"]);
+  const cvForm = h28.find(r => /通用简历|简历/.test(V(r.fields.LinkType) + NOTE(r.fields)));
+  const CVURL = cvForm ? U(cvForm.fields) : "";
   // 每岗位的「问卷(背调)/笔试」表单地址 —— H28 是唯一注册表：加岗位只需在 H28 贴一行 URL，
   // 前端零改动。三步流程用它，不再依赖表单之间的 UI 静态跳转（那条链带不了归因码）。
   const links = {};
-  h28.forEach(r => { const lt = V(r.fields.LinkType), cn = V(r.fields["Job-CN"]), u = V(r.fields["原始链接"]);
+  h28.forEach(r => { const lt = V(r.fields.LinkType), cn = V(r.fields["Job-CN"]), u = U(r.fields);
     if (!cn || !u) return;
     links[cn] = links[cn] || {};
     if (/背景调查/.test(lt)) links[cn].bg = u;
@@ -481,7 +483,7 @@ const encrypt = (pin, obj) => {
 
   // ── 10. 五道巡检（WO-0274 建三道，WO-A97 补第四，2026-09-06 删库重建后补第五道）：查结果而非查过程，详见 checks.js 顶部 ──
   const formList = h28
-    .map((r) => ({ label: V(r.fields.LinkType) + (V(r.fields["Job-CN"]) ? "·" + V(r.fields["Job-CN"]) : ""), url: V(r.fields["原始链接"]) }))
+    .map((r) => ({ label: V(r.fields.LinkType) + (V(r.fields["Job-CN"]) ? "·" + V(r.fields["Job-CN"]) : ""), url: U(r.fields) }))
     .filter((x) => x.url && x.url.indexOf("share/base/form") >= 0);
   const checks = [];
   checks.push(CK.attribution(got.A05 || [], V, { days: 7, minCount: 5, minRatio: 0.3 }));
