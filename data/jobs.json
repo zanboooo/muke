@@ -74,18 +74,6 @@
  ],
  "jobs": [
   {
-   "cn": "主播",
-   "id": "Host Live",
-   "goal": 30,
-   "urgent": false,
-   "track": "S 主播艺人轨",
-   "open": true,
-   "hue": 335,
-   "jd": "按排班出镜直播，完成麦时与流水目标，维护直播间互动与粉丝留存",
-   "jdId": "Siaran langsung sesuai jadwal, memenuhi target jam siaran dan omzet, menjaga interaksi serta retensi penonton.",
-   "jid": "P111"
-  },
-  {
    "cn": "翻译",
    "id": "Penerjemah",
    "goal": 2,
