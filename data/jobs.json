@@ -156,18 +156,6 @@
    "jd": "直播间搭建调试、声光电设备维护、直播故障应急处理",
    "jdId": "Membangun dan mengkalibrasi studio, merawat perangkat audio-visual dan kelistrikan, serta menangani gangguan saat siaran.",
    "jid": "P512"
-  },
-  {
-   "cn": "团播运营",
-   "id": "Operasional Live",
-   "goal": 2,
-   "urgent": false,
-   "track": "",
-   "open": true,
-   "hue": 200,
-   "jd": "直播间排播策划、数据复盘、主播状态管理、活动策划执行",
-   "jdId": "Menyusun jadwal konten studio, evaluasi data, memantau kondisi host, serta merencanakan dan menjalankan event.",
-   "jid": "P211"
   }
  ]
 }
