@@ -1,7 +1,7 @@
 {
  "stamp": "2026-10-27",
  "bench": {
-  "passRate": 64,
-  "hireRate": 72
+  "passRate": 63,
+  "hireRate": 73
  }
 }
